@@ -274,16 +274,16 @@ export default new Router({
               component: () => import('@/views/home/content/quality/InspectionStandard')
             },
             {
-              // 检验记录类型
-              path: 'inspectionRecordType',
-              name: 'inspectionRecordType',
-              component: () => import('@/views/home/content/quality/InspectionRecordType')
+              // 检验汇报类型
+              path: 'inspectionReportType',
+              name: 'inspectionReportType',
+              component: () => import('@/views/home/content/quality/InspectionReportType')
             },
             {
-              // 检验记录
-              path: 'inspectionRecord',
-              name: 'inspectionRecord',
-              component: () => import('@/views/home/content/quality/InspectionRecord')
+              // 检验汇报
+              path: 'inspectionReport',
+              name: 'inspectionReport',
+              component: () => import('@/views/home/content/quality/InspectionReport')
             },
             {
               // 品质看板

@@ -307,7 +307,7 @@ export default {
       userinfor: [],
       /* 附加属性标题 */
       attribute_title: {
-        attribute1: '检验记录编码',
+        attribute1: '检验汇报编码',
         attribute2: '',
         attribute3: '',
         attribute4: '',

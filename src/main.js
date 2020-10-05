@@ -19,6 +19,10 @@ let startApp = function () {
   axios.get('/static/basicConfig.json').then((res) => {
     // 基础地址
     axios.defaults.baseURL = res.data.BASE_URL
+    store.commit({
+      type: 'saveLoginInfor',
+      config: res.data
+    })
     new Vue({
       el: '#app',
       router,

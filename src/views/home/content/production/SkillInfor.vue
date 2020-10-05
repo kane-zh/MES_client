@@ -14,6 +14,11 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
+          <div>类型:
+            <select v-model="selectItem.type" placeholder="请选择类型"      >
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
           <div>状态:
             <select v-model="selectItem.state"  placeholder="请选择状态"    >
               <option value="新建">新建</option>
@@ -331,6 +336,7 @@ export default {
         state: '',
         create_user: '',
         auditor: '',
+        type: '',
         searchValue: ''
       },
       /* 列表页数据排序 */
@@ -457,6 +463,7 @@ export default {
       this.$axios.get('production/skillInfor/?state=' + self.selectItem.state +
               '&auditor=' + self.selectItem.auditor +
               '&create_user=' + self.selectItem.create_user +
+              '&type=' + self.selectItem.type +
               '&search=' + self.selectItem.searchValue +
               '&ordering=' + self.ordering).then(function (response) {
         self.list = response.data.results

@@ -14,6 +14,11 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
+          <div>类型:
+            <select v-model="selectItem.type" placeholder="请选择类型"      >
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
           <div>状态:
             <select v-model="selectItem.state"  placeholder="请选择状态"    >
               <option value="新建">新建</option>
@@ -73,8 +78,8 @@
                 <td>{{index}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>
-                <td>{{item.parent.name}}</td>
-                <td>{{item.parent.code}}</td>
+                <td>{{item.type.name}}</td>
+                <td>{{item.type.code}}</td>
                 <td>{{item.state}}</td>
                 <td>{{item.update_time}}</td>
                 <td>{{item.create_user}}</td>
@@ -103,9 +108,9 @@
           <li>{{"仓位信息名称:"+"&#12288;"+detail.name}}</li>
           <li>{{"仓位信息编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li>{{"仓库名称:"+"&#12288;"+parent.name}}</li>
-          <li>{{"仓库编码:"+"&#12288;"+parent.code}}</li>
-          <li>{{"仓库状态:"+"&#12288;"+parent.state}}</li>
+          <li>{{"仓库名称:"+"&#12288;"+type.name}}</li>
+          <li>{{"仓库编码:"+"&#12288;"+type.code}}</li>
+          <li>{{"仓库状态:"+"&#12288;"+type.state}}</li>
           <li>{{"最大容量:"+"&#12288;"+detail.maximum}}</li>
           <li>{{"位置:"+"&#12288;"+detail.place}}</li>
           <li v-if="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
@@ -175,10 +180,10 @@
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
         <div>父仓库:
-          <select v-model="formItem.parent"   placeholder="请选择父仓库">
+          <select v-model="formItem.type"   placeholder="请选择父仓库">
             <option v-for="item in warehouseInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.parent.required">请选择仓库</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择仓库</span>
         </div>
         <div>最大容量:
           <input v-model="formItem.maximum"  type="number"  placeholder="请输入最大容量..." >
@@ -251,10 +256,10 @@
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
         <div>父仓库:
-          <select v-model="formItem.parent"   placeholder="请选择父仓库">
+          <select v-model="formItem.type"   placeholder="请选择父仓库">
             <option v-for="item in warehouseInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.parent.required">请选择仓库</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择仓库</span>
         </div>
         <div>最大容量:
           <input v-model="formItem.maximum"  type="number"  placeholder="请输入最大容量..." >
@@ -345,6 +350,7 @@ export default {
         state: '',
         create_user: '',
         auditor: '',
+        type: '',
         searchValue: ''
       },
       /* 列表页数据排序 */
@@ -352,7 +358,7 @@ export default {
       /* 详情页数据 */
       qrcode: '',
       detail: [],
-      parent: {},
+      type: {},
       /* 详情页审核记录项表单 */
       alterItem: {
         desc: '',
@@ -371,7 +377,7 @@ export default {
         name: '',
         code: '',
         state: '',
-        parent: null,
+        type: null,
         maximum: 0,
         place: '',
         image: [],
@@ -425,7 +431,7 @@ export default {
       auditor: {
         required
       },
-      parent: {
+      type: {
         required
       }
     }
@@ -469,6 +475,7 @@ export default {
       this.$axios.get('warehouse/position/?state=' + self.selectItem.state +
               '&auditor=' + self.selectItem.auditor +
               '&create_user=' + self.selectItem.create_user +
+              '&type=' + self.selectItem.type +
               '&search=' + self.selectItem.searchValue +
               '&ordering=' + self.ordering).then(function (response) {
         self.list = response.data.results
@@ -533,13 +540,13 @@ export default {
     showDetailView (id) {
       this.detail = [] // 清空详情数据
       this.alterData = []// 清空审核数据
-      this.parent = {}
+      this.type = {}
       var self = this
       var jsonObj = {'type': 'positionInfor'}
       this.$axios.get(`warehouse/position/` + id).then(function (response) {
         self.detail = response.data
-        self.parent = self.detail.parent
-        self.formItem.parent = self.detail.parent.id
+        self.type = self.detail.type
+        self.formItem.type = self.detail.type.id
         jsonObj['id'] = self.detail.id
         self.qrcode = JSON.stringify(jsonObj)
         self.showViewid = 'detail'
@@ -639,9 +646,9 @@ export default {
         self.formItem.desc = response.data.desc
         self.formItem.auditor = response.data.auditor
         self.alterList = response.data.alter
-        if (response.data.parent !== null) {
-          self.formItem.parent = response.data.parent.id
-        } else { self.formItem.parent = response.data.parent }
+        if (response.data.type !== null) {
+          self.formItem.type = response.data.type.id
+        } else { self.formItem.type = response.data.type }
         response.data.file.forEach(function (value, i) {
           var obj = {'id': value.id, 'fileName': value.file_name, 'fileUrl': value.file, 'desc': value.desc, 'uri': value.uri}
           self.formItem.file.push(value.id)
@@ -803,7 +810,7 @@ export default {
       this.$axios.post(`warehouse/position/`, {
         name: self.formItem.name,
         code: self.formItem.code,
-        parent: self.formItem.parent,
+        type: self.formItem.type,
         maximum: self.formItem.maximum,
         place: self.formItem.place,
         file: self.formItem.file,
@@ -838,7 +845,7 @@ export default {
       this.$axios.put(`warehouse/position/` + self.formItem.id + '/', {
         name: self.formItem.name,
         code: self.formItem.code,
-        parent: self.formItem.parent,
+        type: self.formItem.type,
         maximum: self.formItem.maximum,
         place: self.formItem.place,
         file: self.formItem.file,
@@ -869,7 +876,7 @@ export default {
       this.$axios.post(`warehouse/position/`, {
         name: self.formItem.name,
         code: self.formItem.code,
-        parent: self.formItem.parent,
+        type: self.formItem.type,
         maximum: self.formItem.maximum,
         place: self.formItem.place,
         file: self.formItem.file,
@@ -915,7 +922,7 @@ export default {
       this.$axios.put(`warehouse/position/` + self.formItem.id + '/', {
         name: self.formItem.name,
         code: self.formItem.code,
-        parent: self.formItem.parent,
+        type: self.formItem.type,
         maximum: self.formItem.maximum,
         place: self.formItem.place,
         file: self.formItem.file,
@@ -1000,7 +1007,7 @@ export default {
       deep: true
     },
     /* 监控用户选择的类别变化时,更新附加属性标题 */
-    'formItem.parent': function (newval, oldval) {
+    'formItem.type': function (newval, oldval) {
       var self = this
       for (let key in self.attribute_title) {
         self.attribute_title[key] = ''

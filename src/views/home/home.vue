@@ -219,11 +219,11 @@
               <li :class="childMenuSelect==='inspectionStandard'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionStandard'">
                 <router-link to="/home/quality/inspectionStandard">检验标准信息</router-link>
               </li>
-              <li :class="childMenuSelect==='inspectionRecordType'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionRecordType'">
-                <router-link to="/home/quality/inspectionRecordType">检验记录类型</router-link>
+              <li :class="childMenuSelect==='inspectionReportType'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionReportType'">
+                <router-link to="/home/quality/inspectionReportType">检验汇报类型</router-link>
               </li>
-              <li :class="childMenuSelect==='inspectionRecord'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionRecord'">
-                <router-link to="/home/quality/inspectionRecord">检验记录</router-link>
+              <li :class="childMenuSelect==='inspectionReport'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionReport'">
+                <router-link to="/home/quality/inspectionReport">检验汇报</router-link>
               </li>
               <li :class="childMenuSelect==='qualityBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='qualityBoard'">
                 <router-link to="/home/quality/qualityBoard">品质看板</router-link>

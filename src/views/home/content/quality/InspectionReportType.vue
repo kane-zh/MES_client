@@ -1,5 +1,5 @@
 <template>
-  <div class="inspectionRecordType">
+  <div class="inspectionReportType">
     <!-- 列表页显示-->
     <div  class="list"  v-if="showViewid==='list'">
       <div class="modelSelect">
@@ -45,7 +45,7 @@
           </form>
           <div class="button" >
 
-            <button type="button" @click="showCreatView"  v-show="canCreate===true">添加检验记录类型</button>
+            <button type="button" @click="showCreatView"  v-show="canCreate===true">添加检验汇报类型</button>
           </div>
           <div class="ordering">
             <div>
@@ -112,7 +112,7 @@
         </div>
         <div class="button">
           <button type="button" @click="getTreeIndex">查看详情</button>
-          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加检验记录类型</button>
+          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加检验汇报类型</button>
         </div>
       </div>
     </div>
@@ -120,8 +120,8 @@
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="content">
         <ul>
-          <li>{{"检验记录类型名称:"+"&#12288;"+detail.name}}</li>
-          <li>{{"检验记录类型编码:"+"&#12288;"+detail.code}}</li>
+          <li>{{"检验汇报类型名称:"+"&#12288;"+detail.name}}</li>
+          <li>{{"检验汇报类型编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"类别:"+"&#12288;"+detail.classes}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
           <li v-if="parent!==null">{{"父类别名称:"+"&#12288;"+parent.name}}</li>
@@ -134,12 +134,12 @@
           <li>{{"备注信息:"+"&#12288;"+detail.desc}}</li>
         </ul>
         <dl>
-          <dt>检验记录类型文件:</dt>
+          <dt>检验汇报类型文件:</dt>
           <template v-for="(value,id) in detail.file">
             <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
           </template>
         </dl>
-        <Collapse active-key="2" accordion v-if="detail.inspectionRecordType_child!==undefined && detail.inspectionRecordType_child.length > 0">
+        <Collapse active-key="2" accordion v-if="detail.inspectionReportType_child!==undefined && detail.inspectionReportType_child.length > 0">
           子类别:
           <Panel >
             <div  slot="content">
@@ -151,7 +151,7 @@
                   <th>类别</th>
                   <th>状态</th>
                 </tr>
-                <tr align="center" v-for="(item,index) in detail.inspectionRecordType_child" :key="item.id" type="height:1em" >
+                <tr align="center" v-for="(item,index) in detail.inspectionReportType_child" :key="item.id" type="height:1em" >
                   <td>{{index}}</td>
                   <td>{{item.name}}</td>
                   <td>{{item.code}}</td>
@@ -165,7 +165,7 @@
             </div>
           </Panel>
         </Collapse>
-        <Collapse active-key="3" accordion v-if="detail.inspectionRecordType_item!==undefined && detail.inspectionRecordType_item.length > 0">
+        <Collapse active-key="3" accordion v-if="detail.inspectionReportType_item!==undefined && detail.inspectionReportType_item.length > 0">
           包含内容:
           <Panel >
             <div  slot="content">
@@ -176,7 +176,7 @@
                   <th>编码</th>
                   <th>状态</th>
                 </tr>
-                <tr align="center" v-for="(item,index) in detail.inspectionRecordType_item" :key="item.id" type="height:1em" >
+                <tr align="center" v-for="(item,index) in detail.inspectionReportType_item" :key="item.id" type="height:1em" >
                   <td>{{index}}</td>
                   <td>{{item.name}}</td>
                   <td>{{item.code}}</td>
@@ -223,10 +223,10 @@
     <div  class="create"  v-show="showViewid==='create'">
       <form >
           <div>类型名称:
-            <input v-model="formItem.name"  placeholder="请输入检验记录类型名称...">
+            <input v-model="formItem.name"  placeholder="请输入检验汇报类型名称...">
           </div>
           <div>类型编码:
-            <input v-model="formItem.code"  placeholder="请输入检验记录类型编码...">
+            <input v-model="formItem.code"  placeholder="请输入检验汇报类型编码...">
             <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
             <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
             <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -245,7 +245,7 @@
               <option v-for="item in list" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
-          <div>检验记录附加属性:
+          <div>检验汇报附加属性:
             <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  multiple="true">
               <option v-for="(value,key,id) in attach_attributes" :value="key+':'+value" :key="id">{{value}}</option>
             </select>
@@ -278,10 +278,10 @@
     <div  class="update"  v-show="showViewid==='update'">
       <form >
         <div>类型名称:
-          <input v-model="formItem.name"  placeholder="请输入检验记录类型名称...">
+          <input v-model="formItem.name"  placeholder="请输入检验汇报类型名称...">
         </div>
         <div>类型编码:
-          <input v-model="formItem.code"  placeholder="请输入检验记录类型编码...">
+          <input v-model="formItem.code"  placeholder="请输入检验汇报类型编码...">
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -300,7 +300,7 @@
             <option v-for="item in list" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
-        <div>检验记录附加属性:
+        <div>检验汇报附加属性:
           <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  multiple="true">
             <option v-for="(value,key,id) in attach_attributes" :value="key+':'+value" :key="id">{{value}}</option>
           </select>
@@ -335,7 +335,7 @@
 
 import { required, minLength, maxLength } from 'vuelidate/lib/validators'
 export default {
-  name: 'inspectionRecordType',
+  name: 'inspectionReportType',
   components: {
   },
   data () {
@@ -366,7 +366,7 @@ export default {
       /* 详情页审核记录项表单 */
       alterItem: {
         desc: '',
-        uri: 'inspectionRecordType'
+        uri: 'inspectionReportType'
       },
       alterList: [],
       alterData: [],
@@ -394,7 +394,7 @@ export default {
         file: null,
         fileName: '',
         desc: '',
-        uri: 'inspectionRecordType'
+        uri: 'inspectionReportType'
       },
       fileData: [],
       /* 具有审核权限的账号信息 */
@@ -435,7 +435,7 @@ export default {
         this.selectItem[key] = ''
       }
       var self = this
-      this.$axios.get('quality/inspectionRecordType/?ordering=' + self.ordering).then(function (response) {
+      this.$axios.get('quality/inspectionReportType/?ordering=' + self.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -460,7 +460,7 @@ export default {
       this.listPreUrl = ''
       this.listNextUrl = ''
       var self = this
-      this.$axios.get('quality/inspectionRecordType/?state=' + self.selectItem.state +
+      this.$axios.get('quality/inspectionReportType/?state=' + self.selectItem.state +
           '&classes=' + self.selectItem.classes +
               '&auditor=' + self.selectItem.auditor +
               '&create_user=' + self.selectItem.create_user +
@@ -528,7 +528,7 @@ export default {
     showListTreeView: function () {
       this.treeData = []
       var self = this
-      this.$axios.get('quality/inspectionRecordTypes/').then(function (response) {
+      this.$axios.get('quality/inspectionReportTypes/').then(function (response) {
         self.transformToTree(response.data)
       }).catch(function (err) {
         if (err.request) {
@@ -543,15 +543,15 @@ export default {
       /* 遍历第一层,给第一层添加数据 */
       for (let l1 = 0; l1 < data.length; l1++) {
         /* 遍历第二层,给第一层子项添加数据 */
-        let data2 = data[l1].inspectionRecordType_child
+        let data2 = data[l1].inspectionReportType_child
         let children1 = []
         for (let l2 = 0; l2 < data2.length; l2++) {
           /* 遍历第三层,给第二层子项添加数据 */
-          let data3 = data2[l2].inspectionRecordType_child
+          let data3 = data2[l2].inspectionReportType_child
           let children2 = []
           for (let l3 = 0; l3 < data3.length; l3++) {
             /* 遍历第四层,给第三层子项添加数据 */
-            let data4 = data3[l3].inspectionRecordType_child
+            let data4 = data3[l3].inspectionReportType_child
             let children3 = []
             for (let l4 = 0; l4 < data4.length; l4++) {
               children3.push({'id': data4[l4].id,
@@ -598,7 +598,7 @@ export default {
         return
       }
       /* 如果不是创建账号/审核账号/具有查看详情权限 */
-      if (!(('quality.read_inspectionrecordtypedefinitionmodel' in this.permissions) || (data[0].auditor === this.username) || (data[0].create_user === this.username))) {
+      if (!(('quality.read_inspectionreporttypedefinitionmodel' in this.permissions) || (data[0].auditor === this.username) || (data[0].create_user === this.username))) {
         alert('当前账号不具备查看详情权限')
         return
       }
@@ -626,7 +626,7 @@ export default {
       this.alterData = []// 清空审核数据
       this.parent = {}
       var self = this
-      this.$axios.get(`quality/inspectionRecordType/` + id).then(function (response) {
+      this.$axios.get(`quality/inspectionReportType/` + id).then(function (response) {
         self.detail = response.data
         self.parent = self.detail.parent
         self.showViewid = 'detail'
@@ -645,7 +645,7 @@ export default {
         return
       }
       this.formItem.state = state
-      this.$axios.patch(`quality/inspectionRecordType/` + self.detail.id + '/', {
+      this.$axios.patch(`quality/inspectionReportType/` + self.detail.id + '/', {
         state: self.formItem.state,
         alter: self.formItem.alter
       }).then(function (response
@@ -709,7 +709,7 @@ export default {
       this.alterList = []
       this.fileData = []
       var self = this
-      this.$axios.get(`quality/inspectionRecordType/` + id).then(function (response) {
+      this.$axios.get(`quality/inspectionReportType/` + id).then(function (response) {
         self.formItem.id = response.data.id
         self.formItem.name = response.data.name
         self.formItem.state = response.data.state
@@ -823,7 +823,7 @@ export default {
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.post(`quality/inspectionRecordType/`, {
+      this.$axios.post(`quality/inspectionReportType/`, {
         name: self.formItem.name,
         code: self.formItem.code,
         classes: self.formItem.classes,
@@ -850,7 +850,7 @@ export default {
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.put(`quality/inspectionRecordType/` + self.formItem.id + '/', {
+      this.$axios.put(`quality/inspectionReportType/` + self.formItem.id + '/', {
         name: self.formItem.name,
         code: self.formItem.code,
         classes: self.formItem.classes,
@@ -875,7 +875,7 @@ export default {
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.post(`quality/inspectionRecordType/`, {
+      this.$axios.post(`quality/inspectionReportType/`, {
         name: self.formItem.name,
         code: self.formItem.code,
         classes: self.formItem.classes,
@@ -887,7 +887,7 @@ export default {
       }).then(function (response) {
         self.formItem.file = []
         self.fileData = []
-        self.$axios.patch(`quality/inspectionRecordType/` + response.data.id + '/', {
+        self.$axios.patch(`quality/inspectionReportType/` + response.data.id + '/', {
           state: '审核中'
         }).then(function (response
         ) {
@@ -913,7 +913,7 @@ export default {
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.put(`quality/inspectionRecordType/` + self.formItem.id + '/', {
+      this.$axios.put(`quality/inspectionReportType/` + self.formItem.id + '/', {
         name: self.formItem.name,
         code: self.formItem.code,
         classes: self.formItem.classes,
@@ -925,7 +925,7 @@ export default {
       }).then(function (response) {
         self.formItem.file = []
         self.fileData = []
-        self.$axios.patch(`quality/inspectionRecordType/` + response.data.id + '/', {
+        self.$axios.patch(`quality/inspectionReportType/` + response.data.id + '/', {
           state: '审核中'
         }).then(function (response
         ) {
@@ -972,10 +972,10 @@ export default {
       return this.$store.getters.getLoginInfor.permissions
     },
     canCreate () {
-      return 'quality.add_inspectionrecordtypedefinitionmodel' in this.permissions
+      return 'quality.add_inspectionreporttypedefinitionmodel' in this.permissions
     },
     canRead () {
-      return 'quality.read_inspectionrecordtypedefinitionmodel' in this.permissions
+      return 'quality.read_inspectionreporttypedefinitionmodel' in this.permissions
     }
 
   },
@@ -992,7 +992,7 @@ export default {
           self.formItem.parent = ''
           break
         case '二级类别':
-          this.$axios.get('quality/inspectionRecordType/?state=使用中&classes=一级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
+          this.$axios.get('quality/inspectionReportType/?state=使用中&classes=一级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
             self.list = response.data.results
           }).catch(function (err) {
             if (err.request) {
@@ -1003,7 +1003,7 @@ export default {
           })
           break
         case '三级类别':
-          this.$axios.get('quality/inspectionRecordType/?state=使用中&classes=二级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
+          this.$axios.get('quality/inspectionReportType/?state=使用中&classes=二级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
             self.list = response.data.results
           }).catch(function (err) {
             if (err.request) {
@@ -1014,7 +1014,7 @@ export default {
           })
           break
         case '四级类别':
-          this.$axios.get('quality/inspectionRecordType/?state=使用中&classes=三级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
+          this.$axios.get('quality/inspectionReportType/?state=使用中&classes=三级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
             self.list = response.data.results
           }).catch(function (err) {
             if (err.request) {
@@ -1045,7 +1045,7 @@ export default {
 }
 </script>
 <style scoped>
-  .inspectionRecordType{
+  .inspectionReportType{
     position: relative;
     top: 0;
     width: 100%;
