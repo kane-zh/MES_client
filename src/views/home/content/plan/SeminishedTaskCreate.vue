@@ -1323,6 +1323,10 @@ export default {
       }
     })
   },
+  mounted () {
+    this.attribute_title = this.$store.getters.getConfig.attach_attribute.半成品生产任务单
+    this.attribute_title_child = this.$store.getters.getConfig.attach_attribute.半成品生产任务单子项
+  },
   computed: {
     username () {
       return this.$store.getters.getLoginInfor.name

@@ -587,7 +587,7 @@ export default {
       },
       /* 子项附加属性标题 */
       attribute_title_child: {
-        attribute1: '分批交付日期:',
+        attribute1: '',
         attribute2: '',
         attribute3: '',
         attribute4: '',
@@ -1268,6 +1268,10 @@ export default {
         console.log('Error', err.message)
       }
     })
+  },
+  mounted () {
+    this.attribute_title = this.$store.getters.getConfig.attach_attribute.销售订单
+    this.attribute_title_child = this.$store.getters.getConfig.attach_attribute.销售订单子项
   },
   computed: {
     username () {

@@ -1130,6 +1130,10 @@ export default {
       }
     })
   },
+  mounted () {
+    this.attribute_title = this.$store.getters.getConfig.attach_attribute.半成品库存预警规则
+    this.attribute_title_child = this.$store.getters.getConfig.attach_attribute.半成品库存预警规则子项
+  },
   computed: {
     username () {
       return this.$store.getters.getLoginInfor.name
@@ -1225,7 +1229,7 @@ export default {
   .list .listHead .select div{
     position: relative;
     top: 0;
-    width: 25%;
+    width: 23%;
     height: 100%;
     margin-right: 2%;
     font-family: AppleSystemUIFont;

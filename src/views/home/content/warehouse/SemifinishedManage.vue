@@ -1016,6 +1016,9 @@ export default {
       }
     })
   },
+  mounted () {
+    this.attribute_title = this.$store.getters.getConfig.attach_attribute.半成品管理
+  },
   computed: {
     username () {
       return this.$store.getters.getLoginInfor.name

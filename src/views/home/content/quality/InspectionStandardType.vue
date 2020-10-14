@@ -242,7 +242,7 @@
             </select>
           </div>
           <div>检验标准附加属性:
-            <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  multiple="true">
+            <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  style="height: 90%"  multiple="true">
               <option v-for="(value,key,id) in attach_attributes" :value="key+':'+value" :key="id">{{value}}</option>
             </select>
           </div>
@@ -297,7 +297,7 @@
           </select>
         </div>
         <div>检验标准附加属性:
-          <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  multiple="true">
+          <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  style="height: 90%"  multiple="true">
             <option v-for="(value,key,id) in attach_attributes" :value="key+':'+value" :key="id">{{value}}</option>
           </select>
         </div>
@@ -396,11 +396,7 @@ export default {
       /* 具有审核权限的账号信息 */
       userinfor: [],
       attach_attributes: {
-        'attribute1': '',
-        'attribute2': '',
-        'attribute3': '',
-        'attribute4': '',
-        'attribute5': ''
+
       }
 
     }
@@ -956,6 +952,9 @@ export default {
         console.log('Error', err.message)
       }
     })
+  },
+  mounted () {
+    this.attach_attributes = this.$store.getters.getConfig.attach_attribute.检验标准
   },
   computed: {
     username () {

@@ -26,6 +26,11 @@
               <option value="完成">完成</option>
             </select>
           </div>
+<!--          <div>车间:-->
+<!--            <select v-model="selectItem.workshop" placeholder="请选择车间"      >-->
+<!--              <option v-for="item in " :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>-->
+<!--            </select>-->
+<!--          </div>-->
           <div>开始时间:
             <input v-model="selectItem.start_time"  type="datetime-local" placeholder="选择日期和时间">
           </div>
@@ -71,7 +76,9 @@
                 <th>序号</th>
                 <th>名称</th>
                 <th>编码</th>
-                <th>操作者</th>
+                <th>考核者</th>
+                <th>车间</th>
+                <th>班组</th>
                 <th>类型名称</th>
                 <th>类型编码</th>
                 <th>状态</th>
@@ -84,7 +91,9 @@
                 <td>{{index}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>
-                <td>{{item.handler}}</td>
+                <td>{{item.personnel.name}}</td>
+                <td>{{item.personnel.workshop_name}}</td>
+                <td>{{item.personnel.team.name}}</td>
                 <td>{{item.type.name}}</td>
                 <td>{{item.type.code}}</td>
                 <td>{{item.state}}</td>

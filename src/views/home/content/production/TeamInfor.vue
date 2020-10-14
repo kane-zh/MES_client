@@ -14,8 +14,8 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
-          <div>类型:
-            <select v-model="selectItem.type" placeholder="请选择类型"      >
+          <div>车间:
+            <select v-model="selectItem.type" placeholder="请选择车间"      >
               <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
@@ -123,6 +123,36 @@
           <li>{{"更新时间:"+"&#12288;"+detail.update_time}}</li>
           <li>{{"备注信息:"+"&#12288;"+detail.desc}}</li>
         </ul>
+        <Collapse active-key="3" accordion v-if="detail.team_personnel!==undefined && detail.team_personnel.length > 0">
+          包含内容:
+          <Panel >
+            <div  slot="content">
+              <table >
+                <tr align="center"  type="height:2em">
+                  <th>序号</th>
+                  <th>名称</th>
+                  <th>编码</th>
+                  <th>工号</th>
+                  <th>职位</th>
+                  <th>微信</th>
+                  <th>手机</th>
+                </tr>
+                <tr align="center" v-for="(item,index) in detail.team_personnel" :key="item.id" type="height:1em" >
+                  <td>{{index}}</td>
+                  <td>{{item.name}}</td>
+                  <td>{{item.code}}</td>
+                  <td>{{item.job_number}}
+                  <td>{{item.post}}</td>
+                  <td>{{item.wechat}}</td>
+                  <td>{{item.mobile}}</td>
+                </tr>
+                <tr>
+
+                </tr>
+              </table>
+            </div>
+          </Panel>
+        </Collapse>
         <dl>
           <dt>班组信息图片:</dt>
           <template v-for="(value,id) in detail.image">
@@ -1081,7 +1111,7 @@ export default {
   .list .listHead .select div{
     position: relative;
     top: 0;
-    width: 25%;
+    width: 23%;
     height: 100%;
     margin-right: 2%;
     font-family: AppleSystemUIFont;

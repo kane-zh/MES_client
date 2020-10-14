@@ -216,7 +216,7 @@
           <input v-model="formItem.concession_ration" type="number" >
         </div>
         <div>缺陷项:
-          <select v-model="formItem.defect"  placeholder="请选择缺陷项"  multiple="true">
+          <select v-model="formItem.defect"  placeholder="请选择缺陷项"  style="height: 90%"  multiple="true">
             <option v-for="item in defectInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"+"("+item.type.name+item.type.code+")"}}</option>
           </select>
         </div>
@@ -291,7 +291,7 @@
           <input v-model="formItem.concession_ration" type="number"  >
         </div>
         <div>缺陷项:
-          <select v-model="formItem.defect"  placeholder="请选择缺陷项"  multiple="true">
+          <select v-model="formItem.defect"  placeholder="请选择缺陷项"  style="height: 90%"  multiple="true">
             <option v-for="item in defectInfor" :value="item.id" :key="item.id">{{"("+item.type.name+item.type.code+")"+item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -1050,7 +1050,7 @@ export default {
   .list .listHead .select div{
     position: relative;
     top: 0;
-    width: 25%;
+    width: 23%;
     height: 100%;
     margin-right: 2%;
     font-family: AppleSystemUIFont;

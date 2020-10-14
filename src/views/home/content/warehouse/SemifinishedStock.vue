@@ -703,6 +703,9 @@ export default {
         console.log('Error', err.message)
       }
     })
+  },
+  mounted () {
+    this.attribute_title = this.$store.getters.getConfig.attach_attribute.半成品管理
   }
 }
 </script>

@@ -307,7 +307,7 @@ export default {
       userinfor: [],
       /* 附加属性标题 */
       attribute_title: {
-        attribute1: '检验汇报编码',
+        attribute1: '',
         attribute2: '',
         attribute3: '',
         attribute4: '',
@@ -702,6 +702,9 @@ export default {
         console.log('Error', err.message)
       }
     })
+  },
+  mounted () {
+    this.attribute_title = this.$store.getters.getConfig.attach_attribute.物料库存
   }
 }
 </script>

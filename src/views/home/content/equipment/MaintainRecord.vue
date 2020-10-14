@@ -258,7 +258,7 @@
           <span class="message" v-if="!$v.formItem.equipment.required">请选择设备</span>
         </div>
         <div>备品消耗:
-          <select v-model="formItem.parts_use"   placeholder="请选择备品消耗"     multiple="true">
+          <select v-model="formItem.parts_use"   placeholder="请选择备品消耗"  style="height: 90%"  multiple="true">
             <option v-for="item in partsUse" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -393,7 +393,7 @@
           <span class="message" v-if="!$v.formItem.equipment.required">请选择设备</span>
         </div>
         <div>备品消耗:
-          <select v-model="formItem.parts_use"   placeholder="请选择备品消耗"     multiple="true">
+          <select v-model="formItem.parts_use"   placeholder="请选择备品消耗"  style="height: 90%"  multiple="true">
             <option v-for="item in partsUse" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -1358,6 +1358,9 @@ export default {
         console.log('Error', err.message)
       }
     })
+  },
+  mounted () {
+    this.attribute_title_child = this.$store.getters.getConfig.attach_attribute.维护记录子项
   },
   computed: {
     username () {

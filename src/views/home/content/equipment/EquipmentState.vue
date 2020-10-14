@@ -228,16 +228,16 @@ export default {
       equipmentInfor: [],
       /* 附加属性标题 */
       attribute_title: {
-        attribute1: '属性1',
-        attribute2: '属性2',
-        attribute3: '属性3',
-        attribute4: '属性4',
-        attribute5: '属性5',
-        attribute6: '属性6',
-        attribute7: '属性7',
-        attribute8: '属性8',
-        attribute9: '属性9',
-        attribute10: '属性10'
+        attribute1: '',
+        attribute2: '',
+        attribute3: '',
+        attribute4: '',
+        attribute5: '',
+        attribute6: '',
+        attribute7: '',
+        attribute8: '',
+        attribute9: '',
+        attribute10: ''
       }
     }
   },
@@ -484,6 +484,9 @@ export default {
         console.log('Error', err.message)
       }
     })
+  },
+  mounted () {
+    this.attribute_title = this.$store.getters.getConfig.attach_attribute.设备厂商
   },
   computed: {
     username () {

@@ -246,7 +246,7 @@
             </select>
           </div>
           <div>供应商附加属性:
-            <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  multiple="true">
+            <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  style="height: 90%"  multiple="true">
               <option v-for="(value,key,id) in attach_attributes" :value="key+':'+value" :key="id">{{value}}</option>
             </select>
           </div>
@@ -301,7 +301,7 @@
           </select>
         </div>
         <div>供应商附加属性:
-          <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  multiple="true">
+          <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  style="height: 90%"  multiple="true">
             <option v-for="(value,key,id) in attach_attributes" :value="key+':'+value" :key="id">{{value}}</option>
           </select>
         </div>
@@ -959,6 +959,9 @@ export default {
         console.log('Error', err.message)
       }
     })
+  },
+  mounted () {
+    this.attach_attributes = this.$store.getters.getConfig.attach_attribute.供应商信息
   },
   computed: {
     username () {

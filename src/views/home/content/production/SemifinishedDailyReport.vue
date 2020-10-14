@@ -1253,6 +1253,10 @@ export default {
       }
     })
   },
+  mounted () {
+    this.attribute_title = this.$store.getters.getConfig.attach_attribute.半成品生产日报记录
+    this.attribute_title_child = this.$store.getters.getConfig.attach_attribute.半成品生产日报子项
+  },
   computed: {
     username () {
       return this.$store.getters.getLoginInfor.name

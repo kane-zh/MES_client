@@ -988,6 +988,9 @@ export default {
       }
     })
   },
+  mounted () {
+    this.attach_attributes = this.$store.getters.getConfig.attach_attribute.配件信息
+  },
   computed: {
     username () {
       return this.$store.getters.getLoginInfor.name
@@ -1092,7 +1095,7 @@ export default {
   .list .listHead .select div{
     position: relative;
     top: 0;
-    width: 25%;
+    width: 23%;
     height: 100%;
     margin-right: 2%;
     font-family: AppleSystemUIFont;

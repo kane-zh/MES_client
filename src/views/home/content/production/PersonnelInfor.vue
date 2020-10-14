@@ -9,11 +9,21 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
+          <div>车间:
+            <select v-model="selectItem.workshop" placeholder="请选择车间" >
+              <option v-for="item in workshopInfor" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
+          <div>班组:
+            <select v-model="selectItem.team" placeholder="请选择班组" >
+              <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
           <div>关键字:
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
-                      <div>
-               <button type="button" @click="select" >搜索</button>
+          <div>
+          <button type="button" @click="select" >搜索</button>
             </div>
             <div>
               <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
@@ -166,13 +176,18 @@
         <div>人员微信:
           <input v-model="formItem.wechat"  placeholder="请输入人员微信...">
         </div>
+        <div>车间:
+          <select v-model="formItem.workshop" placeholder="请选择车间" >
+            <option v-for="item in workshopInfor" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+          </select>
+        </div>
         <div>班组:
-          <select v-model="formItem.team"   placeholder="请选择班组">
+          <select v-model="formItem.team" placeholder="请选择班组" >
             <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
         <div>技能:
-          <select v-model="formItem.skill"  placeholder="请选择技能"  multiple="true">
+          <select v-model="formItem.skill"  placeholder="请选择技能"  style="height: 90%"  multiple="true">
             <option v-for="item in skillInfor" :value="item.id" :key="item.id">{{"("+item.type.name+item.type.code+")"+item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -242,13 +257,18 @@
         <div>人员微信:
           <input v-model="formItem.wechat"  placeholder="请输入人员微信...">
         </div>
+        <div>车间:
+          <select v-model="formItem.workshop" placeholder="请选择车间" >
+            <option v-for="item in workshopInfor" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+          </select>
+        </div>
         <div>班组:
-          <select v-model="formItem.team"   placeholder="请选择班组">
+          <select v-model="formItem.team" placeholder="请选择班组" >
             <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
         <div>技能:
-          <select v-model="formItem.skill"  placeholder="请选择技能"  multiple="true">
+          <select v-model="formItem.skill"  placeholder="请选择技能"  style="height: 90%"  multiple="true">
             <option v-for="item in skillInfor" :value="item.id" :key="item.id">{{"("+item.type.name+item.type.code+")"+item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -318,7 +338,9 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         create_user: '',
-        searchValue: ''
+        searchValue: '',
+        workshop: '',
+        team: ''
       },
       /* 列表页数据排序 */
       ordering: '-id',
@@ -330,6 +352,7 @@ export default {
         id: '',
         name: '',
         code: '',
+        workshop: '',
         team: null,
         skill: [],
         job_number: '',
@@ -361,13 +384,14 @@ export default {
       },
       fileData: [],
       /* 技能班组信息 */
+      workshopInfor: [],
       teamInfor: [],
       /* 技能信息 */
       skillInfor: [],
       userinfor: [],
       /* 附加属性标题 */
       attribute_title: {
-        attribute1: '电话',
+        attribute1: '',
         attribute2: '',
         attribute3: '',
         attribute4: '',
@@ -424,6 +448,8 @@ export default {
       this.listNextUrl = ''
       var self = this
       this.$axios.get('production/personnelInfor/?create_user' + self.selectItem.create_user +
+              '&workshop_code=' + self.selectItem.workshop +
+              '&team=' + self.selectItem.team +
               '&search=' + self.selectItem.searchValue +
               '&ordering=' + self.ordering).then(function (response) {
         self.list = response.data.results
@@ -559,6 +585,11 @@ export default {
         self.formItem.attribute4 = response.data.attribute4
         self.formItem.attribute5 = response.data.attribute5
         self.formItem.desc = response.data.desc
+        self.workshopInfor.forEach(function (value, i) {
+          if (value.code === response.data.team.type.code) {
+            self.formItem.workshop = value.code
+          }
+        })
         if (response.data.team !== null) {
           self.formItem.team = response.data.team.id
         } else { self.formItem.team = response.data.team }
@@ -765,8 +796,8 @@ export default {
     this.userinfor = []
     this.teamInfor = []
     var self = this
-    this.$axios.get('production/teamInfor/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
-      self.teamInfor = response.data.results
+    this.$axios.get('production/workshopInfor/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
+      self.workshopInfor = response.data.results
       self.$axios.get('production/skillInfor/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
         self.skillInfor = response.data.results
         self.$axios.get('user/userInfor/?page_size=99999&ordering=-id').then(function (response) {
@@ -794,6 +825,9 @@ export default {
       }
     })
   },
+  mounted () {
+    this.attribute_title = this.$store.getters.getConfig.attach_attribute.人员信息
+  },
   computed: {
     username () {
       return this.$store.getters.getLoginInfor.name
@@ -813,8 +847,50 @@ export default {
 
   },
   watch: {
+    selectItem: {
+      deep: true
+    },
     formItem: {
       deep: true
+    },
+    /* 监控用户选择的车间变化时,更新班组信息 */
+    'selectItem.workshop': function (newval, oldval) {
+      var self = this
+      var id = ''
+      this.workshopInfor.forEach(function (value, i) {
+        console.log(value)
+        if (value.code === newval) {
+          id = value.id
+        }
+      })
+      this.$axios.get(`production/workshopInfor/` + id).then(function (response) {
+        self.teamInfor = response.data.workshopInfor_item
+      }).catch(function (err) {
+        if (err.request) {
+          alert(err.request.response)
+        } else {
+          console.log('Error', err.message)
+        }
+      })
+    },
+    'formItem.workshop': function (newval, oldval) {
+      var self = this
+      var id = ''
+      this.workshopInfor.forEach(function (value, i) {
+        console.log(value)
+        if (value.code === newval) {
+          id = value.id
+        }
+      })
+      this.$axios.get(`production/workshopInfor/` + id).then(function (response) {
+        self.teamInfor = response.data.workshopInfor_item
+      }).catch(function (err) {
+        if (err.request) {
+          alert(err.request.response)
+        } else {
+          console.log('Error', err.message)
+        }
+      })
     }
   }
 }

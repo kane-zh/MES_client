@@ -370,7 +370,8 @@ export default {
     return {
       MenuItem: '',
       mainMenuSelect: '',
-      childMenuSelect: ''
+      childMenuSelect: '',
+      function_select: {}
     }
   },
   methods: {
@@ -383,6 +384,9 @@ export default {
       this.MenuItem = key
       this.mainMenuSelect = key
     }
+  },
+  mounted () {
+    this.function_select = this.$store.getters.getConfig.function_select
   },
   computed: {
     username () {

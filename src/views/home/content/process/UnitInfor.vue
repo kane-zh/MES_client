@@ -65,6 +65,7 @@
                 <th>序号</th>
                 <th>名称</th>
                 <th>编码</th>
+                <th>符号</th>
                 <th>类型名称</th>
                 <th>类型编码</th>
                 <th>状态</th>
@@ -77,6 +78,7 @@
                 <td>{{index}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>
+                <td>{{item.symbol}}</td>
                 <td>{{item.type.name}}</td>
                 <td>{{item.type.code}}</td>
                 <td>{{item.state}}</td>
@@ -956,7 +958,7 @@ export default {
   .list .listHead .select div{
     position: relative;
     top: 0;
-    width: 25%;
+    width: 23%;
     height: 100%;
     margin-right: 2%;
     font-family: AppleSystemUIFont;

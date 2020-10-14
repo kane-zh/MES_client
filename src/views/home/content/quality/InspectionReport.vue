@@ -1289,6 +1289,9 @@ export default {
       }
     })
   },
+  mounted () {
+    this.attribute_title_child = this.$store.getters.getConfig.attach_attribute.检验汇报子项
+  },
   computed: {
     username () {
       return this.$store.getters.getLoginInfor.name

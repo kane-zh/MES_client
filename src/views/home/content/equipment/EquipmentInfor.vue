@@ -222,7 +222,7 @@
           <span class="message" v-if="!$v.formItem.vendor.required">请选择厂商</span>
         </div>
         <div>备品:
-          <select v-model="formItem.parts"   placeholder="请选择备品"     multiple="true">
+          <select v-model="formItem.parts"   placeholder="请选择备品"  style="height: 90%"  multiple="true">
             <option v-for="item in partsInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -321,7 +321,7 @@
           <span class="message" v-if="!$v.formItem.vendor.required">请选择厂商</span>
         </div>
         <div>备品:
-          <select v-model="formItem.parts"   placeholder="请选择备品"     multiple="true">
+          <select v-model="formItem.parts"   placeholder="请选择备品"  style="height: 90%"  multiple="true">
             <option v-for="item in partsInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -1230,7 +1230,7 @@ export default {
   .list .listHead .select div{
     position: relative;
     top: 0;
-    width: 25%;
+    width: 23%;
     height: 100%;
     margin-right: 2%;
     font-family: AppleSystemUIFont;

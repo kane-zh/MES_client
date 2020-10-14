@@ -829,6 +829,9 @@ export default {
       }
     })
   },
+  mounted () {
+    this.attribute_title = this.$store.getters.getConfig.attach_attribute.配件消耗记录
+  },
   computed: {
     username () {
       return this.$store.getters.getLoginInfor.name

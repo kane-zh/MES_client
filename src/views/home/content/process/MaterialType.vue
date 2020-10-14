@@ -247,7 +247,7 @@
           </select>
         </div>
         <div>物料附加属性:
-          <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  multiple="multiple" type="height:20px">
+          <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  style="height: 90%"  multiple="true">
             <option v-for="(value,key,id) in attach_attributes" :value="key+':'+value" :key="id">{{value}}</option>
           </select>
         </div>
@@ -302,7 +302,7 @@
           </select>
         </div>
         <div>物料附加属性:
-          <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  multiple="true">
+          <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  style="height: 90%"  multiple="true">
             <option v-for="(value,key,id) in attach_attributes" :value="key+':'+value" :key="id">{{value}}</option>
           </select>
         </div>
@@ -400,29 +400,7 @@ export default {
       /* 具有审核权限的账号信息 */
       userinfor: [],
       attach_attributes: {
-        'attribute1': '图号',
-        'attribute2': '规格',
-        'attribute3': '',
-        'attribute4': '有效期限',
-        'attribute5': '',
-        'attribute6': '',
-        'attribute7': '',
-        'attribute8': '',
-        'attribute9': '',
-        'attribute10': ''
       }
-      // attach_attributes: {
-      //   'attribute1': '封装',
-      //   'attribute2': '品牌',
-      //   'attribute3': '型号',
-      //   'attribute4': '',
-      //   'attribute5': '',
-      //   'attribute6': '',
-      //   'attribute7': '',
-      //   'attribute8': '',
-      //   'attribute9': '',
-      //   'attribute10': ''
-      // }
 
     }
   },
@@ -977,6 +955,9 @@ export default {
         console.log('Error', err.message)
       }
     })
+  },
+  mounted () {
+    this.attach_attributes = this.$store.getters.getConfig.attach_attribute.物料信息
   },
   computed: {
     username () {

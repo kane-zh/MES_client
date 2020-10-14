@@ -10,8 +10,11 @@ const state = sessionStorage.getItem('state') ? JSON.parse(sessionStorage.getIte
     id: '',
     token: '',
     permissions: '',
-    is_superuser: false,
-    config: ''
+    is_superuser: false
+  },
+  config: {
+    attach_attribute: {},
+    function_select: {}
   }
 }
 const action = {
@@ -24,11 +27,18 @@ const mutations = {
     state.loginInfor.permissions = payload.permissions
     state.loginInfor.is_superuser = payload.is_superuser
     state.loginInfor.config = payload.config
+  },
+  saveConfig (state, payload) {
+    state.config.attach_attribute = payload.attach_attribute
+    state.config.function_select = payload.function_select
   }
 }
 const getters = {
   getLoginInfor (state) {
     return state.loginInfor
+  },
+  getConfig (state) {
+    return state.config
   }
 }
 

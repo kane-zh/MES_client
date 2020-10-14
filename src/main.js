@@ -20,8 +20,9 @@ let startApp = function () {
     // 基础地址
     axios.defaults.baseURL = res.data.BASE_URL
     store.commit({
-      type: 'saveLoginInfor',
-      config: res.data
+      type: 'saveConfig',
+      attach_attribute: res.data.attach_attribute,
+      function_select: res.data.function_select
     })
     new Vue({
       el: '#app',

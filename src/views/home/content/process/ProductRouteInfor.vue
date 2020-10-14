@@ -200,7 +200,7 @@
           <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
         </div>
         <div>关联工位:
-          <select v-model="formItem.child"  placeholder="请选择关联工位"  multiple="true">
+          <select v-model="formItem.child"  placeholder="请选择关联工位"  style="height: 90%"  multiple="true">
             <option v-for="item in stationInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -263,7 +263,7 @@
           <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
         </div>
         <div>关联工位:
-          <select v-model="formItem.child"  placeholder="请选择关联工位"  multiple="true">
+          <select v-model="formItem.child"  placeholder="请选择关联工位"  style="height: 90%"  multiple="true">
             <option v-for="item in stationInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
