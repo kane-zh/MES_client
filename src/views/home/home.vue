@@ -22,7 +22,7 @@
       <div class="sliders" >
         <div class="mainSlider" >
           <ul>
-            <dl @click="showMenuItem('user')">
+            <dl @click="showMenuItem('user')" >
               <dt>
                 <img src="../../../static/icons/userManagement_hover.png" v-if="mainMenuSelect==='user'" />
                 <img src="../../../static/icons/userManagement.png" v-if="mainMenuSelect!=='user'" />
@@ -31,7 +31,7 @@
                 账号管理
               </dd>
             </dl>
-            <dl  @click="showMenuItem('process')">
+            <dl  @click="showMenuItem('process')" v-if="function_select['工艺管理'].enable===true">
               <dt>
                 <img src="../../../static/icons/processManagement_hover.png" v-if="mainMenuSelect==='process'" />
                 <img src="../../../static/icons/processManagement.png" v-if="mainMenuSelect!=='process'" />
@@ -40,7 +40,7 @@
                 工艺管理
               </dd>
             </dl>
-            <dl  @click="showMenuItem('warehouse')">
+            <dl  @click="showMenuItem('warehouse')" v-if="function_select['仓库管理'].enable===true">
               <dt>
                 <img src="../../../static/icons/warehouseManagement_hover.png" v-if="mainMenuSelect==='warehouse'" />
                 <img src="../../../static/icons/warehouseManagement.png" v-if="mainMenuSelect!=='warehouse'" />
@@ -49,7 +49,7 @@
                 仓库管理
               </dd>
             </dl>
-            <dl  @click="showMenuItem('quality')">
+            <dl  @click="showMenuItem('quality')" v-if="function_select['品质管理'].enable===true">
               <dt>
                 <img src="../../../static/icons/qualityManagement_hover.png" v-if="mainMenuSelect==='quality'" />
                 <img src="../../../static/icons/qualityManagement.png" v-if="mainMenuSelect!=='quality'" />
@@ -58,7 +58,7 @@
                 品质管理
               </dd>
             </dl>
-            <dl @click="showMenuItem('equipment')">
+            <dl @click="showMenuItem('equipment')" v-if="function_select['设备管理'].enable===true">
               <dt>
                 <img src="../../../static/icons/deviceManagement_hover.png" v-if="mainMenuSelect==='equipment'" />
                 <img src="../../../static/icons/deviceManagement.png" v-if="mainMenuSelect!=='equipment'" />
@@ -67,7 +67,7 @@
                 设备管理
               </dd>
             </dl>
-            <dl  @click="showMenuItem('production')" >
+            <dl  @click="showMenuItem('production')" v-if="function_select['生产管理'].enable===true">
               <dt>
                 <img src="../../../static/icons/productionManagement_hover.png" v-if="mainMenuSelect==='production'" />
                 <img src="../../../static/icons/productionManagement.png" v-if="mainMenuSelect!=='production'" />
@@ -76,7 +76,7 @@
                 生产管理
               </dd>
             </dl>
-            <dl  @click="showMenuItem('plan')" >
+            <dl  @click="showMenuItem('plan')" v-if="function_select['计划管理'].enable===true">
               <dt>
                 <img src="../../../static/icons/planManagement_hover.png" v-if="mainMenuSelect==='plan'" />
                 <img src="../../../static/icons/planManagement.png" v-if="mainMenuSelect!=='plan'" />
@@ -85,7 +85,7 @@
                 计划管理
               </dd >
             </dl>
-            <dl   @click="showMenuItem('lean')">
+            <dl   @click="showMenuItem('lean')" v-if="function_select['精益管理'].enable===true">
               <dt>
                 <img src="../../../static/icons/leanManagement_hover.png" v-if="mainMenuSelect==='lean'" />
                 <img src="../../../static/icons/leanManagement.png" v-if="mainMenuSelect!=='lean'" />
@@ -109,237 +109,308 @@
           </div>
           <div  v-show="MenuItem==='process'">
             <ul>
-              <li :class="childMenuSelect==='unitType'? 'isActive':'isInActive'"  @click="childMenuSelect='unitType'">
+              <li :class="childMenuSelect==='unitType'? 'isActive':'isInActive'"  @click="childMenuSelect='unitType'"
+                  v-if="function_select['工艺管理'].计量单位类型===true">
                 <router-link to="/home/process/unitType">计量单位类型</router-link>
               </li>
-              <li :class="childMenuSelect==='unitInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='unitInfor'">
+              <li :class="childMenuSelect==='unitInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='unitInfor'"
+                  v-if="function_select['工艺管理'].计量单位信息===true">
                 <router-link to="/home/process/unitInfor">计量单位信息</router-link>
               </li>
-              <li :class="childMenuSelect==='materialType'? 'isActive':'isInActive'"  @click="childMenuSelect='materialType'">
+              <li :class="childMenuSelect==='materialType'? 'isActive':'isInActive'"  @click="childMenuSelect='materialType'"
+                  v-if="function_select['工艺管理'].物料类型===true">
                 <router-link to="/home/process/materialType">物料类型</router-link>
               </li>
-              <li :class="childMenuSelect==='materialInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='materialInfor'">
+              <li :class="childMenuSelect==='materialInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='materialInfor'"
+                  v-if="function_select['工艺管理'].物料信息===true">
                 <router-link to="/home/process/materialInfor">物料信息</router-link>
               </li>
-              <li :class="childMenuSelect==='semifinishedType'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedType'">
+              <li :class="childMenuSelect==='semifinishedType'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedType'"
+                  v-if="function_select['工艺管理'].半成品类型===true">
                 <router-link to="/home/process/semifinishedType">半成品类型</router-link>
               </li>
-              <li :class="childMenuSelect==='semifinishedInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedInfor'">
+              <li :class="childMenuSelect==='semifinishedInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedInfor'"
+                  v-if="function_select['工艺管理'].半成品信息===true">
                 <router-link to="/home/process/semifinishedInfor">半成品信息</router-link>
               </li>
-              <li :class="childMenuSelect==='productType'? 'isActive':'isInActive'"  @click="childMenuSelect='productType'">
+              <li :class="childMenuSelect==='productType'? 'isActive':'isInActive'"  @click="childMenuSelect='productType'"
+                  v-if="function_select['工艺管理'].产品类型===true">
                 <router-link to="/home/process/productType">产品类型</router-link>
               </li>
-              <li :class="childMenuSelect==='productInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='productInfor'">
+              <li :class="childMenuSelect==='productInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='productInfor'"
+                  v-if="function_select['工艺管理'].产品信息===true">
                 <router-link to="/home/process/productInfor">产品信息</router-link>
               </li>
-              <li :class="childMenuSelect==='stationType'? 'isActive':'isInActive'"  @click="childMenuSelect='stationType'">
+              <li :class="childMenuSelect==='stationType'? 'isActive':'isInActive'"  @click="childMenuSelect='stationType'"
+                  v-if="function_select['工艺管理'].工位类型===true">
                 <router-link to="/home/process/stationType">工位类型</router-link>
               </li>
-              <li :class="childMenuSelect==='stationInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='stationInfor'">
+              <li :class="childMenuSelect==='stationInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='stationInfor'"
+                  v-if="function_select['工艺管理'].工位信息===true">
                 <router-link to="/home/process/stationInfor">工位信息</router-link>
               </li>
-              <li :class="childMenuSelect==='productRouteType'? 'isActive':'isInActive'"  @click="childMenuSelect='productRouteType'">
+              <li :class="childMenuSelect==='productRouteType'? 'isActive':'isInActive'"  @click="childMenuSelect='productRouteType'"
+                  v-if="function_select['工艺管理'].生产路线类型===true">
                 <router-link to="/home/process/productRouteType">生产路线类型</router-link>
               </li>
-              <li :class="childMenuSelect==='productRouteInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='productRouteInfor'">
+              <li :class="childMenuSelect==='productRouteInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='productRouteInfor'"
+                  v-if="function_select['工艺管理'].生产路线===true">
                 <router-link to="/home/process/productRouteInfor">生产路线</router-link>
               </li>
-              <li :class="childMenuSelect==='processBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='processBoard'">
+              <li :class="childMenuSelect==='processBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='processBoard'"
+                  v-if="function_select['工艺管理'].工艺看板===true">
                 <router-link to="/home/process/processBoard">工艺看板</router-link>
               </li>
             </ul>
           </div>
           <div  v-show="MenuItem==='warehouse'">
             <ul>
-              <li :class="childMenuSelect==='warehouseInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='warehouseInfor'">
+              <li :class="childMenuSelect==='warehouseInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='warehouseInfor'"
+                  v-if="function_select['仓库管理'].仓库信息===true">
                 <router-link to="/home/warehouse/warehouseInfor">仓库信息</router-link>
               </li>
-              <li :class="childMenuSelect==='positionInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='positionInfor'">
+              <li :class="childMenuSelect==='positionInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='positionInfor'"
+                  v-if="function_select['仓库管理'].仓位信息===true">
                 <router-link to="/home/warehouse/positionInfor">仓位信息</router-link>
               </li>
-              <li :class="childMenuSelect==='equipmentManage'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentManage'">
+              <li :class="childMenuSelect==='equipmentManage'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentManage'"
+                  v-if="function_select['仓库管理'].设备管理===true">
                 <router-link to="/home/warehouse/equipmentManage">设备管理</router-link>
               </li>
-              <li :class="childMenuSelect==='partsManage'? 'isActive':'isInActive'"  @click="childMenuSelect='partsManage'">
+              <li :class="childMenuSelect==='partsManage'? 'isActive':'isInActive'"  @click="childMenuSelect='partsManage'"
+                  v-if="function_select['仓库管理'].备品管理===true">
                 <router-link to="/home/warehouse/partsManage">备品管理</router-link>
               </li>
-              <li :class="childMenuSelect==='materialManage'? 'isActive':'isInActive'"  @click="childMenuSelect='materialManage'">
+              <li :class="childMenuSelect==='materialManage'? 'isActive':'isInActive'"  @click="childMenuSelect='materialManage'"
+                  v-if="function_select['仓库管理'].物料管理===true">
                 <router-link to="/home/warehouse/materialManage">物料管理</router-link>
               </li>
-              <li :class="childMenuSelect==='semifinishedManage'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedManage'">
+              <li :class="childMenuSelect==='semifinishedManage'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedManage'"
+                  v-if="function_select['仓库管理'].半成品管理===true">
                 <router-link to="/home/warehouse/semifinishedManage">半成品管理</router-link>
               </li>
-              <li :class="childMenuSelect==='productManage'? 'isActive':'isInActive'"  @click="childMenuSelect='productManage'">
+              <li :class="childMenuSelect==='productManage'? 'isActive':'isInActive'"  @click="childMenuSelect='productManage'"
+                  v-if="function_select['仓库管理'].产品管理===true">
                 <router-link to="/home/warehouse/productManage">产品管理</router-link>
               </li>
-              <li :class="childMenuSelect==='equipmentStock'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentStock'">
+              <li :class="childMenuSelect==='equipmentStock'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentStock'"
+                  v-if="function_select['仓库管理'].设备库存===true">
                 <router-link to="/home/warehouse/equipmentStock">设备库存</router-link>
               </li>
-              <li :class="childMenuSelect==='partsStock'? 'isActive':'isInActive'"  @click="childMenuSelect='partsStock'">
+              <li :class="childMenuSelect==='partsStock'? 'isActive':'isInActive'"  @click="childMenuSelect='partsStock'"
+                  v-if="function_select['仓库管理'].备品库存===true">
                 <router-link to="/home/warehouse/partsStock">备品库存</router-link>
               </li>
-              <li :class="childMenuSelect==='materialStock'? 'isActive':'isInActive'"  @click="childMenuSelect='materialStock'">
+              <li :class="childMenuSelect==='materialStock'? 'isActive':'isInActive'"  @click="childMenuSelect='materialStock'"
+                  v-if="function_select['仓库管理'].物料库存===true">
                 <router-link to="/home/warehouse/materialStock">物料库存</router-link>
               </li>
-              <li :class="childMenuSelect==='semifinishedStock'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedStock'">
+              <li :class="childMenuSelect==='semifinishedStock'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedStock'"
+                  v-if="function_select['仓库管理'].半成品库存===true">
                 <router-link to="/home/warehouse/semifinishedStock">半成品库存</router-link>
               </li>
-              <li :class="childMenuSelect==='productStock'? 'isActive':'isInActive'"  @click="childMenuSelect='productStock'">
+              <li :class="childMenuSelect==='productStock'? 'isActive':'isInActive'"  @click="childMenuSelect='productStock'"
+                  v-if="function_select['仓库管理'].产品库存===true">
                 <router-link to="/home/warehouse/productStock">产品库存</router-link>
               </li>
-              <li :class="childMenuSelect==='materialWaringRule'? 'isActive':'isInActive'"  @click="childMenuSelect='materialWaringRule'">
+              <li :class="childMenuSelect==='materialWaringRule'? 'isActive':'isInActive'"  @click="childMenuSelect='materialWaringRule'"
+                  v-if="function_select['仓库管理'].物料预警规则===true">
                 <router-link to="/home/warehouse/materialWaringRule">物料预警规则</router-link>
               </li>
-              <li :class="childMenuSelect==='semifinishedWaringRule'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedWaringRule'">
+              <li :class="childMenuSelect==='semifinishedWaringRule'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedWaringRule'"
+                  v-if="function_select['仓库管理'].半成品预警规则===true">
                 <router-link to="/home/warehouse/semifinishedWaringRule">半成品预警规则</router-link>
               </li>
-              <li  :class="childMenuSelect==='productWaringRule'? 'isActive':'isInActive'"  @click="childMenuSelect='productWaringRule'">
+              <li  :class="childMenuSelect==='productWaringRule'? 'isActive':'isInActive'"  @click="childMenuSelect='productWaringRule'"
+                   v-if="function_select['仓库管理'].产品预警规则===true">
                 <router-link to="/home/warehouse/productWaringRule">产品预警规则</router-link>
               </li>
-              <li :class="childMenuSelect==='warehouseBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='warehouseBoard'">
+              <li :class="childMenuSelect==='warehouseBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='warehouseBoard'"
+                  v-if="function_select['仓库管理'].仓库看板===true">
                 <router-link  to="/home/warehouse/warehouseBoard">仓库看板</router-link>
               </li>
             </ul>
           </div>
           <div  v-show="MenuItem==='quality'">
             <ul >
-              <li :class="childMenuSelect==='defectType'? 'isActive':'isInActive'"  @click="childMenuSelect='defectType'">
+              <li :class="childMenuSelect==='defectType'? 'isActive':'isInActive'"  @click="childMenuSelect='defectType'"
+                  v-if="function_select['品质管理'].缺陷类型===true">
                 <router-link to="/home/quality/defectType">缺陷类型</router-link>
               </li>
-              <li :class="childMenuSelect==='defectGrade'? 'isActive':'isInActive'"  @click="childMenuSelect='defectGrade'">
+              <li :class="childMenuSelect==='defectGrade'? 'isActive':'isInActive'"  @click="childMenuSelect='defectGrade'"
+                  v-if="function_select['品质管理'].缺陷等级===true">
                 <router-link to="/home/quality/defectGrade">缺陷等级</router-link>
               </li>
-              <li :class="childMenuSelect==='defectInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='defectInfor'">
+              <li :class="childMenuSelect==='defectInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='defectInfor'"
+                  v-if="function_select['品质管理'].缺陷信息===true">
                 <router-link to="/home/quality/defectInfor">缺陷信息</router-link>
               </li>
-              <li :class="childMenuSelect==='inspectionStandardType'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionStandardType'">
+              <li :class="childMenuSelect==='inspectionStandardType'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionStandardType'"
+                  v-if="function_select['品质管理'].检验标准类型===true">
                 <router-link to="/home/quality/inspectionStandardType">检验标准类型</router-link>
               </li>
-              <li :class="childMenuSelect==='inspectionStandard'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionStandard'">
+              <li :class="childMenuSelect==='inspectionStandard'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionStandard'"
+                  v-if="function_select['品质管理'].检验标准信息===true">
                 <router-link to="/home/quality/inspectionStandard">检验标准信息</router-link>
               </li>
-              <li :class="childMenuSelect==='inspectionReportType'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionReportType'">
+              <li :class="childMenuSelect==='inspectionReportType'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionReportType'"
+                  v-if="function_select['品质管理'].检验汇报类型===true">
                 <router-link to="/home/quality/inspectionReportType">检验汇报类型</router-link>
               </li>
-              <li :class="childMenuSelect==='inspectionReport'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionReport'">
+              <li :class="childMenuSelect==='inspectionReport'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionReport'"
+                  v-if="function_select['品质管理'].检验汇报===true">
                 <router-link to="/home/quality/inspectionReport">检验汇报</router-link>
               </li>
-              <li :class="childMenuSelect==='qualityBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='qualityBoard'">
+              <li :class="childMenuSelect==='qualityBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='qualityBoard'"
+                  v-if="function_select['品质管理'].品质看板===true">
                 <router-link to="/home/quality/qualityBoard">品质看板</router-link>
               </li>
             </ul>
           </div>
           <div  v-show="MenuItem==='equipment'">
             <ul>
-              <li :class="childMenuSelect==='equipmentVendor'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentVendor'">
+              <li :class="childMenuSelect==='equipmentVendor'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentVendor'"
+                  v-if="function_select['设备管理'].设备厂商信息===true">
                 <router-link to="/home/equipment/equipmentVendor">设备厂商信息</router-link>
               </li>
-              <li :class="childMenuSelect==='partsType'? 'isActive':'isInActive'"  @click="childMenuSelect='partsType'">
+              <li :class="childMenuSelect==='partsType'? 'isActive':'isInActive'"  @click="childMenuSelect='partsType'"
+                  v-if="function_select['设备管理'].备品类型===true">
                 <router-link to="/home/equipment/partsType">备品类型</router-link>
               </li>
-              <li :class="childMenuSelect==='partsInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='partsInfor'">
+              <li :class="childMenuSelect==='partsInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='partsInfor'"
+                  v-if="function_select['设备管理'].备品信息===true">
                 <router-link to="/home/equipment/partsInfor">备品信息</router-link>
               </li>
-              <li :class="childMenuSelect==='equipmentType'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentType'">
+              <li :class="childMenuSelect==='equipmentType'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentType'"
+                  v-if="function_select['设备管理'].设备类型===true">
                 <router-link to="/home/equipment/equipmentType">设备类型</router-link>
               </li>
-              <li :class="childMenuSelect==='equipmentInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentInfor'">
+              <li :class="childMenuSelect==='equipmentInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentInfor'"
+                  v-if="function_select['设备管理'].设备台账===true">
                 <router-link to="/home/equipment/equipmentInfor">设备台账</router-link>
               </li>
-              <li :class="childMenuSelect==='maintainRecordType'? 'isActive':'isInActive'"  @click="childMenuSelect='maintainRecordType'">
+              <li :class="childMenuSelect==='maintainRecordType'? 'isActive':'isInActive'"  @click="childMenuSelect='maintainRecordType'"
+                  v-if="function_select['设备管理'].维护记录类型===true">
                 <router-link to="/home/equipment/maintainRecordType">维护记录类型</router-link>
               </li>
-              <li :class="childMenuSelect==='maintainRecord'? 'isActive':'isInActive'"  @click="childMenuSelect='maintainRecord'">
+              <li :class="childMenuSelect==='maintainRecord'? 'isActive':'isInActive'"  @click="childMenuSelect='maintainRecord'"
+                  v-if="function_select['设备管理'].维护记录===true">
                 <router-link to="/home/equipment/maintainRecord">维护记录</router-link>
               </li>
-              <li :class="childMenuSelect==='partsUseRecord'? 'isActive':'isInActive'"  @click="childMenuSelect='partsUseRecord'">
+              <li :class="childMenuSelect==='partsUseRecord'? 'isActive':'isInActive'"  @click="childMenuSelect='partsUseRecord'"
+                  v-if="function_select['设备管理'].备品消耗记录===true">
                 <router-link to="/home/equipment/partsUseRecord">备品消耗记录</router-link>
               </li>
-              <li :class="childMenuSelect==='equipmentState'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentState'">
+              <li :class="childMenuSelect==='equipmentState'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentState'"
+                  v-if="function_select['设备管理'].设备状态信息===true">
                 <router-link to="/home/equipment/equipmentState">设备状态信息</router-link>
               </li>
-              <li :class="childMenuSelect==='equipmentBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentBoard'">
+              <li :class="childMenuSelect==='equipmentBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentBoard'"
+                  v-if="function_select['设备管理'].设备看板===true">
                 <router-link to="/home/equipment/equipmentBoard">设备看板</router-link>
               </li>
             </ul>
           </div>
           <div  v-show="MenuItem==='production'">
             <ul>
-              <li :class="childMenuSelect==='workshopInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='workshopInfor'">
+              <li :class="childMenuSelect==='workshopInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='workshopInfor'"
+                  v-if="function_select['生产管理'].车间信息===true">
                 <router-link to="/home/production/workshopInfor">车间信息</router-link>
               </li>
-              <li :class="childMenuSelect==='teamInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='teamInfor'">
+              <li :class="childMenuSelect==='teamInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='teamInfor'"
+                  v-if="function_select['生产管理'].班组信息===true">
                 <router-link to="/home/production/teamInfor">班组信息</router-link>
               </li>
-              <li :class="childMenuSelect==='skillType'? 'isActive':'isInActive'"  @click="childMenuSelect='skillType'">
+              <li :class="childMenuSelect==='skillType'? 'isActive':'isInActive'"  @click="childMenuSelect='skillType'"
+                  v-if="function_select['生产管理'].技能类型===true">
                 <router-link to="/home/production/skillType">技能类型</router-link>
               </li>
-              <li :class="childMenuSelect==='skillInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='skillInfor'">
+              <li :class="childMenuSelect==='skillInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='skillInfor'"
+                  v-if="function_select['生产管理'].技能信息===true">
                 <router-link to="/home/production/skillInfor">技能信息</router-link>
               </li>
-              <li :class="childMenuSelect==='personnelInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='personnelInfor'">
+              <li :class="childMenuSelect==='personnelInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='personnelInfor'"
+                  v-if="function_select['生产管理'].人员信息===true">
                 <router-link to="/home/production/personnelInfor">人员信息</router-link>
               </li>
-              <li :class="childMenuSelect==='assessmentType'? 'isActive':'isInActive'"  @click="childMenuSelect='assessmentType'">
+              <li :class="childMenuSelect==='assessmentType'? 'isActive':'isInActive'"  @click="childMenuSelect='assessmentType'"
+                  v-if="function_select['生产管理'].考核类型===true">
                 <router-link to="/home/production/assessmentType">考核类型</router-link>
               </li>
-              <li :class="childMenuSelect==='assessmentLevel'? 'isActive':'isInActive'"  @click="childMenuSelect='assessmentLevel'">
+              <li :class="childMenuSelect==='assessmentLevel'? 'isActive':'isInActive'"  @click="childMenuSelect='assessmentLevel'"
+                  v-if="function_select['生产管理'].考核等级===true">
                 <router-link to="/home/production/assessmentLevel">考核等级</router-link>
               </li>
-              <li :class="childMenuSelect==='assessmentRecord'? 'isActive':'isInActive'"  @click="childMenuSelect='assessmentRecord'">
+              <li :class="childMenuSelect==='assessmentRecord'? 'isActive':'isInActive'"  @click="childMenuSelect='assessmentRecord'"
+                  v-if="function_select['生产管理'].考核记录===true">
                 <router-link to="/home/production/assessmentRecord">考核记录</router-link>
               </li>
-              <li :class="childMenuSelect==='semifinishedDailyReport'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedDailyReport'">
+              <li :class="childMenuSelect==='semifinishedDailyReport'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedDailyReport'"
+                  v-if="function_select['生产管理'].半成品生产汇报===true">
                 <router-link to="/home/production/semifinishedDailyReport">半成品生产汇报</router-link>
               </li>
-              <li :class="childMenuSelect==='productDailyReport'? 'isActive':'isInActive'"  @click="childMenuSelect='productDailyReport'">
+              <li :class="childMenuSelect==='productDailyReport'? 'isActive':'isInActive'"  @click="childMenuSelect='productDailyReport'"
+                  v-if="function_select['生产管理'].产品生产汇报===true">
                 <router-link to="/home/production/productDailyReport">产品生产汇报</router-link>
               </li>
-              <li :class="childMenuSelect==='productionBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='productionBoard'">
+              <li :class="childMenuSelect==='productionBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='productionBoard'"
+                  v-if="function_select['生产管理'].生产看板===true">
                 <router-link to="/home/production/productionBoard">生产看板</router-link>
               </li>
             </ul>
           </div>
           <div  v-show="MenuItem==='plan'">
             <ul>
-              <li :class="childMenuSelect==='clientType'? 'isActive':'isInActive'"  @click="childMenuSelect='clientType'">
+              <li :class="childMenuSelect==='clientType'? 'isActive':'isInActive'"  @click="childMenuSelect='clientType'"
+                  v-if="function_select['计划管理'].客户类型===true">
                 <router-link to="/home/plan/clientType">客户类型</router-link>
               </li>
-              <li :class="childMenuSelect==='clientInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='clientInfor'">
+              <li :class="childMenuSelect==='clientInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='clientInfor'"
+                  v-if="function_select['计划管理'].客户信息===true">
                 <router-link to="/home/plan/clientInfor">客户信息</router-link>
               </li>
-              <li :class="childMenuSelect==='vendorType'? 'isActive':'isInActive'"  @click="childMenuSelect='vendorType'">
+              <li :class="childMenuSelect==='vendorType'? 'isActive':'isInActive'"  @click="childMenuSelect='vendorType'"
+                  v-if="function_select['计划管理'].供应商类型===true">
                 <router-link to="/home/plan/vendorType">供应商类型</router-link>
               </li>
-              <li :class="childMenuSelect==='vendorInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='vendorInfor'">
+              <li :class="childMenuSelect==='vendorInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='vendorInfor'"
+                  v-if="function_select['计划管理'].供应商信息===true">
                 <router-link to="/home/plan/vendorInfor">供应商信息</router-link>
               </li>
-              <li :class="childMenuSelect==='salesOrderCreate'? 'isActive':'isInActive'"  @click="childMenuSelect='salesOrderCreate'" >
+              <li :class="childMenuSelect==='salesOrderCreate'? 'isActive':'isInActive'"  @click="childMenuSelect='salesOrderCreate'"
+                  v-if="function_select['计划管理'].销售订单===true">
                 <router-link to="/home/plan/salesOrderCreate">销售订单</router-link>
               </li>
-              <li :class="childMenuSelect==='productTaskCreate'? 'isActive':'isInActive'"  @click="childMenuSelect='productTaskCreate'">
+              <li :class="childMenuSelect==='productTaskCreate'? 'isActive':'isInActive'"  @click="childMenuSelect='productTaskCreate'"
+                  v-if="function_select['计划管理'].产品生产任务===true">
                 <router-link to="/home/plan/productTaskCreate">产品生产任务</router-link>
               </li>
-              <li :class="childMenuSelect==='seminishedTaskCreate'? 'isActive':'isInActive'"  @click="childMenuSelect='seminishedTaskCreate'">
+              <li :class="childMenuSelect==='seminishedTaskCreate'? 'isActive':'isInActive'"  @click="childMenuSelect='seminishedTaskCreate'"
+                  v-if="function_select['计划管理'].半成品生产任务===true">
                 <router-link to="/home/plan/seminishedTaskCreate">半成品生产任务</router-link>
               </li>
-              <li :class="childMenuSelect==='purchaseRequire'? 'isActive':'isInActive'"  @click="childMenuSelect='purchaseRequire'">
+              <li :class="childMenuSelect==='purchaseRequire'? 'isActive':'isInActive'"  @click="childMenuSelect='purchaseRequire'"
+                  v-if="function_select['计划管理'].物料需求===true">
                 <router-link to="/home/plan/purchaseRequire">物料需求</router-link>
               </li>
-              <li :class="childMenuSelect==='materialManagePlan'? 'isActive':'isInActive'"  @click="childMenuSelect='materialManagePlan'">
+              <li :class="childMenuSelect==='materialManagePlan'? 'isActive':'isInActive'"  @click="childMenuSelect='materialManagePlan'"
+                  v-if="function_select['计划管理'].物料管理计划===true">
                 <router-link to="/home/plan/materialManagePlan">物料管理计划</router-link>
               </li>
-              <li :class="childMenuSelect==='semifinishedManagePlan'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedManagePlan'">
+              <li :class="childMenuSelect==='semifinishedManagePlan'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedManagePlan'"
+                  v-if="function_select['计划管理'].半成品管理计划===true">
                 <router-link to="/home/plan/semifinishedManagePlan">半成品管理计划</router-link>
               </li>
-              <li :class="childMenuSelect==='productManagePlan'? 'isActive':'isInActive'"  @click="childMenuSelect='productManagePlan'">
+              <li :class="childMenuSelect==='productManagePlan'? 'isActive':'isInActive'"  @click="childMenuSelect='productManagePlan'"
+                  v-if="function_select['计划管理'].产品管理计划===true">
                 <router-link to="/home/plan/productManagePlan">产品管理计划</router-link>
               </li>
-              <li :class="childMenuSelect==='equipmentMaintainPlan'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentMaintainPlan'">
+              <li :class="childMenuSelect==='equipmentMaintainPlan'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentMaintainPlan'"
+                  v-if="function_select['计划管理'].设备保养计划===true">
                 <router-link to="/home/plan/equipmentMaintainPlan">设备保养计划</router-link>
               </li>
-              <li :class="childMenuSelect==='planBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='planBoard'">
+              <li :class="childMenuSelect==='planBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='planBoard'"
+                  v-if="function_select['计划管理'].计划看板===true">
                 <router-link to="/home/plan/planBoard">计划看板</router-link>
               </li>
             </ul>
