@@ -481,6 +481,41 @@
             "attribute4": "",
             "attribute5": ""
           },
+          "产品过程记录":
+          {
+            "attribute1": "循环时间",
+            "attribute2": "结果",
+            "attribute3": "",
+            "attribute4": "",
+            "attribute5": "",
+            "attribute6": "",
+            "attribute7": "",
+            "attribute8": "",
+            "attribute9": ""
+          },
+          "半成品过程记录":
+          {
+            "attribute1": "",
+            "attribute2": "",
+            "attribute3": "",
+            "attribute4": "",
+            "attribute5": "",
+            "attribute6": "",
+            "attribute7": "",
+            "attribute8": "",
+            "attribute9": "",
+            "attribute10": "",
+            "attribute11": "",
+            "attribute12": "",
+            "attribute13": "",
+            "attribute14": "",
+            "attribute15": "",
+            "attribute16": "",
+            "attribute17": "",
+            "attribute18": "",
+            "attribute19": "",
+            "attribute20": ""
+          },
           "检验汇报":
           {
             "attribute1": "",
@@ -586,6 +621,10 @@
             "考核记录": true,
             "半成品生产汇报": true,
             "产品生产汇报": true,
+            "产品记录类型": true,
+            "半成品记录类型": true,
+            "产品过程数据": true,
+            "半成品过程数据": true,
             "生产看板": true
           },
           "计划管理":{

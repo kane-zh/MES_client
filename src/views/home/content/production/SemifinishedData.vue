@@ -1,5 +1,5 @@
 <template>
-  <div class="materialManagePlan">
+  <div class="semifinishedData">
     <!-- 列表页显示-->
     <div  class="list"  v-if="showViewid==='list'">
       <div class="listHead">
@@ -9,25 +9,16 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
-          <div>审核账号:
-            <select v-model="selectItem.auditor" placeholder="请选择审核账号"      >
-              <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
+          <div>类型:
+            <select v-model="selectItem.type" placeholder="请选择类型"      >
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
-          <div>状态:
-            <select v-model="selectItem.state"  placeholder="请选择状态"    >
-              <option value="新建">新建</option>
-              <option value="审核中">审核中</option>
-              <option value="使用中">使用中</option>
-            </select>
-          </div>
-          <div>操作类型:
-            <select v-model="selectItem.state"  placeholder="请选择操作类型"    >
-              <option value="入库操作">入库操作</option>
-              <option value="出库操作">出库操作</option>
-              <option value="盘点操作">盘点管理</option>
-            </select>
-          </div>
+          <!--          <div>车间:-->
+          <!--            <select v-model="selectItem.workshop" placeholder="请选择车间"      >-->
+          <!--              <option v-for="item in " :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>-->
+          <!--            </select>-->
+          <!--          </div>-->
           <div>开始时间:
             <input v-model="selectItem.start_time"  type="datetime-local" placeholder="选择日期和时间">
           </div>
@@ -37,15 +28,15 @@
           <div>关键字:
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
-           <div>
-               <button type="button" @click="select" >搜索</button>
-            </div>
-            <div>
-              <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
-            </div>
+          <div>
+            <button type="button" @click="select" >搜索</button>
+          </div>
+          <div>
+            <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
+          </div>
         </form>
         <div class="button" >
-          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加物料管理计划</button>
+          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加过程数据</button>
         </div>
         <div class="ordering">
           <div>
@@ -67,61 +58,80 @@
         </div>
       </div>
       <div class="listTable">
-          <div class="table">
-            <table >
-              <tr align="center"  type="height:2em">
-                <th>序号</th>
-                <th>名称</th>
-                <th>编码</th>
-                <th>状态</th>
-                <th>执行日期</th>
-                <th>更新时间</th>
-                <th>创建账号</th>
-                <th>审核账号</th>
-                <th>操作</th>
-              </tr>
-              <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
-                <td>{{index}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.code}}</td>
-                <td>{{item.state}}</td>
-                <td>{{item.dataTime}}</td>
-                <td>{{item.update_time}}</td>
-                <td>{{item.create_user}}</td>
-                <td>{{item.auditor}}</td>
-                <td>
-                  <button type="button" @click="showDetailView(item.id)" v-if="item.create_user===username ||
-                  item.auditor===username||canRead===true">详情</button>
-                  <button type="button" @click="showUpdateView(item.id)" v-if="item.state==='新建'">更改</button>
-                </td>
-              </tr>
-              <tr>
+        <div class="table">
+          <table >
+            <tr align="center"  type="height:2em">
+              <th>序号</th>
+              <th>类型</th>
+              <th>半成品类型</th>
+              <th>半成品</th>
+              <th>批次号</th>
+              <th>序列号</th>
+              <th>时间</th>
+              <th>创建账号</th>
+              <th>操作</th>
+            </tr>
+            <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
+              <td>{{index}}</td>
+              <td>{{item.type.name+"("+item.type.code+")"}}</td>
+              <td>{{item.semifinishedType_name+"("+item.semifinishedType_code+")"}}</td>
+              <td>{{item.semifinished_name+"("+item.semifinished_code+")"}}</td>
+              <td>{{item.batch}}</td>
+              <td>{{item.sn}}</td>
+              <td>{{item.dataTime}}</td>
+              <td>{{item.create_user}}</td>
+              <td>
+                <button type="button" @click="showDetailView(item.id)" v-if="item.create_user===username ||
+                  canRead===true">详情</button>
+              </td>
+            </tr>
+            <tr>
 
-              </tr>
-            </table>
-          </div><div class="page">
-          <div>总共：{{listCount}}</div>
-          <button type="button" @click="listPre" v-if="listPreUrl!==''">上一页</button>
-          <button type="button" @click="listNext" v-if="listNextUrl!==''">下一页</button>
-        </div>
+            </tr>
+          </table>
+        </div><div class="page">
+        <div>总共：{{listCount}}</div>
+        <button type="button" @click="listPre" v-if="listPreUrl!==''">上一页</button>
+        <button type="button" @click="listNext" v-if="listNextUrl!==''">下一页</button>
+      </div>
       </div>
     </div>
     <!--   /*详情页显示*/-->
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="content">
         <ul>
-          <li>{{"名称:"+"&#12288;"+detail.name}}</li>
-          <li>{{"编码:"+"&#12288;"+detail.code}}</li>
-          <li>{{"状态:"+"&#12288;"+detail.state}}</li>
+          <li>{{"类型:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
+          <li>{{"半成品类型:"+"&#12288;"+detail.semifinishedType_name+"("+semifinishedType_code+")"}}</li>
+          <li>{{"半成品:"+"&#12288;"+detail.semifinished_name+"("+semifinished_code+")"}}</li>
+          <li>{{"批次号:"+"&#12288;"+detail.batch}}</li>
+          <li>{{"序列号:"+"&#12288;"+detail.sn}}</li>
+          <li>{{"人员信息:"+"&#12288;"+detail.personnel}}</li>
+          <li>{{"设备信息:"+"&#12288;"+detail.equipment}}</li>
+          <li>{{"物料信息:"+"&#12288;"+detail.material}}</li>
+          <li>{{"工位信息:"+"&#12288;"+detail.station}}</li>
+          <li>{{"质检信息:"+"&#12288;"+detail.quality}}</li>
           <li v-if="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
           <li v-if="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
           <li v-if="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</li>
           <li v-if="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</li>
           <li v-if="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</li>
+          <li v-if="attribute_title.attribute6!==''">{{attribute_title.attribute6 +":"+"&#12288;"+detail.attribute6}}</li>
+          <li v-if="attribute_title.attribute7!==''">{{attribute_title.attribute7 +":"+"&#12288;"+detail.attribute7}}</li>
+          <li v-if="attribute_title.attribute8!==''">{{attribute_title.attribute8 +":"+"&#12288;"+detail.attribute8}}</li>
+          <li v-if="attribute_title.attribute9!==''">{{attribute_title.attribute9 +":"+"&#12288;"+detail.attribute9}}</li>
+          <li v-if="attribute_title.attribute10!==''">{{attribute_title.attribute10 +":"+"&#12288;"+detail.attribute10}}</li>
+          <li v-if="attribute_title.attribute11!==''">{{attribute_title.attribute11 +":"+"&#12288;"+detail.attribute11}}</li>
+          <li v-if="attribute_title.attribute12!==''">{{attribute_title.attribute12 +":"+"&#12288;"+detail.attribute12}}</li>
+          <li v-if="attribute_title.attribute13!==''">{{attribute_title.attribute13 +":"+"&#12288;"+detail.attribute13}}</li>
+          <li v-if="attribute_title.attribute14!==''">{{attribute_title.attribute14 +":"+"&#12288;"+detail.attribute14}}</li>
+          <li v-if="attribute_title.attribute15!==''">{{attribute_title.attribute15 +":"+"&#12288;"+detail.attribute15}}</li>
+          <li v-if="attribute_title.attribute16!==''">{{attribute_title.attribute16 +":"+"&#12288;"+detail.attribute16}}</li>
+          <li v-if="attribute_title.attribute17!==''">{{attribute_title.attribute17 +":"+"&#12288;"+detail.attribute17}}</li>
+          <li v-if="attribute_title.attribute18!==''">{{attribute_title.attribute18 +":"+"&#12288;"+detail.attribute18}}</li>
+          <li v-if="attribute_title.attribute19!==''">{{attribute_title.attribute19 +":"+"&#12288;"+detail.attribute19}}</li>
+          <li v-if="attribute_title.attribute20!==''">{{attribute_title.attribute20 +":"+"&#12288;"+detail.attribute20}}</li>
           <li>{{"创建账号:"+"&#12288;"+detail.create_user}}</li>
-          <li>{{"审核账号:"+"&#12288;"+detail.auditor}}</li>
           <li>{{"创建时间:"+"&#12288;"+detail.create_time}}</li>
-          <li>{{"更新时间:"+"&#12288;"+detail.update_time}}</li>
           <li>{{"备注信息:"+"&#12288;"+detail.desc}}</li>
         </ul>
         <dl>
@@ -130,66 +140,119 @@
             <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
           </template>
         </dl>
-        <dl>
-          <dt>历史审核记录:</dt>
-          <template v-for="(value,id) in detail.alter">
-            <dd v-bind:key="id">
-              {{"&#12288;&#12288;&#12288;"+value.desc+"&#12288;" +value.create_user+"&#12288;"+value.create_time}}
-            </dd>
-          </template>
-        </dl>
-        <dl>
-          <dt>新添加记录:</dt>
-          <template v-for="(value,id) in alterData">
-            <dd v-bind:key="id">
-              {{"&#12288;&#12288;&#12288;"+value.desc}}
-            </dd>
-          </template>
-        </dl>
       </div>
-      <div class="alter" v-if="detail.state!=='使用中'">
-        审核信息:
-        <textarea v-model="alterItem.desc"  placeholder="请输入当前信息的审核记录..."></textarea>
-        <button type="button" @click="uploadAlter">提交记录</button>
-      </div>
-       <div class="button">
-        <button type="button" @click="changeState('审核中')" v-show="showSubmitBt===true">提交数据</button>
-        <button type="button" @click="changeState('使用中')" v-show="showApprovedBt===true" >通过审核</button>
-        <button type="button" @click="changeState('新建')" v-show="showReturnBt===true">驳回信息</button>
-        <button type="button" @click="changeState('作废')" v-show="showDeleteBt===true">删除数据</button>
+      <div class="button">
         <button type="button" @click="showViewid='list'">返回列表页</button>
       </div>
     </div>
     <!--    /*创建页显示*/-->
     <div  class="create"  v-show="showViewid==='create'">
       <form >
-        <div>名称:
-          <input v-model="formItem.name"  placeholder="请输入名称">
-        </div>
-        <div>编码:
-          <input v-model="formItem.code"  placeholder="请输入编码">
-          <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
-          <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
-          <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
-        </div>
-        <div>操作类型:
-          <select v-model="formItem.type"  placeholder="请选择操作类型"   >
-            <option value="入库操作">入库操作</option>
-            <option value="出库操作">出库操作</option>
-            <option value="盘点操作">盘点管理</option>
+        <div>类型:
+          <select v-model="formItem.type"   placeholder="请选择类型">
+            <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
           <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
         </div>
-        <div>审核账号:
-          <select v-model="formItem.auditor"  placeholder="请选择审核账号">
-            <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
+        <div>半成品类型:
+          <select v-model="formItem.semifinishedType" >
+            <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
+        </div>
+        <div>半成品信息:
+          <select v-model="formItem.semifinished" >
+            <option v-for="item in semifinishedInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
+          </select>
+        </div>
+        <div>批次号:
+          <input v-model="formItem.batch"  placeholder="请输入批次号...">
+        </div>
+        <div>序列号:
+          <input v-model="formItem.sn"  placeholder="请输入序列号...">
+        </div>
+        <div >人员信息:
+          <textarea v-model="formItem.personnel" placeholder="请输入当前的人员信息..."></textarea>
+        </div>
+        <div >设备信息:
+          <textarea v-model="formItem.equipment" placeholder="请输入当前的设备信息..."></textarea>
+        </div>
+        <div >物料信息:
+          <textarea v-model="formItem.material" placeholder="请输入当前的物料信息..."></textarea>
+        </div>
+        <div >工位信息:
+          <textarea v-model="formItem.station" placeholder="请输入当前的工位信息..."></textarea>
+        </div>
+        <div >质检信息:
+          <textarea v-model="formItem.quality" placeholder="请输入当前的质检信息..."></textarea>
+        </div>
+        <div>记录时间:
+          <input v-model="formItem.dataTime"  type="datetime-local" placeholder="选择日期和时间">
+          <span class="message" v-if="!$v.formItem.dataTime.required">请选择日期</span>
+        </div>
+        <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
+          <input v-model="formItem.attribute1"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
+          <input v-model="formItem.attribute2"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
+          <input v-model="formItem.attribute3"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
+          <input v-model="formItem.attribute4"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
+          <input v-model="formItem.attribute5"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute6!==''">{{attribute_title.attribute6}}
+          <input v-model="formItem.attribute6"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute7!==''">{{attribute_title.attribute7}}
+          <input v-model="formItem.attribute7"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute8!==''">{{attribute_title.attribute8}}
+          <input v-model="formItem.attribute8"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute9!==''">{{attribute_title.attribute9}}
+          <input v-model="formItem.attribute9"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute10!==''">{{attribute_title.attribute10}}
+          <input v-model="formItem.attribute10"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute11!==''">{{attribute_title.attribute11}}
+          <input v-model="formItem.attribute11"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute12!==''">{{attribute_title.attribute12}}
+          <input v-model="formItem.attribute12"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute13!==''">{{attribute_title.attribute13}}
+          <input v-model="formItem.attribute13"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute14!==''">{{attribute_title.attribute14}}
+          <input v-model="formItem.attribute14"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute15!==''">{{attribute_title.attribute15}}
+          <input v-model="formItem.attribute15"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute16!==''">{{attribute_title.attribute16}}
+          <input v-model="formItem.attribute16"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute17!==''">{{attribute_title.attribute17}}
+          <input v-model="formItem.attribute17"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute18!==''">{{attribute_title.attribute18}}
+          <input v-model="formItem.attribute18"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute19!==''">{{attribute_title.attribute19}}
+          <input v-model="formItem.attribute19"  placeholder="...">
+        </div>
+        <div v-show="attribute_title.attribute20!==''">{{attribute_title.attribute20}}
+          <input v-model="formItem.attribute20"  placeholder="...">
         </div>
         <div >备注信息:
           <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
-          <div class="annex">文件附件:
+        <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
@@ -200,67 +263,15 @@
       </form>
       <div class="button">
         <button type="button" @click="save">保存数据</button>
-        <button type="button" @click="saveAndSubmit">保存并提交</button>
-        <button type="button" @click="showViewid='list'">返回列表页</button>
-      </div>
-    </div>
-    <!--    /*更新页显示*/-->
-    <div  class="update"  v-show="showViewid==='update'">
-      <form >
-        <div>名称:
-          <input v-model="formItem.name"  placeholder="请输入名称">
-        </div>
-        <div>编码:
-          <input v-model="formItem.code"  placeholder="请输入编码">
-          <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
-          <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
-          <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
-        </div>
-        <div>操作类型:
-          <select v-model="formItem.type"  placeholder="请选择操作类型"   >
-            <option value="入库操作">入库操作</option>
-            <option value="出库操作">出库操作</option>
-            <option value="盘点操作">盘点管理</option>
-          </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
-        </div>
-        <div>审核账号:
-          <select v-model="formItem.auditor"  placeholder="请选择审核账号">
-            <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
-          </select>
-          <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
-        </div>
-        <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
-        </div>
-          <div class="annex">文件附件:
-          <ul>
-            <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
-          </ul>
-          <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
-          <button type="button" @click="uploadFile">上传</button>
-        </div>
-        <div>历史审核记录:
-          <ul>
-            <li v-for="value in alterList" v-bind:key="value.id" >
-              {{value.desc+value.create_time+value.create_user}}
-            </li>
-          </ul>
-        </div>
-      </form>
-      <div class="button">
-        <button type="button" @click="update">保存数据</button>
-        <button type="button" @click="updateAndSubmit">保存并提交</button>
         <button type="button" @click="showViewid='list'">返回列表页</button>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import {required} from 'vuelidate/lib/validators'
 export default {
-  name: 'materialManagePlan',
+  name: 'semifinishedData',
   components: {
   },
   data () {
@@ -275,9 +286,9 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
-        type: '',
         create_user: '',
         auditor: '',
+        type: '',
         searchValue: '',
         start_time: '',
         stop_time: ''
@@ -286,10 +297,13 @@ export default {
       ordering: '-id',
       /* 详情页数据 */
       detail: [],
+      type: {},
+      personnel: {},
+      level: {},
       /* 详情页审核记录项表单 */
       alterItem: {
         desc: '',
-        uri: 'materialManagePlan'
+        uri: 'semifinishedData'
       },
       alterList: [],
       alterData: [],
@@ -301,12 +315,39 @@ export default {
       /* 创建页表单项数据 */
       formItem: {
         id: '',
-        name: '',
-        code: '',
-        type: '',
-        state: '',
+        type: null,
+        semifinishedType: null,
+        semifinished: null,
+        batch: '',
+        sn: '',
+        personnel: '',
+        equipment: '',
+        material: '',
+        station: '',
+        quality: '',
+        dataTime: '',
         file: [],
         alter: [],
+        attribute1: '',
+        attribute2: '',
+        attribute3: '',
+        attribute4: '',
+        attribute5: '',
+        attribute6: '',
+        attribute7: '',
+        attribute8: '',
+        attribute9: '',
+        attribute10: '',
+        attribute11: '',
+        attribute12: '',
+        attribute13: '',
+        attribute14: '',
+        attribute15: '',
+        attribute16: '',
+        attribute17: '',
+        attribute18: '',
+        attribute19: '',
+        attribute20: '',
         desc: '',
         auditor: ''
       },
@@ -315,9 +356,15 @@ export default {
         file: null,
         fileName: '',
         desc: '',
-        uri: 'materialManagePlan'
+        uri: 'semifinishedData'
       },
       fileData: [],
+      /* 半成品类型信息 */
+      semifinishedType: [],
+      /* 半成品信息 */
+      semifinishedInfor: [],
+      /* 过程数据类型信息 */
+      typeInfor: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
       /* 附加属性标题 */
@@ -326,21 +373,32 @@ export default {
         attribute2: '',
         attribute3: '',
         attribute4: '',
-        attribute5: ''
+        attribute5: '',
+        attribute6: '',
+        attribute7: '',
+        attribute8: '',
+        attribute9: '',
+        attribute10: '',
+        attribute11: '',
+        attribute12: '',
+        attribute13: '',
+        attribute14: '',
+        attribute15: '',
+        attribute16: '',
+        attribute17: '',
+        attribute18: '',
+        attribute19: '',
+        attribute20: ''
       }
+
     }
   },
   validations: {
     formItem: {
-      code: {
-        required,
-        minLength: minLength(2),
-        maxLength: maxLength(32)
-      },
-      auditor: {
+      type: {
         required
       },
-      type: {
+      dataTime: {
         required
       }
     }
@@ -356,7 +414,7 @@ export default {
         this.selectItem[key] = ''
       }
       var self = this
-      this.$axios.get('plan/materialManagePlan/?ordering=' + self.ordering).then(function (response) {
+      this.$axios.get('production/semifinishedData/?ordering=' + self.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -381,13 +439,12 @@ export default {
       this.listPreUrl = ''
       this.listNextUrl = ''
       var self = this
-      this.$axios.get('plan/materialManagePlan/?state=' + self.selectItem.state +
-              '&auditor=' + self.selectItem.auditor +
-              '&create_user=' + self.selectItem.create_user +
-              '&search=' + self.selectItem.searchValue +
-              '&start_time=' + self.selectItem.start_time +
-              '&stop_time=' + self.selectItem.stop_time +
-              '&ordering=' + self.ordering).then(function (response) {
+      this.$axios.get('production/semifinishedData/?create_user=' + self.selectItem.create_user +
+          '&type=' + self.selectItem.type +
+          '&search=' + self.selectItem.searchValue +
+          '&start_time=' + self.selectItem.start_time +
+          '&stop_time=' + self.selectItem.stop_time +
+          '&ordering=' + self.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -450,37 +507,13 @@ export default {
     showDetailView (id) {
       this.detail = [] // 清空详情数据
       this.alterData = []// 清空审核数据
+      this.type = {}
       var self = this
-      this.$axios.get(`plan/materialManagePlan/` + id).then(function (response) {
+      this.$axios.get(`production/semifinishedData/` + id).then(function (response) {
         self.detail = response.data
+        self.type = self.detail.type
+        self.formItem.type = self.detail.type.id
         self.showViewid = 'detail'
-      }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
-      })
-    },
-    /* 改变数据项状态 */
-    changeState (state) {
-      var self = this
-      if (!confirm('确认提交??')) {
-        return
-      }
-      this.formItem.state = state
-      this.$axios.patch(`plan/materialManagePlan/` + self.detail.id + '/', {
-        state: self.formItem.state,
-        alter: self.formItem.alter
-      }).then(function (response
-      ) {
-        self.detail.state = self.formItem.state
-        self.formItem.state = ''
-        self.formItem.alter = []
-        if (self.detail.state === '作废') {
-          self.showListView()
-        }
-        alert('数据提交成功')
       }).catch(function (err) {
         if (err.request) {
           alert(err.request.response)
@@ -511,51 +544,6 @@ export default {
       this.fileData = []
       this.showViewid = 'create'
     },
-    /* 显示更新视图 */
-    showUpdateView (id) {
-      /* 清空表单数据 */
-      for (let key in this.formItem) {
-        if (Object.prototype.toString.call(this.formItem[key]) === '[object Array]') {
-          this.formItem[key] = []
-        } else if (Object.prototype.toString.call(this.formItem[key]) === '[object Object]') {
-          var obj = this.formItem[key]
-          for (let key1 in obj) {
-            if (Object.prototype.toString.call(obj[key1]) === '[object Array]') {
-              obj[key1] = []
-            } else {
-              obj[key1] = ''
-            }
-          }
-        } else {
-          this.formItem[key] = ''
-        }
-      }
-      this.alterList = []
-      this.fileData = []
-      var self = this
-      this.$axios.get(`plan/materialManagePlan/` + id).then(function (response) {
-        self.formItem.id = response.data.id
-        self.formItem.name = response.data.name
-        self.formItem.state = response.data.state
-        self.formItem.code = response.data.code
-        self.formItem.type = response.data.type
-        self.formItem.desc = response.data.desc
-        self.formItem.auditor = response.data.auditor
-        self.alterList = response.data.alter
-        response.data.file.forEach(function (value, i) {
-          var obj = {'id': value.id, 'fileName': value.file_name, 'fileUrl': value.file, 'desc': value.desc, 'uri': value.uri}
-          self.formItem.file.push(value.id)
-          self.fileData.push(obj)
-        })
-        self.showViewid = 'update'
-      }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
-      })
-    },
     /* 提交文件项 */
     uploadFile () {
       if (!confirm('确认提交??')) {
@@ -567,7 +555,7 @@ export default {
       formData.append('desc', this.fileItem.desc)
       formData.append('file', this.fileItem.file)
       var self = this
-      this.$axios.post(`plan/file/`, formData,
+      this.$axios.post(`production/file/`, formData,
         {headers: {'Content-Type': 'multipart/form-data'}}
       ).then(function (response) {
         var obj = {'id': response.data.id,
@@ -610,44 +598,45 @@ export default {
         }
       }
     },
-    /* 提交审核记录项 */
-    uploadAlter () {
-      var self = this
-      if (!confirm('确认提交??')) {
-        return
-      }
-      this.$axios.post(`plan/alterRecord/`, {
-        desc: self.alterItem.desc,
-        uri: self.alterItem.uri
-      }).then(function (response) {
-        var obj = {'id': response.data.id,
-          'desc': response.data.desc,
-          'uri': response.data.uri}
-        self.alterItem.desc = ''
-        self.formItem.alter.push(response.data.id)
-        self.alterData.push(obj)
-        alert('审核记录提交成功')
-      }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
-      })
-    },
     /* 保存表单数据 */
     save () {
       var self = this
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.post(`plan/materialManagePlan/`, {
-        name: self.formItem.name,
-        code: self.formItem.code,
+      this.$axios.post(`production/semifinishedData/`, {
         type: self.formItem.type,
+        semifinished_id: self.formItem.semifinished,
+        batch: self.formItem.batch,
+        sn: self.formItem.sn,
+        personnel: self.formItem.personnel,
+        equipment: self.formItem.equipment,
+        material: self.formItem.material,
+        station: self.formItem.station,
+        quality: self.formItem.quality,
+        dataTime: self.formItem.dataTime,
         file: self.formItem.file,
-        desc: self.formItem.desc,
-        auditor: self.formItem.auditor
+        attribute1: self.formItem.attribute1,
+        attribute2: self.formItem.attribute2,
+        attribute3: self.formItem.attribute3,
+        attribute4: self.formItem.attribute4,
+        attribute5: self.formItem.attribute5,
+        attribute6: self.formItem.attribute6,
+        attribute7: self.formItem.attribute7,
+        attribute8: self.formItem.attribute8,
+        attribute9: self.formItem.attribute9,
+        attribute10: self.formItem.attribute10,
+        attribute11: self.formItem.attribute11,
+        attribute12: self.formItem.attribute12,
+        attribute13: self.formItem.attribute13,
+        attribute14: self.formItem.attribute14,
+        attribute15: self.formItem.attribute15,
+        attribute16: self.formItem.attribute16,
+        attribute17: self.formItem.attribute17,
+        attribute18: self.formItem.attribute18,
+        attribute19: self.formItem.attribute19,
+        attribute20: self.formItem.attribute20,
+        desc: self.formItem.desc
       }).then(function (response) {
         self.formItem.file = []
         self.fileData = []
@@ -657,112 +646,35 @@ export default {
           alert(error.request.response)
         } else {
           console.log('Error', error.message)
-        }
-      })
-    },
-    /* 更新表单数据 */
-    update () {
-      var self = this
-      if (!confirm('确认保存??')) {
-        return
-      }
-      this.$axios.put(`plan/materialManagePlan/` + self.formItem.id + '/', {
-        name: self.formItem.name,
-        code: self.formItem.code,
-        type: self.formItem.type,
-        file: self.formItem.file,
-        desc: self.formItem.desc,
-        auditor: self.formItem.auditor
-      }).then(function (response) {
-        alert('数据保存成功')
-      }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
-      })
-    },
-    /* 保存并提交表单数据 */
-    saveAndSubmit () {
-      var self = this
-      if (!confirm('确认保存??')) {
-        return
-      }
-      this.$axios.post(`plan/materialManagePlan/`, {
-        name: self.formItem.name,
-        code: self.formItem.code,
-        type: self.formItem.type,
-        file: self.formItem.file,
-        desc: self.formItem.desc,
-        auditor: self.formItem.auditor
-      }).then(function (response) {
-        self.formItem.file = []
-        self.fileData = []
-        self.$axios.patch(`plan/materialManagePlan/` + response.data.id + '/', {
-          state: '审核中'
-        }).then(function (response
-        ) {
-          alert('数据提交成功')
-        }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
-        })
-      }).catch(function (error) {
-        if (error.request) {
-          alert(error.request.response)
-        } else {
-          console.log('Error', error.message)
-        }
-      })
-    },
-    /* 更新并提交表单数据 */
-    updateAndSubmit () {
-      var self = this
-      if (!confirm('确认保存??')) {
-        return
-      }
-      this.$axios.put(`plan/materialManagePlan/` + self.formItem.id + '/', {
-        name: self.formItem.name,
-        code: self.formItem.code,
-        type: self.formItem.type,
-        file: self.formItem.file,
-        desc: self.formItem.desc,
-        auditor: self.formItem.auditor
-      }).then(function (response) {
-        self.formItem.file = []
-        self.fileData = []
-        self.$axios.patch(`plan/materialManagePlan/` + response.data.id + '/', {
-          state: '审核中'
-        }).then(function (response
-        ) {
-          alert('数据提交成功')
-          self.showViewid = 'list'
-        }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
-        })
-      }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
         }
       })
     }
   },
   created () {
     this.userinfor = []
+    this.typeInfor = []
     var self = this
-    this.$axios.get('user/userInfor/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
+    this.$axios.get('user/userInfor/?page_size=99999&ordering=-id').then(function (response) {
       self.userinfor = response.data.results
-      self.showListView()
+      self.$axios.get('production/semifinishedDataType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
+        self.typeInfor = response.data.results
+        self.$axios.get('process/semifinishedType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
+          self.semifinishedType = response.data.results
+          self.showListView()
+        }).catch(function (err) {
+          if (err.request) {
+            alert(err.request.response)
+          } else {
+            console.log('Error', err.message)
+          }
+        })
+      }).catch(function (err) {
+        if (err.request) {
+          alert(err.request.response)
+        } else {
+          console.log('Error', err.message)
+        }
+      })
     }).catch(function (err) {
       if (err.request) {
         alert(err.request.response)
@@ -782,10 +694,10 @@ export default {
       return this.$store.getters.getLoginInfor.permissions
     },
     canCreate () {
-      return 'plan.add_materialmanageplanmodel' in this.permissions
+      return 'production.add_semifinisheddatadefinitionmodel' in this.permissions
     },
     canRead () {
-      return 'plan.read_materialmanageplanmodel' in this.permissions
+      return 'production.read_semifinisheddatadefinitionmodel' in this.permissions
     }
 
   },
@@ -793,28 +705,57 @@ export default {
     formItem: {
       deep: true
     },
-    /* 监控状态信息变化,控制操作按钮的显示 */
-    /* 监控信息状态改变时,更新操作按钮状态 */
-    'detail.state': function (newval, oldval) {
+    /* 监控用户选择的类别变化时,更新附加属性标题 */
+    'formItem.type': function (newval, oldval) {
       var self = this
-      self.showSubmitBt = false
-      self.showDeleteBt = false
-      self.showReturnBt = false
-      self.showApprovedBt = false
-      if (self.detail.state === '审核中' && ((self.detail.auditor === self.username) || (self.is_superuser === true))) {
-        self.showApprovedBt = true
-        self.showReturnBt = true
+      for (let key in self.attribute_title) {
+        self.attribute_title[key] = ''
       }
-      if (self.detail.state === '新建' && ((self.detail.create_user === self.username) || (self.is_superuser === true))) {
-        self.showSubmitBt = true
-        self.showDeleteBt = true
+      if (newval === undefined) {
+        return
       }
+      this.$axios.get(`production/semifinishedDataType/` + newval).then(function (response) {
+        if (response.data.attach_attribute !== null) {
+          var result = response.data.attach_attribute.split(';')
+          if (result.length > 0) {
+            result.forEach(function (value, i) {
+              var data = value.split(':')
+              if (data.length === 2) {
+                self.attribute_title[data[0]] = data[1]
+              }
+            })
+          }
+        }
+      }).catch(function (err) {
+        if (err.request) {
+          alert(err.request.response)
+        } else {
+          console.log('Error', err.message)
+        }
+      })
+    },
+    /**/
+    'formItem.semifinishedType': function (newval, oldval) {
+      var self = this
+      this.semifinishedInfor = []
+      if (newval === undefined) {
+        return
+      }
+      this.$axios.get(`process/semifinishedType/` + newval).then(function (response) {
+        self.semifinishedInfor = response.data.semifinishedType_item
+      }).catch(function (err) {
+        if (err.request) {
+          alert(err.request.response)
+        } else {
+          console.log('Error', err.message)
+        }
+      })
     }
   }
 }
 </script>
 <style scoped>
-  .materialManagePlan{
+  .semifinishedData{
     position: relative;
     top: 0;
     width: 100%;
@@ -847,7 +788,7 @@ export default {
   .list .listHead .select div{
     position: relative;
     top: 0;
-    width: 18%;
+    width: 20%;
     height: 100%;
     margin-right: 2%;
     font-family: AppleSystemUIFont;
@@ -928,7 +869,7 @@ export default {
   .list .listTable .table table{
     height: 100%;
     width: 100%;
-        /*table-layout: fixed;*/
+    /*table-layout: fixed;*/
     empty-cells:hide;
   }
   .list .listTable .table  th{
@@ -991,7 +932,7 @@ export default {
   .detail table{
     height: 30%;
     width: 100%;
-        /*table-layout: fixed;*/
+    /*table-layout: fixed;*/
     empty-cells:hide;
   }
   .detail  th{
@@ -1107,7 +1048,7 @@ export default {
     color: #f5222d;
     display: block;
   }
- .create .child {
+  .create .child {
     position: relative;
     width: 100%;
     height: 20%;
@@ -1198,7 +1139,7 @@ export default {
   }
   .create table{
     width: 100%;
-        /*table-layout: fixed;*/
+    /*table-layout: fixed;*/
     empty-cells:hide;
   }
   .create  th{
@@ -1230,182 +1171,6 @@ export default {
     float: left;
   }
   .create .button button{
-    width: 12em;
-    margin: 0.2em;
-    font-size: 0.4em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .update{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .update form{
-    position: absolute;
-    top: 0;
-    left: 2%;
-    width: 80%;
-    height: 90%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #151515;
-    letter-spacing: -0.45px;
-    overflow: auto;
-  }
-  .update form div{
-    position: relative;
-    width: 50%;
-    height: 12%;
-    float: left;
-  }
-    .update form div select,.update form div input,.update form div textarea{
-    position: absolute;
-    width: 15em;
-    right: 4em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.8em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .update form div span{
-    position: absolute;
-    width: 15em;
-    right: 6em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.6em;
-    color: #f5222d;
-    display: block;
-  }
- .update .child {
-    position: relative;
-    width: 100%;
-    height: 20%;
-    float: left;
-    background: #4d5669;
-  }
-  .update .child form{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    padding-top: 1%;
-    overflow: auto;
-  }
-  .update .child div{
-    position: relative;
-    width: 50%;
-    height: 30%;
-    font-size: 1.5em;
-    float: left;
-  }
-  .update .child select,.update .child input,.update .child textarea{
-    position: absolute;
-    width: 60%;
-    height: 80%;
-    right: 4em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .update .annex{
-    position: relative;
-    width: 45%;
-    height: 30%;
-    margin-right: 5%;
-    background: #4d5669;
-    float: left;
-  }
-  .update .annex ul{
-    position: absolute;
-    top: 5%;
-    left: 2.5em;
-    right: 10%;
-    height: 35%;
-    margin-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .update .annex ul li{
-    position: relative;
-    width: 80%;
-    height: 2em;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 1em;
-  }
-  .update .annex input{
-    position: absolute;
-    top: 45%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .update .annex textarea {
-    position: absolute;
-    top: 65%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    padding-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .update .annex button{
-    position: absolute;
-    bottom: 0.2em;
-    width: 6em;
-    margin: 0.2em;
-    font-size: 0.8em;
-    line-height: 2em;
-    background: #2d59ff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .update table{
-    width: 100%;
-        /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .update  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 1em;
-    color: #ffffff;
-    text-align: center;
-    letter-spacing: -0.45px;
-    background: #191A1E;
-  }
-  .update  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.8em;
-    color: #191A1E;
-    letter-spacing: -0.45px;
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .update .button{
-    position: absolute;
-    top: 90%;
-    width: 100%;
-    height: 10%;
-    float: left;
-  }
-  .update .button button{
     width: 12em;
     margin: 0.2em;
     font-size: 0.4em;

@@ -51,23 +51,17 @@
             <table >
               <tr align="center"  type="height:2em">
                 <th>序号</th>
-                <th>仓库名称</th>
-                <th>仓库编码</th>
-                <th>产品类型名称</th>
-                <th>产品类型编码</th>
-                <th>产品名称</th>
-                <th>产品编码</th>
+                <th>仓库</th>
+                <th>产品类型</th>
+                <th>产品</th>
                 <th>批次</th>
                 <th>数量</th>
               </tr>
               <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
                 <td>{{index}}</td>
-                <td>{{item.warehouse_name}}</td>
-                <td>{{item.warehouse_code}}</td>
-                <td>{{item.productType_name}}</td>
-                <td>{{item.productType_code}}</td>
-                <td>{{item.product_name}}</td>
-                <td>{{item.product_code}}</td>
+                <td>{{item.warehouse_name+"("+item.warehouse_code+")"}}</td>
+                <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
+                <td>{{item.product_name+"("+item.product_code+")"}}</td>
                 <td>{{item.batch}}</td>
                 <td>{{item.sum}}</td>
               </tr>
@@ -137,14 +131,10 @@
             <table >
               <tr align="center"  type="height:2em">
                 <th>序号</th>
-                <th>仓库名称</th>
-                <th>仓库编码</th>
-                <th>仓位名称</th>
-                <th>仓位编码</th>
-                <th>产品类型名称</th>
-                <th>产品类型编码</th>
-                <th>产品名称</th>
-                <th>产品编码</th>
+                <th>仓库</th>
+                <th>仓位</th>
+                <th>产品类型</th>
+                <th>产品</th>
                 <th>批次</th>
                 <th>数量</th>
                 <th>状态</th>
@@ -152,14 +142,10 @@
               </tr>
               <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
                 <td>{{index}}</td>
-                <td>{{item.warehouse_name}}</td>
-                <td>{{item.warehouse_code}}</td>
-                <td>{{item.position_name}}</td>
-                <td>{{item.position_code}}</td>
-                <td>{{item.productType_name}}</td>
-                <td>{{item.productType_code}}</td>
-                <td>{{item.product_name}}</td>
-                <td>{{item.product_code}}</td>
+                <td>{{item.warehouse_name+"("+item.warehouse_code+")"}}</td>
+                <td>{{item.position_name+"("+item.position_code+")"}}</td>
+                <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
+                <td>{{item.product_name+"("+item.product_code+")"}}</td>
                 <td>{{item.batch}}</td>
                 <td>{{item.sum}}</td>
                 <td>{{item.state}}</td>
@@ -182,11 +168,11 @@
       <!--    /*创建页显示*/-->
       <div  class="create"  v-show="showViewid==='create'">
         <form>
-          <div>产品管理名称:
-            <input v-model="formItem.name"  placeholder="请输入产品管理名称...">
+          <div>名称:
+            <input v-model="formItem.name"  placeholder="请输入名称">
           </div>
-          <div>产品管理编码:
-            <input v-model="formItem.code"  placeholder="请输入产品管理编码...">
+          <div>编码:
+            <input v-model="formItem.code"  placeholder="请输入编码">
             <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
             <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
             <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -233,14 +219,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
           <div >备注信息:
-            <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+            <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
           </div>
           <div class="annex">文件附件:
             <ul>
               <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
             </ul>
             <input type="file"  @change="fileBeforeUpload"/>
-            <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+            <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
             <button type="button" @click="uploadFile">上传</button>
           </div>
         </form>

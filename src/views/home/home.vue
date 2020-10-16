@@ -353,6 +353,22 @@
                   v-if="function_select['生产管理'].产品生产汇报===true">
                 <router-link to="/home/production/productDailyReport">产品生产汇报</router-link>
               </li>
+              <li :class="childMenuSelect==='productDataType'? 'isActive':'isInActive'"  @click="childMenuSelect='productDataType'"
+                  v-if="function_select['生产管理'].产品记录类型===true">
+                <router-link to="/home/production/productDataType">产品记录类型</router-link>
+              </li>
+              <li :class="childMenuSelect==='semifinishedDataType'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedDataType'"
+                  v-if="function_select['生产管理'].半成品记录类型===true">
+                <router-link to="/home/production/semifinishedDataType">半成品记录类型</router-link>
+              </li>
+              <li :class="childMenuSelect==='productData'? 'isActive':'isInActive'"  @click="childMenuSelect='productData'"
+                  v-if="function_select['生产管理'].产品过程数据===true">
+                <router-link to="/home/production/productData">产品过程数据</router-link>
+              </li>
+              <li :class="childMenuSelect==='semifinishedData'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedData'"
+                  v-if="function_select['生产管理'].半成品过程数据===true">
+                <router-link to="/home/production/semifinishedData">半成品过程数据</router-link>
+              </li>
               <li :class="childMenuSelect==='productionBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='productionBoard'"
                   v-if="function_select['生产管理'].生产看板===true">
                 <router-link to="/home/production/productionBoard">生产看板</router-link>
@@ -537,6 +553,7 @@ export default {
     height:100% ;
     width: 45%;
     background: #22272A;
+    scroll-behavior: auto;
   }
   .childSlider{
     position: absolute;
@@ -545,6 +562,7 @@ export default {
     height:100% ;
     width: 55%;
     background: rgba(255, 255, 255, 0.57);
+    overflow: auto;
   }
   .mainSlider ul{
     width: 100%;

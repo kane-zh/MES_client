@@ -32,7 +32,7 @@
           <div>关键字:
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
-                      <div>
+           <div>
                <button type="button" @click="select" >搜索</button>
             </div>
             <div>
@@ -69,8 +69,7 @@
                 <th>名称</th>
                 <th>编码</th>
                 <th>状态</th>
-                <th>客户名称</th>
-                <th>客户编码</th>
+                <th>客户</th>
                 <th>交期</th>
                 <th>更新日期</th>
                 <th>创建账号</th>
@@ -82,8 +81,7 @@
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>
                 <td>{{item.state}}</td>
-                <td>{{item.client.name}}</td>
-                <td>{{item.client.code}}</td>
+                <td>{{item.client.name+"("+item.client.code+")"}}</td>
                 <td>{{item.delivery_time}}</td>
                 <td>{{item.update_time}}</td>
                 <td>{{item.create_user}}</td>
@@ -109,11 +107,10 @@
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="content">
         <ul>
-          <li>{{"销售订单名称:"+"&#12288;"+detail.name}}</li>
-          <li>{{"销售订单编码:"+"&#12288;"+detail.code}}</li>
+          <li>{{"名称:"+"&#12288;"+detail.name}}</li>
+          <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li>{{"客户名称:"+"&#12288;"+client.name}}</li>
-          <li>{{"客户编码:"+"&#12288;"+client.code}}</li>
+          <li>{{"客户:"+"&#12288;"+client.name+"("+client.code+")"}}</li>
           <li>{{"交付日期:"+"&#12288;"+detail.delivery_time}}</li>
           <li v-if="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
           <li v-if="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
@@ -133,10 +130,9 @@
               <table >
                 <tr align="center"  type="height:2em">
                   <th>序号</th>
-                  <th>产品类型名称</th>
-                  <th>产品类型编码</th>
-                  <th>产品名称</th>
-                  <th>产品编码</th>
+                  <th>产品类型</th>
+                  <th>产品</th>
+                  <th>批次</th>
                   <th>需求数量</th>
                   <th>分配数量</th>
                   <th>完成数量</th>
@@ -145,10 +141,9 @@
                 </tr>
                 <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
                   <td>{{index}}</td>
-                  <td>{{item.productTypeName}}</td>
-                  <td>{{item.productTypeCode}}</td>
-                  <td>{{item.productName}}</td>
-                  <td>{{item.productCode}}</td>
+                  <td>{{item.productTypeName+"("+item.productTypeCode+")"}}</td>
+                  <td>{{item.productName+"("+item.productCode+")"}}</td>
+                  <td>{{item.batch}}</td>
                   <td>{{item.sum}}</td>
                   <td>{{item.assigned}}</td>
                   <td>{{item.completed}}</td>
@@ -165,7 +160,7 @@
           </Panel>
         </Collapse>
         <dl>
-          <dt>销售订单文件:</dt>
+          <dt>文件附件:</dt>
           <template v-for="(value,id) in detail.file">
             <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
           </template>
@@ -204,11 +199,11 @@
     <!--    /*创建页显示*/-->
     <div  class="create"  v-show="showViewid==='create'">
       <form >
-        <div>销售订单名称:
-          <input v-model="formItem.name"  placeholder="请输入销售订单名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>销售订单编码:
-          <input v-model="formItem.code"  placeholder="请输入销售订单编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -245,14 +240,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
         <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
         <div>
@@ -275,6 +270,9 @@
               <select v-model="formItem_child.product" >
                 <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
               </select>
+            </div>
+            <div>批次:
+              <input v-model="formItem_child.batch"  placeholder="请输入批次">
             </div>
             <div>总数量:
               <input type="number" v-model="formItem_child.sum">
@@ -307,20 +305,18 @@
             <caption align="top">已添加子项:</caption>
             <tr align="center"  type="height:2em">
               <th>序号</th>
-              <th>产品类型名称</th>
-              <th>产品类型编码</th>
-              <th>产品名称</th>
-              <th>产品编码</th>
+              <th>产品类型</th>
+              <th>产品</th>
+              <th>批次</th>
               <th>数量</th>
               <th>说明</th>
               <th>操作</th>
             </tr>
             <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
               <td>{{index}}</td>
-              <td>{{item.productTypeName}}</td>
-              <td>{{item.productTypeCode}}</td>
-              <td>{{item.productName}}</td>
-              <td>{{item.productCode}}</td>
+              <td>{{item.productTypeName+"("+item.productTypeCode+")"}}</td>
+              <td>{{item.productName+"("+item.productCode+")"}}</td>
+              <td>{{item.batch}}</td>
               <td>{{item.sum}}</td>
               <td>{{item.desc}}</td>
               <td>
@@ -341,11 +337,11 @@
     <!--    /*更新页显示*/-->
     <div  class="update"  v-show="showViewid==='update'">
       <form >
-        <div>销售订单名称:
-          <input v-model="formItem.name"  placeholder="请输入销售订单名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>销售订单编码:
-          <input v-model="formItem.code"  placeholder="请输入销售订单编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -382,14 +378,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
         <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
         <div>
@@ -412,6 +408,9 @@
               <select v-model="formItem_child.product" >
                 <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
               </select>
+            </div>
+            <div>批次:
+              <input v-model="formItem_child.batch"  placeholder="请输入批次">
             </div>
             <div>总数量:
               <input type="number" v-model="formItem_child.sum">
@@ -443,20 +442,18 @@
         <table v-show="list_child.length>0">
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>产品类型名称</th>
-            <th>产品类型编码</th>
-            <th>产品名称</th>
-            <th>产品编码</th>
+            <th>产品类型</th>
+            <th>产品</th>
+            <th>批次</th>
             <th>数量</th>
             <th>说明</th>
             <th>操作</th>
           </tr>
           <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
             <td>{{index}}</td>
-            <td>{{item.productTypeName}}</td>
-            <td>{{item.productTypeCode}}</td>
-            <td>{{item.productName}}</td>
-            <td>{{item.productCode}}</td>
+            <td>{{item.productTypeName+"("+item.productTypeCode+")"}}</td>
+            <td>{{item.productName+"("+item.productCode+")"}}</td>
+            <td>{{item.batch}}</td>
             <td>{{item.sum}}</td>
             <td>{{item.desc}}</td>
             <td>
@@ -553,6 +550,7 @@ export default {
         id: '',
         productType: null,
         product: null,
+        batch: '',
         sum: 0,
         attribute1: '',
         attribute2: '',
@@ -730,6 +728,7 @@ export default {
             'productTypeCode': value.productType_code,
             'productName': value.product_name,
             'productCode': value.product_code,
+            'batch': value.batch,
             'state': value.state,
             'sum': value.sum,
             'assigned': value.assigned,
@@ -902,6 +901,7 @@ export default {
             'productTypeCode': value.productType_code,
             'productName': value.product_name,
             'productCode': value.product_code,
+            'batch': value.batch,
             'sum': value.sum,
             'attribute1': value.attribute1,
             'attribute2': value.attribute2,
@@ -1011,6 +1011,7 @@ export default {
       var self = this
       this.$axios.post(`plan/salesOrderItemCreate/`, {
         product_id: self.formItem_child.product,
+        batch: self.formItem_child.batch,
         route_id: self.formItem_child.productRoute,
         sum: self.formItem_child.sum,
         attribute1: self.formItem_child.attribute1,
@@ -1041,6 +1042,7 @@ export default {
           'productName': self.productInfor[index].name,
           'productTypeCode': self.productType[index1].code,
           'productTypeName': self.productType[index1].name,
+          'batch': response.data.batch,
           'sum': response.data.sum,
           'attribute1': response.data.attribute1,
           'attribute2': response.data.attribute2,
@@ -1296,6 +1298,7 @@ export default {
       deep: true
     },
     /* 监控状态信息变化,控制操作按钮的显示 */
+    /* 监控信息状态改变时,更新操作按钮状态 */
     'detail.state': function (newval, oldval) {
       var self = this
       self.showSubmitBt = false

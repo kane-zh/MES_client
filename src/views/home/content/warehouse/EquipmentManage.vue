@@ -21,8 +21,8 @@
             <option value="完成">完成</option>
           </select>
           </div>
-          <div>仓库编码:
-            <select v-model="selectItem.warehouse" placeholder="请选择仓库编码" >
+          <div>仓库:
+            <select v-model="selectItem.warehouse" placeholder="请选择编码" >
               <option v-for="item in warehouse" :value="item.code" :key="item.code">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
@@ -44,7 +44,7 @@
           <div>关键字:
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
-                      <div>
+           <div>
                <button type="button" @click="select" >搜索</button>
             </div>
             <div>
@@ -81,12 +81,10 @@
                 <th>名称</th>
                 <th>编码</th>
                 <th>状态</th>
-                <th>设备名称</th>
-                <th>设备编码</th>
-                <th>仓库名称</th>
-                <th>仓库编码</th>
-                <th>仓位名称</th>
-                <th>仓位编码</th>
+                <th>仓库</th>
+                <th>仓位</th>
+                <th>设备类型</th>
+                <th>设备</th>
                 <th>操作者</th>
                 <th>数量</th>
                 <th>操作类型</th>
@@ -100,12 +98,10 @@
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>
                 <td>{{item.state}}</td>
-                <td>{{item.equipment_name}}</td>
-                <td>{{item.equipment_code}}</td>
-                <td>{{item.warehouse_name}}</td>
-                <td>{{item.warehouse_code}}</td>
-                <td>{{item.position_name}}</td>
-                <td>{{item.position_code}}</td>
+                <td>{{item.warehouse_name+"("+item.warehouse_code+")"}}</td>
+                <td>{{item.position_name+"("+item.position_code+")"}}</td>
+                <td>{{item.equipmentType_name+"("+item.equipmentType_code+")"}}</td>
+                <td>{{item.equipment_name+"("+item.equipment_code+")"}}</td>
                 <td>{{item.handler}}</td>
                 <td>{{item.sum}}</td>
                 <td>{{item.type}}</td>
@@ -133,18 +129,14 @@
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="content">
         <ul>
-          <li>{{"设备管理名称:"+"&#12288;"+detail.name}}</li>
-          <li>{{"设备管理编码:"+"&#12288;"+detail.code}}</li>
+          <li>{{"名称:"+"&#12288;"+detail.name}}</li>
+          <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
           <li>{{"类型:"+"&#12288;"+detail.type}}</li>
-          <li>{{"仓库编码:"+"&#12288;"+detail.warehouse_code}}</li>
-          <li>{{"仓库名称:"+"&#12288;"+detail.warehouse_name}}</li>
-          <li>{{"仓位编码:"+"&#12288;"+detail.position_code}}</li>
-          <li>{{"仓位名称:"+"&#12288;"+detail.position_name}}</li>
-          <li>{{"设备类型编码:"+"&#12288;"+detail.equipmentType_code}}</li>
-          <li>{{"设备类型名称:"+"&#12288;"+detail.equipmentType_name}}</li>
-          <li>{{"设备编码:"+"&#12288;"+detail.equipment_code}}</li>
-          <li>{{"设备名称:"+"&#12288;"+detail.equipment_name}}</li>
+          <li>{{"仓库:"+"&#12288;"+detail.warehouse_code+"("+warehouse_name+")"}}</li>
+          <li>{{"仓位:"+"&#12288;"+detail.position_code+"("+position_name+")"}}</li>
+          <li>{{"设备类型:"+"&#12288;"+detail.equipmentType_name+"("+equipmentType_code+")"}}</li>
+          <li>{{"设备:"+"&#12288;"+detail.equipment_code+"("+equipment_name+")"}}</li>
           <li>{{"操作者:"+"&#12288;"+detail.handler}}</li>
           <li>{{"数量:"+"&#12288;"+detail.sum}}</li>
           <li>{{"操作时间:"+"&#12288;"+detail.dataTime}}</li>
@@ -155,7 +147,7 @@
           <li>{{"备注信息:"+"&#12288;"+detail.desc}}</li>
         </ul>
         <dl>
-          <dt>设备管理文件:</dt>
+          <dt>文件附件:</dt>
           <template v-for="(value,id) in detail.file">
             <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
           </template>
@@ -193,11 +185,14 @@
     <!--    /*创建页显示*/-->
     <div  class="create"  v-show="showViewid==='create'">
       <form >
-        <div>设备管理名称:
-          <input v-model="formItem.name"  placeholder="请输入设备管理名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>设备管理编码:
-          <input v-model="formItem.code"  placeholder="请输入设备管理编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
+          <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
+          <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
+          <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
         <div>操作类型:
           <select v-model="formItem.type"  placeholder="请选择操作类型"   >
@@ -264,14 +259,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
           <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
       </form>
@@ -284,11 +279,14 @@
     <!--    /*更新页显示*/-->
     <div  class="update"  v-show="showViewid==='update'">
       <form >
-        <div>设备管理名称:
-          <input v-model="formItem.name"  placeholder="请输入设备管理名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>设备管理编码:
-          <input v-model="formItem.code"  placeholder="请输入设备管理编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
+          <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
+          <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
+          <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
         <div>操作类型:
           <select v-model="formItem.type"  placeholder="请选择操作类型"   >
@@ -355,14 +353,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
         <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
         <div>历史审核记录:
@@ -1121,6 +1119,7 @@ export default {
       }
     },
     /* 监控状态信息变化,控制操作按钮的显示 */
+    /* 监控信息状态改变时,更新操作按钮状态 */
     'detail.state': function (newval, oldval) {
       var self = this
       self.showSubmitBt = false

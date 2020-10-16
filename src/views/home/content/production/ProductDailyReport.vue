@@ -30,7 +30,7 @@
           <div>关键字:
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
-                      <div>
+           <div>
                <button type="button" @click="select" >搜索</button>
             </div>
             <div>
@@ -67,10 +67,8 @@
                 <th>名称</th>
                 <th>编码</th>
                 <th>状态</th>
-                <th>车间编码</th>
-                <th>车间名称</th>
-                <th>班组编码</th>
-                <th>班组名称</th>
+                <th>车间</th>
+                <th>班组</th>
                 <th>汇报时间</th>
                 <th>创建账号</th>
                 <th>审核账号</th>
@@ -81,10 +79,8 @@
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>
                 <td>{{item.state}}</td>
-                <td>{{item.workshop_code}}</td>
-                <td>{{item.workshop_name}}</td>
-                <td>{{item.team.code}}</td>
-                <td>{{item.team.name}}</td>
+                <td>{{item.workshop_name+"("+item.workshop_code+")"}}</td>
+                <td>{{item.team.name+"("+item.team.code+")"}}</td>
                 <td>{{item.dataTime}}</td>
                 <td>{{item.create_user}}</td>
                 <td>{{item.auditor}}</td>
@@ -109,13 +105,11 @@
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="content">
         <ul>
-          <li>{{"产品生产汇报名称:"+"&#12288;"+detail.name}}</li>
-          <li>{{"产品生产汇报编码:"+"&#12288;"+detail.code}}</li>
+          <li>{{"名称:"+"&#12288;"+detail.name}}</li>
+          <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li>{{"车间名称:"+"&#12288;"+detail.workshop_name}}</li>
-          <li>{{"车间编码:"+"&#12288;"+detail.workshop_code}}</li>
-          <li>{{"班组名称:"+"&#12288;"+team.name}}</li>
-          <li>{{"班组编码:"+"&#12288;"+team.code}}</li>
+          <li>{{"车间:"+"&#12288;"+detail.workshop_name+"("+detail.workshop_code+")"}}</li>
+          <li>{{"班组:"+"&#12288;"+team.name+"("+team.code+")"}}</li>
           <li>{{"汇报时间:"+"&#12288;"+detail.dataTime}}</li>
           <li v-if="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
           <li v-if="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
@@ -135,10 +129,8 @@
               <table >
                 <tr align="center"  type="height:2em">
                   <th>序号</th>
-                  <th>产品类型名称</th>
-                  <th>产品类型编码</th>
-                  <th>产品名称</th>
-                  <th>产品编码</th>
+                  <th>产品类型</th>
+                  <th>产品</th>
                   <th>操作者</th>
                   <th>总数量</th>
                   <th>合格数量</th>
@@ -148,10 +140,8 @@
                 </tr>
                 <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
                   <td>{{index}}</td>
-                  <td>{{item.productTypeName}}</td>
-                  <td>{{item.productTypeCode}}</td>
-                  <td>{{item.productName}}</td>
-                  <td>{{item.productCode}}</td>
+                  <td>{{item.productTypeName+"("+item.productTypeCode+")"}}</td>
+                  <td>{{item.productName+"("+item.productCode+")"}}</td>
                   <td>{{item.handler}}</td>
                   <td>{{item.all_sum}}</td>
                   <td>{{item.ok_sum}}</td>
@@ -167,7 +157,7 @@
           </Panel>
         </Collapse>
         <dl>
-          <dt>产品生产汇报文件:</dt>
+          <dt>文件附件:</dt>
           <template v-for="(value,id) in detail.file">
             <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
           </template>
@@ -205,11 +195,11 @@
     <!--    /*创建页显示*/-->
     <div  class="create"  v-show="showViewid==='create'">
       <form >
-        <div>产品生产生产汇报名称:
-          <input v-model="formItem.name"  placeholder="请输入产品生产生产汇报名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>产品生产生产汇报编码:
-          <input v-model="formItem.code"  placeholder="请输入产品生产生产汇报编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
         </div>
         <div>车间:
           <select v-model="formItem.workshop"   placeholder="请选择车间">
@@ -247,14 +237,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
         <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
         <div>
@@ -315,10 +305,8 @@
             <caption align="top">已添加子项:</caption>
             <tr align="center"  type="height:2em">
               <th>序号</th>
-              <th>产品类型名称</th>
-              <th>产品类型编码</th>
-              <th>产品名称</th>
-              <th>产品编码</th>
+              <th>产品类型</th>
+              <th>产品</th>
               <th>操作者</th>
               <th>总数量</th>
               <th>合格数量</th>
@@ -329,10 +317,8 @@
             </tr>
             <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
               <td>{{index}}</td>
-              <td>{{item.productTypeName}}</td>
-              <td>{{item.productTypeCode}}</td>
-              <td>{{item.productName}}</td>
-              <td>{{item.productCode}}</td>
+              <td>{{item.productTypeName+"("+item.productTypeCode+")"}}</td>
+              <td>{{item.productName+"("+item.productCode+")"}}</td>
               <td>{{item.handler}}</td>
               <td>{{item.all_sum}}</td>
               <td>{{item.ok_sum}}</td>
@@ -357,11 +343,11 @@
     <!--    /*更新页显示*/-->
     <div  class="update"  v-show="showViewid==='update'">
       <form >
-        <div>产品生产生产汇报名称:
-          <input v-model="formItem.name"  placeholder="请输入产品生产生产汇报名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>产品生产生产汇报编码:
-          <input v-model="formItem.code"  placeholder="请输入产品生产生产汇报编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
         </div>
         <div>车间:
           <select v-model="formItem.workshop"   placeholder="请选择车间">
@@ -399,14 +385,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
         <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
         <div>
@@ -467,10 +453,8 @@
           <caption align="top">已添加子项:</caption>
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>产品类型名称</th>
-            <th>产品类型编码</th>
-            <th>产品名称</th>
-            <th>产品编码</th>
+            <th>产品类型</th>
+            <th>产品</th>
             <th>操作者</th>
             <th>总数量</th>
             <th>合格数量</th>
@@ -481,10 +465,8 @@
           </tr>
           <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
             <td>{{index}}</td>
-            <td>{{item.productTypeName}}</td>
-            <td>{{item.productTypeCode}}</td>
-            <td>{{item.productName}}</td>
-            <td>{{item.productCode}}</td>
+            <td>{{item.productTypeName+"("+item.productTypeCode+")"}}</td>
+            <td>{{item.productName+"("+item.productCode+")"}}</td>
             <td>{{item.handler}}</td>
             <td>{{item.all_sum}}</td>
             <td>{{item.ok_sum}}</td>
@@ -1336,6 +1318,7 @@ export default {
       })
     },
     /* 监控状态信息变化,控制操作按钮的显示 */
+    /* 监控信息状态改变时,更新操作按钮状态 */
     'detail.state': function (newval, oldval) {
       var self = this
       self.showSubmitBt = false

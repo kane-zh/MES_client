@@ -24,7 +24,7 @@
           <div>关键字:
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
-                      <div>
+           <div>
                <button type="button" @click="select" >搜索</button>
             </div>
             <div>
@@ -93,8 +93,8 @@
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="content">
         <ul>
-          <li>{{"半成品库存预警名称:"+"&#12288;"+detail.name}}</li>
-          <li>{{"半成品库存预警编码:"+"&#12288;"+detail.code}}</li>
+          <li>{{"名称:"+"&#12288;"+detail.name}}</li>
+          <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
           <li v-if="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
           <li v-if="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
@@ -132,7 +132,7 @@
           </Panel>
         </Collapse>
         <dl>
-          <dt>半成品库存预警文件:</dt>
+          <dt>文件附件:</dt>
           <template v-for="(value,id) in detail.file">
             <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
           </template>
@@ -170,11 +170,11 @@
     <!--    /*创建页显示*/-->
     <div  class="create"  v-show="showViewid==='create'">
       <form >
-        <div>半成品预警规则名称:
-          <input v-model="formItem.name"  placeholder="请输入半成品预警规则名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>半成品预警规则编码:
-          <input v-model="formItem.code"  placeholder="请输入半成品预警规则编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -186,14 +186,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
           <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
         <div>
@@ -250,12 +250,9 @@
           <caption align="top">已添加子项:</caption>
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>仓库名称</th>
-            <th>仓库编码</th>
-            <th>半成品类型名称</th>
-            <th>半成品类型编码</th>
-            <th>半成品名称</th>
-            <th>半成品编码</th>
+            <th>仓库</th>
+            <th>半成品类型</th>
+            <th>半成品</th>
             <th>批次</th>
             <th>最大量</th>
             <th>最少量</th>
@@ -266,6 +263,7 @@
           </tr>
           <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
             <td>{{index}}</td>
+
             <td>{{item.warehouseName}}</td>
             <td>{{item.warehouseCode}}</td>
             <td>{{item.semifinishedTypeName}}</td>
@@ -296,11 +294,11 @@
     <!--    /*更新页显示*/-->
     <div  class="update"  v-show="showViewid==='update'">
       <form >
-        <div>半成品预警规则名称:
-          <input v-model="formItem.name"  placeholder="请输入半成品预警规则名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>半成品预警规则编码:
-          <input v-model="formItem.code"  placeholder="请输入半成品预警规则编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -312,14 +310,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
           <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
         <div>
@@ -376,12 +374,9 @@
           <caption align="top">已添加子项:</caption>
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>仓库名称</th>
-            <th>仓库编码</th>
-            <th>半成品类型名称</th>
-            <th>半成品类型编码</th>
-            <th>半成品名称</th>
-            <th>半成品编码</th>
+            <th>仓库</th>
+            <th>半成品类型</th>
+            <th>半成品</th>
             <th>批次</th>
             <th>最大量</th>
             <th>最少量</th>
@@ -392,12 +387,9 @@
           </tr>
           <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
             <td>{{index}}</td>
-            <td>{{item.warehouseName}}</td>
-            <td>{{item.warehouseCode}}</td>
-            <td>{{item.semifinishedTypeName}}</td>
-            <td>{{item.semifinishedTypCode}}</td>
-            <td>{{item.semifinishedName}}</td>
-            <td>{{item.semifinishedCode}}</td>
+            <td>{{item.warehouseName+"("+item.warehouseCode+")"}}</td>
+            <td>{{item.semifinishedTypeName+"("+item.semifinishedTypCode+")"}}</td>
+            <td>{{item.semifinishedName+"("+item.semifinishedCode+")"}}</td>
             <td>{{item.batch}}</td>
             <td>{{item.maximum}}</td>
             <td>{{item.minimum}}</td>
@@ -1157,6 +1149,7 @@ export default {
       deep: true
     },
     /* 监控状态信息变化,控制操作按钮的显示 */
+    /* 监控信息状态改变时,更新操作按钮状态 */
     'detail.state': function (newval, oldval) {
       var self = this
       self.showSubmitBt = false

@@ -19,7 +19,7 @@
               </select>
             </div>
             <div>类别:
-              <select v-model="selectItem.classes"  placeholder="请选择状态"    >
+              <select v-model="selectItem.classes"  placeholder="请选择类别"    >
                 <option value="一级类别">一级类别</option>
                 <option value="二级类别">二级类别</option>
                 <option value="三级类别">三级类别</option>
@@ -36,7 +36,7 @@
             <div>关键字:
               <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
             </div>
-                        <div>
+             <div>
                <button type="button" @click="select" >搜索</button>
             </div>
             <div>
@@ -120,13 +120,11 @@
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="content">
         <ul>
-          <li>{{"维护记录类型名称:"+"&#12288;"+detail.name}}</li>
-          <li>{{"维护记录类型编码:"+"&#12288;"+detail.code}}</li>
+          <li>{{"名称:"+"&#12288;"+detail.name}}</li>
+          <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"类别:"+"&#12288;"+detail.classes}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li v-if="parent!==null">{{"父类别名称:"+"&#12288;"+parent.name}}</li>
-          <li v-if="parent!==null">{{"父类别编码:"+"&#12288;"+parent.code}}</li>
-          <li v-if="parent!==null">{{"父类别状态:"+"&#12288;"+parent.state}}</li>
+          <li v-if="parent!==null">{{"父类别:"+"&#12288;"+parent.name+"("+parent.code+")"}}</li>
           <li>{{"创建账号:"+"&#12288;"+detail.create_user}}</li>
           <li>{{"审核账号:"+"&#12288;"+detail.auditor}}</li>
           <li>{{"创建时间:"+"&#12288;"+detail.create_time}}</li>
@@ -134,7 +132,7 @@
           <li>{{"备注信息:"+"&#12288;"+detail.desc}}</li>
         </ul>
         <dl>
-          <dt>维护记录类型文件:</dt>
+          <dt>文件附件:</dt>
           <template v-for="(value,id) in detail.file">
             <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
           </template>
@@ -222,11 +220,11 @@
     <!--    /*创建页显示*/-->
     <div  class="create"  v-show="showViewid==='create'">
       <form >
-          <div>类型名称:
-            <input v-model="formItem.name"  placeholder="请输入维护记录类型名称...">
+          <div>名称:
+            <input v-model="formItem.name"  placeholder="请输入名称">
           </div>
-          <div>类型编码:
-            <input v-model="formItem.code"  placeholder="请输入维护记录类型编码...">
+          <div>编码:
+            <input v-model="formItem.code"  placeholder="请输入编码">
             <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
             <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
             <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -257,14 +255,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
             <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
         </form>
@@ -277,11 +275,11 @@
     <!--    /*更新页显示*/-->
     <div  class="update"  v-show="showViewid==='update'">
       <form >
-        <div>类型名称:
-          <input v-model="formItem.name"  placeholder="请输入维护记录类型名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>类型编码:
-          <input v-model="formItem.code"  placeholder="请输入维护记录类型编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -312,14 +310,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
           <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
       </form>
@@ -1023,6 +1021,7 @@ export default {
           break
       }
     },
+    /* 监控信息状态改变时,更新操作按钮状态 */
     'detail.state': function (newval, oldval) {
       var self = this
       self.showSubmitBt = false

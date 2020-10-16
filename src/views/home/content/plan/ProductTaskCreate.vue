@@ -40,7 +40,7 @@
           <div>关键字:
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
-                      <div>
+           <div>
                <button type="button" @click="select" >搜索</button>
             </div>
             <div>
@@ -115,8 +115,8 @@
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="content">
         <ul>
-          <li>{{"生产任务名称:"+"&#12288;"+detail.name}}</li>
-          <li>{{"生产任务编码:"+"&#12288;"+detail.code}}</li>
+          <li>{{"名称:"+"&#12288;"+detail.name}}</li>
+          <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
           <li>{{"优先级:"+"&#12288;"+detail.priority}}</li>
           <li>{{"交付日期:"+"&#12288;"+detail.delivery_time}}</li>
@@ -138,16 +138,12 @@
               <table >
                 <tr align="center"  type="height:2em">
                   <th>序号</th>
-                  <th>订单名称</th>
-                  <th>订单编码</th>
-                  <th>产品类型名称</th>
-                  <th>产品类型编码</th>
-                  <th>产品名称</th>
-                  <th>产品编码</th>
-                  <th>生产线路类型名称</th>
-                  <th>生产线路类型编码</th>
-                  <th>生产线路名称</th>
-                  <th>生产线路编码</th>
+                  <th>订单</th>
+                  <th>产品类型</th>
+                  <th>产品</th>
+                  <th>批次</th>
+                  <th>生产线路类型</th>
+                  <th>生产线路</th>
                   <th>状态</th>
                   <th>数量</th>
                   <th>说明</th>
@@ -155,16 +151,12 @@
                 </tr>
                 <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
                   <td>{{index}}</td>
-                  <td>{{item.salesOrder_name}}</td>
-                  <td>{{item.salesOrder_code}}</td>
-                  <td>{{item.productType_name}}</td>
-                  <td>{{item.productType_code}}</td>
-                  <td>{{item.product_name}}</td>
-                  <td>{{item.product_code}}</td>
-                  <td>{{item.routeType_name}}</td>
-                  <td>{{item.routeType_code}}</td>
-                  <td>{{item.route_name}}</td>
-                  <td>{{item.route_code}}</td>
+                  <td>{{item.salesOrder_name+"("+item.salesOrder_code+")"}}</td>
+                  <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
+                  <td>{{item.product_name+"("+item.product_code+")"}}</td>
+                  <td>{{item.batch}}</td>
+                  <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
+                  <td>{{item.route_name+"("+item.route_code+")"}}</td>
                   <td>{{item.state}}</td>
                   <td>{{item.sum}}</td>
                   <td>{{item.desc}}</td>
@@ -182,7 +174,7 @@
           </Panel>
         </Collapse>
         <dl>
-          <dt>生产任务文件:</dt>
+          <dt>文件附件:</dt>
           <template v-for="(value,id) in detail.file">
             <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
           </template>
@@ -222,11 +214,11 @@
     <!--    /*创建页显示*/-->
     <div  class="create"  v-show="showViewid==='create'">
       <form >
-        <div>产品生产任务单名称:
-          <input v-model="formItem.name"  placeholder="请输入产品生产任务单名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>产品生产任务单编码:
-          <input v-model="formItem.code"  placeholder="请输入产品生产任务单编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -265,14 +257,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
         <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
         <div>
@@ -293,7 +285,7 @@
             </div>
             <div>销售订单子项:
               <select v-model="formItem_child.salesOrderItem" >
-                <option v-for="item in salesOrderItem" :value="item.id" :key="item.id">{{item.product_name +"("+ item.product_code+")"}}</option>
+                <option v-for="item in salesOrderItem" :value="item.id" :key="item.id">{{item.product_name +"("+ item.product_code+")"+"["+ item.batch+"]"}}</option>
               </select>
             </div>
             <div>生产线路类型:
@@ -337,32 +329,24 @@
           <caption align="top">已添加子项:</caption>
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>订单名称</th>
-            <th>订单编码</th>
-            <th>产品类型名称</th>
-            <th>产品类型编码</th>
-            <th>产品名称</th>
-            <th>产品编码</th>
-            <th>生产线路类型名称</th>
-            <th>生产线路类型编码</th>
-            <th>生产线路名称</th>
-            <th>生产线路编码</th>
+            <th>订单</th>
+            <th>产品类型</th>
+            <th>产品</th>
+            <th>批次</th>
+            <th>生产线路类型</th>
+            <th>生产线路</th>
             <th>数量</th>
             <th>说明</th>
             <th>操作</th>
           </tr>
           <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
             <td>{{index}}</td>
-            <td>{{item.salesOrder_name}}</td>
-            <td>{{item.salesOrder_code}}</td>
-            <td>{{item.productType_name}}</td>
-            <td>{{item.productType_code}}</td>
-            <td>{{item.product_name}}</td>
-            <td>{{item.product_code}}</td>
-            <td>{{item.routeType_name}}</td>
-            <td>{{item.routeType_code}}</td>
-            <td>{{item.route_name}}</td>
-            <td>{{item.route_code}}</td>
+            <td>{{item.salesOrder_name+"("+item.salesOrder_code+")"}}</td>
+            <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
+            <td>{{item.product_name+"("+item.product_code+")"}}</td>
+            <td>{{item.batch}}</td>
+            <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
+            <td>{{item.route_name+"("+item.route_code+")"}}</td>
             <td>{{item.sum}}</td>
             <td>{{item.desc}}</td>
             <td>
@@ -383,11 +367,11 @@
     <!--    /*更新页显示*/-->
     <div  class="update"  v-show="showViewid==='update'">
       <form >
-        <div>产品生产任务单名称:
-          <input v-model="formItem.name"  placeholder="请输入产品生产任务单名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>产品生产任务单编码:
-          <input v-model="formItem.code"  placeholder="请输入产品生产任务单编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -426,14 +410,14 @@
           <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
         <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
         <div>
@@ -454,7 +438,7 @@
             </div>
             <div>销售订单子项:
               <select v-model="formItem_child.salesOrderItem" >
-                <option v-for="item in salesOrderItem" :value="item.id" :key="item.id">{{item.product_name +"("+ item.product_code+")"}}</option>
+                <option v-for="item in salesOrderItem" :value="item.id" :key="item.id">{{item.product_name +"("+ item.product_code+")"+"["+ item.batch+"]"}}</option>
               </select>
             </div>
             <div>生产线路类型:
@@ -498,32 +482,24 @@
           <caption align="top">已添加子项:</caption>
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>订单名称</th>
-            <th>订单编码</th>
-            <th>产品类型名称</th>
-            <th>产品类型编码</th>
-            <th>产品名称</th>
-            <th>产品编码</th>
-            <th>生产线路类型名称</th>
-            <th>生产线路类型编码</th>
-            <th>生产线路名称</th>
-            <th>生产线路编码</th>
+            <th>订单</th>
+            <th>产品类型</th>
+            <th>产品</th>
+            <th>批次</th>
+            <th>生产线路类型</th>
+            <th>生产线路</th>
             <th>数量</th>
             <th>说明</th>
             <th>操作</th>
           </tr>
           <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
             <td>{{index}}</td>
-            <td>{{item.salesOrder_name}}</td>
-            <td>{{item.salesOrder_code}}</td>
-            <td>{{item.productType_name}}</td>
-            <td>{{item.productType_code}}</td>
-            <td>{{item.product_name}}</td>
-            <td>{{item.product_code}}</td>
-            <td>{{item.routeType_name}}</td>
-            <td>{{item.routeType_code}}</td>
-            <td>{{item.route_name}}</td>
-            <td>{{item.route_code}}</td>
+            <td>{{item.salesOrder_name+"("+item.salesOrder_code+")"}}</td>
+            <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
+            <td>{{item.product_name+"("+item.product_code+")"}}</td>
+            <td>{{item.batch}}</td>
+            <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
+            <td>{{item.route_name+"("+item.route_code+")"}}</td>
             <td>{{item.sum}}</td>
             <td>{{item.desc}}</td>
             <td>
@@ -803,6 +779,7 @@ export default {
             'productType_name': value.salesOrderItem.productType_name,
             'product_name': value.salesOrderItem.product_name,
             'product_code': value.salesOrderItem.product_code,
+            'batch': value.salesOrderItem.batch,
             'routeType_code': value.routeType_code,
             'routeType_name': value.routeType_name,
             'route_code': value.route_code,
@@ -1011,6 +988,7 @@ export default {
             'productType_name': value.salesOrderItem.productType_name,
             'product_name': value.salesOrderItem.product_name,
             'product_code': value.salesOrderItem.product_code,
+            'batch': value.salesOrderItem.batch,
             'routeType_code': value.routeType_code,
             'routeType_name': value.routeType_name,
             'route_code': value.route_code,
@@ -1433,6 +1411,7 @@ export default {
       deep: true
     },
     /* 监控状态信息变化,控制操作按钮的显示 */
+    /* 监控信息状态改变时,更新操作按钮状态 */
     'detail.state': function (newval, oldval) {
       var self = this
       self.showSubmitBt = false

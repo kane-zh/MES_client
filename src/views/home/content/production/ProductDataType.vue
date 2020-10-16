@@ -1,71 +1,79 @@
 <template>
-  <div class="equipmentInfor">
+  <div class="productDataType">
     <!-- 列表页显示-->
     <div  class="list"  v-if="showViewid==='list'">
-      <div class="listHead">
-        <form class="select">
-          <div>创建账号:
-            <select v-model="selectItem.create_user" placeholder="请选择创建账号" >
-              <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
-            </select>
-          </div>
-          <div>审核账号:
-            <select v-model="selectItem.auditor" placeholder="请选择审核账号"      >
-              <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
-            </select>
-          </div>
-          <div>类型:
-            <select v-model="selectItem.type" placeholder="请选择类型"      >
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
-            </select>
-          </div>
-          <div>状态:
-            <select v-model="selectItem.state"  placeholder="请选择状态"    >
-              <option value="新建">新建</option>
-              <option value="审核中">审核中</option>
-              <option value="使用中">使用中</option>
-            </select>
-          </div>
-          <div>关键字:
-            <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
-          </div>
-           <div>
+      <div class="modelSelect">
+        <button type="button" @click="changeMode">{{btTitle}}</button>
+      </div>
+      <div v-if="showTree===false">
+        <div class="listHead">
+          <form class="select">
+            <div>创建账号:
+              <select v-model="selectItem.create_user" placeholder="请选择创建账号" >
+                <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
+              </select>
+            </div>
+            <div>审核账号:
+              <select v-model="selectItem.auditor" placeholder="请选择审核账号"      >
+                <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
+              </select>
+            </div>
+            <div>类别:
+              <select v-model="selectItem.classes"  placeholder="请选择类别"    >
+                <option value="一级类别">一级类别</option>
+                <option value="二级类别">二级类别</option>
+                <option value="三级类别">三级类别</option>
+                <option value="四级类别">四级类别</option>
+              </select>
+            </div>
+            <div>状态:
+              <select v-model="selectItem.state"  placeholder="请选择状态"    >
+                <option value="新建">新建</option>
+                <option value="审核中">审核中</option>
+                <option value="使用中">使用中</option>
+              </select>
+            </div>
+            <div>关键字:
+              <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
+            </div>
+             <div>
                <button type="button" @click="select" >搜索</button>
             </div>
             <div>
               <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
             </div>
-        </form>
-        <div class="button" >
-          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加设备台账</button>
+          </form>
+          <div class="button" >
+
+            <button type="button" @click="showCreatView"  v-show="canCreate===true">添加考核记录类型</button>
+          </div>
+          <div class="ordering">
+            <div>
+              <input value="id" type="radio" name ="ordering" v-model="ordering">
+              添加时间-正排序
+            </div>
+            <div>
+              <input value="-id" type="radio" name ="ordering" v-model="ordering">
+              添加时间-倒排序
+            </div>
+            <div>
+              <input value="update_time" type="radio" name ="ordering" v-model="ordering">
+              更新时间-正排序
+            </div>
+            <div>
+              <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
+              更新时间-倒排序
+            </div>
+          </div>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
-      </div>
-      <div class="listTable">
-          <div class="table">
+        <div class="listTable">
+            <div class="table">
             <table >
               <tr align="center"  type="height:2em">
                 <th>序号</th>
                 <th>名称</th>
                 <th>编码</th>
-                <th>类型</th>
+                <th>类别</th>
                 <th>状态</th>
                 <th>更新时间</th>
                 <th>创建账号</th>
@@ -76,7 +84,7 @@
                 <td>{{index}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>
-                <td>{{item.type.name+"("+item.type.code+")"}}</td>
+                <td>{{item.classes}}</td>
                 <td>{{item.state}}</td>
                 <td>{{item.update_time}}</td>
                 <td>{{item.create_user}}</td>
@@ -92,9 +100,19 @@
               </tr>
             </table>
           </div><div class="page">
-          <div>总共：{{listCount}}</div>
-          <button type="button" @click="listPre" v-if="listPreUrl!==''">上一页</button>
-          <button type="button" @click="listNext" v-if="listNextUrl!==''">下一页</button>
+            <div>总共：{{listCount}}</div>
+            <button type="button" @click="listPre" v-if="listPreUrl!==''">上一页</button>
+            <button type="button" @click="listNext" v-if="listNextUrl!==''">下一页</button>
+          </div>
+        </div>
+      </div>
+      <div class="listTree" v-if="showTree===true">
+        <div class="tree">
+          <Tree :data="treeData"  ref="listTree" expand></Tree>
+        </div>
+        <div class="button">
+          <button type="button" @click="getTreeIndex">查看详情</button>
+          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加考核记录类型</button>
         </div>
       </div>
     </div>
@@ -104,20 +122,9 @@
         <ul>
           <li>{{"名称:"+"&#12288;"+detail.name}}</li>
           <li>{{"编码:"+"&#12288;"+detail.code}}</li>
+          <li>{{"类别:"+"&#12288;"+detail.classes}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li>{{"类型:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
-          <li v-if="vendor!==null">{{"厂商:"+"&#12288;"+vendor.name+"("+vendor.code+")"}}</li>
-          <li>{{"归属单位:"+"&#12288;"+detail.affiliation}}</li>
-          <li>{{"所在位置:"+"&#12288;"+detail.location}}</li>
-          <li>{{"负责人:"+"&#12288;"+detail.principal}}</li>
-          <li>{{"折旧率:"+"&#12288;"+detail.depreciationRate}}</li>
-          <li>{{"启用日期:"+"&#12288;"+detail.dataOfActivation}}</li>
-          <li>{{"购买日期:"+"&#12288;"+detail.dataOfPurchase}}</li>
-          <li v-if="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
-          <li v-if="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
-          <li v-if="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</li>
-          <li v-if="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</li>
-          <li v-if="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</li>
+          <li v-if="parent!==null">{{"父类别:"+"&#12288;"+parent.name+"("+parent.code+")"}}</li>
           <li>{{"创建账号:"+"&#12288;"+detail.create_user}}</li>
           <li>{{"审核账号:"+"&#12288;"+detail.auditor}}</li>
           <li>{{"创建时间:"+"&#12288;"+detail.create_time}}</li>
@@ -125,20 +132,39 @@
           <li>{{"备注信息:"+"&#12288;"+detail.desc}}</li>
         </ul>
         <dl>
-          <dt>设备台账图片:</dt>
-          <template v-for="(value,id) in detail.image">
-            <a target='_black' v-bind:key="id" :href="value.image"> <img :src="value.image" width="50px"></a>
-          </template>
-          <vue-qr :text="qrcode" :margin="0" colorDark="#f67b29" colorLight="#fff"  :logoScale="0.3" :size="50"></vue-qr>
-        </dl>
-        <dl>
           <dt>文件附件:</dt>
           <template v-for="(value,id) in detail.file">
             <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
           </template>
         </dl>
-        <Collapse active-key="3" accordion v-if="detail.parts!==undefined && detail.parts.length > 0">
-          备品信息:
+        <Collapse active-key="2" accordion v-if="detail.productDataType_child!==undefined && detail.productDataType_child.length > 0">
+          子类别:
+          <Panel >
+            <div  slot="content">
+              <table >
+                <tr align="center"  type="height:2em">
+                  <th>序号</th>
+                  <th>名称</th>
+                  <th>编码</th>
+                  <th>类别</th>
+                  <th>状态</th>
+                </tr>
+                <tr align="center" v-for="(item,index) in detail.productDataType_child" :key="item.id" type="height:1em" >
+                  <td>{{index}}</td>
+                  <td>{{item.name}}</td>
+                  <td>{{item.code}}</td>
+                  <td>{{item.classes}}</td>
+                  <td>{{item.state}}</td>
+                </tr>
+                <tr>
+
+                </tr>
+              </table>
+            </div>
+          </Panel>
+        </Collapse>
+        <Collapse active-key="3" accordion v-if="detail.productDataType_item!==undefined && detail.productDataType_item.length > 0">
+          包含内容:
           <Panel >
             <div  slot="content">
               <table >
@@ -148,7 +174,7 @@
                   <th>编码</th>
                   <th>状态</th>
                 </tr>
-                <tr align="center" v-for="(item,index) in detail.parts" :key="item.id" type="height:1em" >
+                <tr align="center" v-for="(item,index) in detail.productDataType_item" :key="item.id" type="height:1em" >
                   <td>{{index}}</td>
                   <td>{{item.name}}</td>
                   <td>{{item.code}}</td>
@@ -194,68 +220,34 @@
     <!--    /*创建页显示*/-->
     <div  class="create"  v-show="showViewid==='create'">
       <form >
-        <div>名称:
-          <input v-model="formItem.name"  placeholder="请输入名称">
-        </div>
-        <div>编码:
-          <input v-model="formItem.code"  placeholder="请输入编码">
-          <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
-          <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
-          <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
-        </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
-            <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
-          </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
-        </div>
-        <div>厂商:
-          <select v-model="formItem.vendor"   placeholder="请选择厂商">
-            <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
-          </select>
-          <span class="message" v-if="!$v.formItem.vendor.required">请选择厂商</span>
-        </div>
-        <div>备品:
-          <select v-model="formItem.parts"   placeholder="请选择备品"  style="height: 90%"  multiple="true">
-            <option v-for="item in partsInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
-          </select>
-        </div>
-        <div>归属单位:
-          <input v-model="formItem.affiliation"  placeholder="请输入归属单位...">
-        </div>
-        <div>所在位置:
-          <input v-model="formItem.location"  placeholder="请输入所在位置...">
-        </div>
-        <div>负责人:
-          <input v-model="formItem.principal"  placeholder="请输入负责人...">
-        </div>
-        <div>折旧率:
-          <input v-model="formItem.depreciationRate"  placeholder="请输入折旧率...">
-        </div>
-        <div>
-
-        </div>
-        <div>启用日期:
-          <input v-model="formItem.dataOfActivation" type="datetime-local" placeholder="选择启用日期" >
-        </div>
-        <div>购买日期:
-          <input v-model="formItem.dataOfPurchase" type="datetime-local" placeholder="选择购买日期" >
-        </div>
-        <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
-          <input v-model="formItem.attribute1"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
-          <input v-model="formItem.attribute2"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
-          <input v-model="formItem.attribute3"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
-          <input v-model="formItem.attribute4"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
-          <input v-model="formItem.attribute5"  placeholder="...">
-        </div>
+          <div>名称:
+            <input v-model="formItem.name"  placeholder="请输入名称">
+          </div>
+          <div>编码:
+            <input v-model="formItem.code"  placeholder="请输入编码">
+            <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
+            <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
+            <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
+          </div>
+          <div>类别:
+            <select v-model="formItem.classes"  placeholder="请选择类别"   >
+              <option value="一级类别">一级类别</option>
+              <option value="二级类别">二级类别</option>
+              <option value="三级类别">三级类别</option>
+              <option value="四级类别">四级类别</option>
+            </select>
+            <span class="message" v-if="!$v.formItem.classes.required">请选择类别</span>
+          </div>
+          <div>上级类别:
+            <select v-model="formItem.parent"   placeholder="请选择上级类别">
+              <option v-for="item in list" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
+          <div>考核附加属性:
+            <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  style="height: 90%"  multiple="true">
+              <option v-for="(value,key,id) in attach_attributes" :value="key+':'+value" :key="id">{{value}}</option>
+            </select>
+          </div>
         <div>审核账号:
           <select v-model="formItem.auditor"  placeholder="请选择审核账号">
             <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
@@ -265,16 +257,6 @@
         <div >备注信息:
           <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
-        <div class="annex">图片附件:
-          <ul>
-            <li v-for="value in imageData" v-bind:key="value.id"  @click="removeImage(value.id)">
-              <img :src="value.imageUrl" width="50px">
-            </li>
-          </ul>
-          <input type="file"  @change="imageBeforeUpload"/>
-          <textarea  v-model="imageItem.desc"  placeholder="请输入当前的备注信息"></textarea>
-          <button type="button" @click="uploadImage">上传</button>
-        </div>
           <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
@@ -283,11 +265,11 @@
           <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
-      </form>
+        </form>
       <div class="button">
         <button type="button" @click="save">保存数据</button>
         <button type="button" @click="saveAndSubmit">保存并提交</button>
-        <button type="button" @click="showViewid='list'">返回列表页</button><button type="button" @click="showViewid='list'">返回列表页</button>
+        <button type="button" @click="showViewid='list'">返回列表页</button>
       </div>
     </div>
     <!--    /*更新页显示*/-->
@@ -302,58 +284,24 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
-            <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+        <div>类别:
+          <select v-model="formItem.classes"  placeholder="请选择类别"   >
+            <option value="一级类别">一级类别</option>
+            <option value="二级类别">二级类别</option>
+            <option value="三级类别">三级类别</option>
+            <option value="四级类别">四级类别</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.classes.required">请选择类别</span>
         </div>
-        <div>厂商:
-          <select v-model="formItem.vendor"   placeholder="请选择厂商">
-            <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
-          </select>
-          <span class="message" v-if="!$v.formItem.vendor.required">请选择厂商</span>
-        </div>
-        <div>备品:
-          <select v-model="formItem.parts"   placeholder="请选择备品"  style="height: 90%"  multiple="true">
-            <option v-for="item in partsInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+        <div>上级类别:
+          <select v-model="formItem.parent"   placeholder="请选择上级类别">
+            <option v-for="item in list" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
-        <div>归属单位:
-          <input v-model="formItem.affiliation"  placeholder="请输入归属单位...">
-        </div>
-        <div>所在位置:
-          <input v-model="formItem.location"  placeholder="请输入所在位置...">
-        </div>
-        <div>负责人:
-          <input v-model="formItem.principal"  placeholder="请输入负责人...">
-        </div>
-        <div>折旧率:
-          <input v-model="formItem.depreciationRate"  placeholder="请输入折旧率...">
-        </div>
-        <div>
-
-        </div>
-        <div>启用日期:
-          <input v-model="formItem.dataOfActivation" type="datetime-local" placeholder="选择启用日期" >
-        </div>
-        <div>购买日期:
-          <input v-model="formItem.dataOfPurchase" type="datetime-local" placeholder="选择购买日期" >
-        </div>
-        <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
-          <input v-model="formItem.attribute1"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
-          <input v-model="formItem.attribute2"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
-          <input v-model="formItem.attribute3"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
-          <input v-model="formItem.attribute4"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
-          <input v-model="formItem.attribute5"  placeholder="...">
+        <div>考核附加属性:
+          <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  style="height: 90%"  multiple="true">
+            <option v-for="(value,key,id) in attach_attributes" :value="key+':'+value" :key="id">{{value}}</option>
+          </select>
         </div>
         <div>审核账号:
           <select v-model="formItem.auditor"  placeholder="请选择审核账号">
@@ -364,16 +312,6 @@
         <div >备注信息:
           <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
-        <div class="annex">图片附件:
-          <ul>
-            <li v-for="value in imageData" v-bind:key="value.id"  @click="removeImage(value.id)">
-              <img :src="value.imageUrl" width="50px">
-            </li>
-          </ul>
-          <input type="file"  @change="imageBeforeUpload"/>
-          <textarea  v-model="imageItem.desc"  placeholder="请输入当前的备注信息"></textarea>
-          <button type="button" @click="uploadImage">上传</button>
-        </div>
           <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
@@ -381,13 +319,6 @@
           <input type="file"  @change="fileBeforeUpload"/>
           <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
-        </div>
-        <div>历史审核记录:
-          <ul>
-            <li v-for="value in alterList" v-bind:key="value.id" >
-              {{value.desc+value.create_time+value.create_user}}
-            </li>
-          </ul>
         </div>
       </form>
       <div class="button">
@@ -399,41 +330,41 @@
   </div>
 </template>
 <script>
-import vueQr from 'vue-qr'
 import { required, minLength, maxLength } from 'vuelidate/lib/validators'
 export default {
-  name: 'equipmentAccount',
+  name: 'productDataType',
   components: {
-    vueQr
+
   },
   data () {
     return {
       /* 视图显示控制 */
       showViewid: 'list',
+      showTree: false,
+      btTitle: '树状模式',
       /* 列表页数据 */
       list: [],
       listCount: 0,
       listPreUrl: '',
       listNextUrl: '',
+      treeData: [],
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        classes: '',
         create_user: '',
         auditor: '',
-        type: '',
         searchValue: ''
       },
       /* 列表页数据排序 */
       ordering: '-id',
       /* 详情页数据 */
-      qrcode: '',
       detail: [],
-      type: {},
-      vendor: {},
+      parent: {},
       /* 详情页审核记录项表单 */
       alterItem: {
         desc: '',
-        uri: 'equipmentAccount'
+        uri: 'productDataType'
       },
       alterList: [],
       alterData: [],
@@ -448,58 +379,27 @@ export default {
         name: '',
         code: '',
         state: '',
-        type: null,
-        parts: [],
-        vendor: '',
-        affiliation: '',
-        location: '',
-        principal: '',
-        depreciationRate: '',
-        dataOfActivation: '',
-        dataOfPurchase: '',
-        image: [],
+        classes: null,
+        parent: null,
+        attach_attribute: [],
         file: [],
         alter: [],
-        attribute1: '',
-        attribute2: '',
-        attribute3: '',
-        attribute4: '',
-        attribute5: '',
         desc: '',
         auditor: ''
       },
-      /* 图片项表单 */
-      imageItem: {
-        image: null,
-        imageName: '',
-        desc: '',
-        uri: 'equipmentAccount'
-      },
-      imageData: [],
       /* 创建页文件项表单 */
       fileItem: {
         file: null,
         fileName: '',
         desc: '',
-        uri: 'equipmentAccount'
+        uri: 'productDataType'
       },
       fileData: [],
-      /* 设备类型信息 */
-      typeInfor: [],
-      /* 厂商信息 */
-      vendorInfor: [],
-      /* 备品信息 */
-      partsInfor: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
-      /* 附加属性标题 */
-      attribute_title: {
-        attribute1: '',
-        attribute2: '',
-        attribute3: '',
-        attribute4: '',
-        attribute5: ''
+      attach_attributes: {
       }
+
     }
   },
   validations: {
@@ -512,10 +412,7 @@ export default {
       auditor: {
         required
       },
-      type: {
-        required
-      },
-      vendor: {
+      classes: {
         required
       }
     }
@@ -531,7 +428,7 @@ export default {
         this.selectItem[key] = ''
       }
       var self = this
-      this.$axios.get('equipment/equipmentAccount/?ordering=' + self.ordering).then(function (response) {
+      this.$axios.get('production/productDataType/?ordering=' + self.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -556,10 +453,10 @@ export default {
       this.listPreUrl = ''
       this.listNextUrl = ''
       var self = this
-      this.$axios.get('equipment/equipmentAccount/?state=' + self.selectItem.state +
+      this.$axios.get('production/productDataType/?state=' + self.selectItem.state +
+          '&classes=' + self.selectItem.classes +
               '&auditor=' + self.selectItem.auditor +
               '&create_user=' + self.selectItem.create_user +
-              '&type=' + self.selectItem.type +
               '&search=' + self.selectItem.searchValue +
               '&ordering=' + self.ordering).then(function (response) {
         self.list = response.data.results
@@ -620,20 +517,111 @@ export default {
         }
       })
     },
+    /* 显示列表树状视图 */
+    showListTreeView: function () {
+      this.treeData = []
+      var self = this
+      this.$axios.get('production/productDataTypes/').then(function (response) {
+        self.transformToTree(response.data)
+      }).catch(function (err) {
+        if (err.request) {
+          alert(err.request.response)
+        } else {
+          console.log('Error', err.message)
+        }
+      })
+    },
+    /* 将数据转换成树形结构数据格式 */
+    transformToTree (data) {
+      /* 遍历第一层,给第一层添加数据 */
+      for (let l1 = 0; l1 < data.length; l1++) {
+        /* 遍历第二层,给第一层子项添加数据 */
+        let data2 = data[l1].productDataType_child
+        let children1 = []
+        for (let l2 = 0; l2 < data2.length; l2++) {
+          /* 遍历第三层,给第二层子项添加数据 */
+          let data3 = data2[l2].productDataType_child
+          let children2 = []
+          for (let l3 = 0; l3 < data3.length; l3++) {
+            /* 遍历第四层,给第三层子项添加数据 */
+            let data4 = data3[l3].productDataType_child
+            let children3 = []
+            for (let l4 = 0; l4 < data4.length; l4++) {
+              children3.push({'id': data4[l4].id,
+                expand: true,
+                'state': data4[l4].state,
+                'auditor': data4[l4].auditor,
+                'create_user': data4[l4].create_user,
+                'title': data4[l4].name + '(' + data4[l4].code + ')',
+                'disableCheckbox': true})
+            }
+            children2.push({'id': data3[l3].id,
+              expand: true,
+              'state': data3[l3].state,
+              'auditor': data3[l3].auditor,
+              'create_user': data3[l3].create_user,
+              'title': data3[l3].name + '(' + data3[l3].code + ')',
+              'children': children3,
+              'disableCheckbox': true})
+          }
+          children1.push({'id': data2[l2].id,
+            expand: true,
+            'state': data2[l2].state,
+            'auditor': data2[l2].auditor,
+            'create_user': data2[l2].create_user,
+            'title': data2[l2].name + '(' + data2[l2].code + ')',
+            'children': children2,
+            'disableCheckbox': true})
+        }
+        this.treeData.push({'id': data[l1].id,
+          expand: true,
+          'state': data[l1].state,
+          'auditor': data[l1].auditor,
+          'create_user': data[l1].create_user,
+          'title': data[l1].name + '(' + data[l1].code + ')',
+          'children': children1,
+          'disableCheckbox': true})
+      }
+    },
+    /* 获取树结构id */
+    getTreeIndex () {
+      var data = this.$refs.listTree.getSelectedNodes()
+      if (data.length === 0) {
+        alert('请选择要查看的信息')
+        return
+      }
+      /* 如果不是创建账号/审核账号/具有查看详情权限 */
+      if (!(('production.read_productdatatypedefinitionmodel' in this.permissions) || (data[0].auditor === this.username) || (data[0].create_user === this.username))) {
+        alert('当前账号不具备查看详情权限')
+        return
+      }
+      if (data[0].state !== '使用中') {
+        alert('当前信息不可查看详情,如需查看过请转至(列表模式)')
+        return
+      }
+      this.showDetailView(data[0].id)
+    },
+    /* 改变列表显示模式 */
+    changeMode () {
+      if (this.showTree === false) {
+        this.showTree = true
+        this.btTitle = '列表模式'
+        this.showListTreeView()
+      } else {
+        this.showTree = false
+        this.btTitle = '树状模式'
+        this.showListView()
+      }
+    },
     /* 显示详情视图 */
     showDetailView (id) {
       this.detail = [] // 清空详情数据
       this.alterData = []// 清空审核数据
-      this.type = {}
+      this.parent = {}
       var self = this
-      var jsonObj = {'type': 'equipmentInfor'}
-      this.$axios.get(`equipment/equipmentAccount/` + id).then(function (response) {
+      this.$axios.get(`production/productDataType/` + id).then(function (response) {
         self.detail = response.data
-        self.type = self.detail.type
-        self.formItem.type = self.detail.type.id
-        self.vendor = self.detail.vendor
-        jsonObj['id'] = self.detail.id
-        self.qrcode = JSON.stringify(jsonObj)
+        self.parent = self.detail.parent
         self.showViewid = 'detail'
       }).catch(function (err) {
         if (err.request) {
@@ -650,7 +638,7 @@ export default {
         return
       }
       this.formItem.state = state
-      this.$axios.patch(`equipment/equipmentAccount/` + self.detail.id + '/', {
+      this.$axios.patch(`production/productDataType/` + self.detail.id + '/', {
         state: self.formItem.state,
         alter: self.formItem.alter
       }).then(function (response
@@ -690,7 +678,6 @@ export default {
         }
       }
       this.fileData = []
-      this.imageData = []
       this.showViewid = 'create'
     },
     /* 显示更新视图 */
@@ -714,43 +701,26 @@ export default {
       }
       this.alterList = []
       this.fileData = []
-      this.imageData = []
       var self = this
-      this.$axios.get(`equipment/equipmentAccount/` + id).then(function (response) {
+      this.$axios.get(`production/productDataType/` + id).then(function (response) {
         self.formItem.id = response.data.id
         self.formItem.name = response.data.name
         self.formItem.state = response.data.state
         self.formItem.code = response.data.code
-        self.formItem.vendor = response.data.vendor.id
-        self.formItem.affiliation = response.data.affiliation
-        self.formItem.location = response.data.location
-        self.formItem.principal = response.data.principal
-        self.formItem.depreciationRate = response.data.depreciationRate
-        self.formItem.dataOfActivation = response.data.dataOfActivation
-        self.formItem.dataOfPurchase = response.data.dataOfPurchase
-        self.formItem.attribute1 = response.data.attribute1
-        self.formItem.attribute2 = response.data.attribute2
-        self.formItem.attribute3 = response.data.attribute3
-        self.formItem.attribute4 = response.data.attribute4
-        self.formItem.attribute5 = response.data.attribute5
+        self.formItem.classes = response.data.classes
         self.formItem.desc = response.data.desc
         self.formItem.auditor = response.data.auditor
         self.alterList = response.data.alter
-        if (response.data.type !== null) {
-          self.formItem.type = response.data.type.id
-        } else { self.formItem.type = response.data.type }
-        response.data.parts.forEach(function (value, i) {
-          self.formItem.parts.push(value.id)
-        })
+        if (response.data.attach_attribute !== null) {
+          self.formItem.attach_attribute = response.data.attach_attribute.split(';')
+        } else { self.formItem.attach_attribute = [] }
+        if (response.data.parent !== null) {
+          self.formItem.parent = response.data.parent.id
+        } else { self.formItem.parent = response.data.parent }
         response.data.file.forEach(function (value, i) {
           var obj = {'id': value.id, 'fileName': value.file_name, 'fileUrl': value.file, 'desc': value.desc, 'uri': value.uri}
           self.formItem.file.push(value.id)
           self.fileData.push(obj)
-        })
-        response.data.image.forEach(function (value, i) {
-          var obj1 = {'id': value.id, 'imageName': value.image_name, 'imageUrl': value.image, 'desc': value.desc, 'uri': value.uri}
-          self.formItem.image.push(value.id)
-          self.imageData.push(obj1)
         })
         self.showViewid = 'update'
       }).catch(function (err) {
@@ -760,60 +730,6 @@ export default {
           console.log('Error', err.message)
         }
       })
-    },
-    /* 提交图片项 */
-    uploadImage () {
-      if (!confirm('确认提交??')) {
-        return
-      }
-      let formData = new FormData()
-      // 下面是表单绑定的data 数据
-      formData.append('uri', this.imageItem.uri)
-      formData.append('desc', this.imageItem.desc)
-      formData.append('image', this.imageItem.image)
-      var self = this
-      this.$axios.post(`equipment/image/`, formData,
-        {headers: {'Content-Type': 'multipart/form-data'}}
-      ).then(function (response) {
-        var obj = {'id': response.data.id,
-          'imageName': self.imageItem.imageName,
-          'imageUrl': response.data.image,
-          'desc': response.data.desc,
-          'uri': response.data.uri}
-        self.imageItem.image = null
-        self.imageItem.desc = ''
-        self.formItem.image.push(response.data.id)
-        self.imageData.push(obj)
-        alert(self.imageItem.imageName + '图片提交成功')
-      }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
-      })
-    },
-
-    imageBeforeUpload (event) {
-      this.imageItem.image = event.target.files[0]
-      this.imageItem.imageName = event.target.files[0].name
-    },
-    removeImage: function (id) {
-      var self = this
-      if (!confirm('是否要删除当前数据' + id)) {
-        // 当用户点击的取消按钮的时候，应该阻断这个方法中的后面代码的继续执行
-        return
-      }
-      for (var i = 0; i < self.formItem.image.length; i++) {
-        if (self.formItem.image[i] === id) {
-          self.formItem.image.splice(i, 1)
-        }
-      }
-      for (var j = 0; j < self.imageData.length; j++) {
-        if (self.imageData[j].id === id) {
-          self.imageData.splice(j, 1)
-        }
-      }
     },
     /* 提交文件项 */
     uploadFile () {
@@ -826,7 +742,7 @@ export default {
       formData.append('desc', this.fileItem.desc)
       formData.append('file', this.fileItem.file)
       var self = this
-      this.$axios.post(`equipment/file/`, formData,
+      this.$axios.post(`production/file/`, formData,
         {headers: {'Content-Type': 'multipart/form-data'}}
       ).then(function (response) {
         var obj = {'id': response.data.id,
@@ -855,6 +771,7 @@ export default {
     removeFile: function (id) {
       var self = this
       if (!confirm('是否要删除当前数据')) {
+        // 当用户点击的取消按钮的时候，应该阻断这个方法中的后面代码的继续执行
         return
       }
       for (var i = 0; i < self.formItem.file.length; i++) {
@@ -874,7 +791,7 @@ export default {
       if (!confirm('确认提交??')) {
         return
       }
-      this.$axios.post(`equipment/alterRecord/`, {
+      this.$axios.post(`production/alterRecord/`, {
         desc: self.alterItem.desc,
         uri: self.alterItem.uri
       }).then(function (response) {
@@ -899,32 +816,18 @@ export default {
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.post(`equipment/equipmentAccount/`, {
+      this.$axios.post(`production/productDataType/`, {
         name: self.formItem.name,
         code: self.formItem.code,
-        type: self.formItem.type,
-        vendor: self.formItem.vendor,
-        parts: self.formItem.parts,
-        affiliation: self.formItem.affiliation,
-        location: self.formItem.location,
-        principal: self.formItem.principal,
-        depreciationRate: self.formItem.depreciationRate,
-        dataOfActivation: self.formItem.dataOfActivation,
-        dataOfPurchase: self.formItem.dataOfPurchase,
+        classes: self.formItem.classes,
+        parent: self.formItem.parent,
+        attach_attribute: self.formItem.attach_attribute.join(';'),
         file: self.formItem.file,
-        image: self.formItem.image,
-        attribute1: self.formItem.attribute1,
-        attribute2: self.formItem.attribute2,
-        attribute3: self.formItem.attribute3,
-        attribute4: self.formItem.attribute4,
-        attribute5: self.formItem.attribute5,
         desc: self.formItem.desc,
         auditor: self.formItem.auditor
       }).then(function (response) {
         self.formItem.file = []
         self.fileData = []
-        self.formItem.image = []
-        self.imageData = []
         alert('数据保存成功')
       }).catch(function (error) {
         if (error.request) {
@@ -940,28 +843,18 @@ export default {
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.put(`equipment/equipmentAccount/` + self.formItem.id + '/', {
+      this.$axios.put(`production/productDataType/` + self.formItem.id + '/', {
         name: self.formItem.name,
         code: self.formItem.code,
-        type: self.formItem.type,
-        vendor: self.formItem.vendor,
-        parts: self.formItem.parts,
-        affiliation: self.formItem.affiliation,
-        location: self.formItem.location,
-        principal: self.formItem.principal,
-        depreciationRate: self.formItem.depreciationRate,
-        dataOfActivation: self.formItem.dataOfActivation,
-        dataOfPurchase: self.formItem.dataOfPurchase,
+        classes: self.formItem.classes,
+        parent: self.formItem.parent,
+        attach_attribute: self.formItem.attach_attribute.join(';'),
         file: self.formItem.file,
-        image: self.formItem.image,
-        attribute1: self.formItem.attribute1,
-        attribute2: self.formItem.attribute2,
-        attribute3: self.formItem.attribute3,
-        attribute4: self.formItem.attribute4,
-        attribute5: self.formItem.attribute5,
         desc: self.formItem.desc,
         auditor: self.formItem.auditor
       }).then(function (response) {
+        self.formItem.file = []
+        self.fileData = []
         alert('数据保存成功')
       }).catch(function (err) {
         if (err.request) {
@@ -977,33 +870,19 @@ export default {
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.post(`equipment/equipmentAccount/`, {
+      this.$axios.post(`production/productDataType/`, {
         name: self.formItem.name,
         code: self.formItem.code,
-        type: self.formItem.type,
-        vendor: self.formItem.vendor,
-        parts: self.formItem.parts,
-        affiliation: self.formItem.affiliation,
-        location: self.formItem.location,
-        principal: self.formItem.principal,
-        depreciationRate: self.formItem.depreciationRate,
-        dataOfActivation: self.formItem.dataOfActivation,
-        dataOfPurchase: self.formItem.dataOfPurchase,
+        classes: self.formItem.classes,
+        parent: self.formItem.parent,
+        attach_attribute: self.formItem.attach_attribute.join(';'),
         file: self.formItem.file,
-        image: self.formItem.image,
-        attribute1: self.formItem.attribute1,
-        attribute2: self.formItem.attribute2,
-        attribute3: self.formItem.attribute3,
-        attribute4: self.formItem.attribute4,
-        attribute5: self.formItem.attribute5,
         desc: self.formItem.desc,
         auditor: self.formItem.auditor
       }).then(function (response) {
         self.formItem.file = []
         self.fileData = []
-        self.formItem.image = []
-        self.imageData = []
-        self.$axios.patch(`equipment/equipmentAccount/` + response.data.id + '/', {
+        self.$axios.patch(`production/productDataType/` + response.data.id + '/', {
           state: '审核中'
         }).then(function (response
         ) {
@@ -1029,33 +908,19 @@ export default {
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.put(`equipment/equipmentAccount/` + self.formItem.id + '/', {
+      this.$axios.put(`production/productDataType/` + self.formItem.id + '/', {
         name: self.formItem.name,
         code: self.formItem.code,
-        type: self.formItem.type,
-        vendor: self.formItem.vendor,
-        parts: self.formItem.parts,
-        affiliation: self.formItem.affiliation,
-        location: self.formItem.location,
-        principal: self.formItem.principal,
-        depreciationRate: self.formItem.depreciationRate,
-        dataOfActivation: self.formItem.dataOfActivation,
-        dataOfPurchase: self.formItem.dataOfPurchase,
+        classes: self.formItem.classes,
+        parent: self.formItem.parent,
+        attach_attribute: self.formItem.attach_attribute.join(';'),
         file: self.formItem.file,
-        image: self.formItem.image,
-        attribute1: self.formItem.attribute1,
-        attribute2: self.formItem.attribute2,
-        attribute3: self.formItem.attribute3,
-        attribute4: self.formItem.attribute4,
-        attribute5: self.formItem.attribute5,
         desc: self.formItem.desc,
         auditor: self.formItem.auditor
       }).then(function (response) {
         self.formItem.file = []
         self.fileData = []
-        self.formItem.image = []
-        self.imageData = []
-        self.$axios.patch(`equipment/equipmentAccount/` + response.data.id + '/', {
+        self.$axios.patch(`production/productDataType/` + response.data.id + '/', {
           state: '审核中'
         }).then(function (response
         ) {
@@ -1079,39 +944,10 @@ export default {
   },
   created () {
     this.userinfor = []
-    this.partsType = []
-    this.partsInfor = []
     var self = this
     this.$axios.get('user/userInfor/?page_size=99999&ordering=-id').then(function (response) {
       self.userinfor = response.data.results
-      self.$axios.get('equipment/equipmentType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
-        self.typeInfor = response.data.results
-        self.$axios.get('equipment/partsInfor/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
-          self.partsInfor = response.data.results
-          self.$axios.get('equipment/vendor/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
-            self.vendorInfor = response.data.results
-            self.showListView()
-          }).catch(function (err) {
-            if (err.request) {
-              alert(err.request.response)
-            } else {
-              console.log('Error', err.message)
-            }
-          })
-        }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
-        })
-      }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
-      })
+      self.showListView()
     }).catch(function (err) {
       if (err.request) {
         alert(err.request.response)
@@ -1119,6 +955,9 @@ export default {
         console.log('Error', err.message)
       }
     })
+  },
+  mounted () {
+    this.attach_attributes = this.$store.getters.getConfig.attach_attribute.产品过程记录
   },
   computed: {
     username () {
@@ -1131,10 +970,10 @@ export default {
       return this.$store.getters.getLoginInfor.permissions
     },
     canCreate () {
-      return 'equipment.add_equipmentaccountmodel' in this.permissions
+      return 'production.add_productdatatypedefinitionmodel' in this.permissions
     },
     canRead () {
-      return 'equipment.read_equipmentaccountmodel' in this.permissions
+      return 'production.read_productdatatypedefinitionmodel' in this.permissions
     }
 
   },
@@ -1142,36 +981,49 @@ export default {
     formItem: {
       deep: true
     },
-    /* 监控用户选择的类别变化时,更新附加属性标题 */
-    'formItem.type': function (newval, oldval) {
+    /* 监控用户选择的类别变化时,更新父类信息 */
+    'formItem.classes': function (newval, oldval) {
       var self = this
-      for (let key in self.attribute_title) {
-        self.attribute_title[key] = ''
+      switch (newval) {
+        case '一级类别':
+          self.list = []
+          self.formItem.parent = ''
+          break
+        case '二级类别':
+          this.$axios.get('production/productDataType/?state=使用中&classes=一级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
+            self.list = response.data.results
+          }).catch(function (err) {
+            if (err.request) {
+              alert(err.request.response)
+            } else {
+              console.log('Error', err.message)
+            }
+          })
+          break
+        case '三级类别':
+          this.$axios.get('production/productDataType/?state=使用中&classes=二级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
+            self.list = response.data.results
+          }).catch(function (err) {
+            if (err.request) {
+              alert(err.request.response)
+            } else {
+              console.log('Error', err.message)
+            }
+          })
+          break
+        case '四级类别':
+          this.$axios.get('production/productDataType/?state=使用中&classes=三级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
+            self.list = response.data.results
+          }).catch(function (err) {
+            if (err.request) {
+              alert(err.request.response)
+            } else {
+              console.log('Error', err.message)
+            }
+          })
+          break
       }
-      if (newval === undefined) {
-        return
-      }
-      this.$axios.get(`equipment/equipmentType/` + newval).then(function (response) {
-        if (response.data.attach_attribute !== null) {
-          var result = response.data.attach_attribute.split(';')
-          if (result.length > 0) {
-            result.forEach(function (value, i) {
-              var data = value.split(':')
-              if (data.length === 2) {
-                self.attribute_title[data[0]] = data[1]
-              }
-            })
-          }
-        }
-      }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
-      })
     },
-    /* 监控状态信息变化,控制操作按钮的显示 */
     /* 监控信息状态改变时,更新操作按钮状态 */
     'detail.state': function (newval, oldval) {
       var self = this
@@ -1192,7 +1044,7 @@ export default {
 }
 </script>
 <style scoped>
-  .equipmentInfor{
+  .productDataType{
     position: relative;
     top: 0;
     width: 100%;
@@ -1204,9 +1056,28 @@ export default {
     width: 100%;
     height: 100%;
   }
-  .list .listHead{
+  .list .modelSelect{
     position: absolute;
     top: 0;
+    width: 100%;
+    height: 5%;
+    font-family: PingFangSC-Regular;
+    font-size: 0.3em;
+    line-height: 2em;
+    color: #151515;
+    letter-spacing: -0.45px;
+  }
+  .list .modelSelect button{
+    position: absolute;
+    top: 10%;
+    width: 8%;
+    height: 80%;
+    border: 1px solid #363E42;
+    border-radius: 1em;
+  }
+  .list .listHead{
+    position: absolute;
+    top: 5%;
     width: 100%;
     height: 25%;
     background: rgba(255, 255, 255, 0.57);
@@ -1225,7 +1096,7 @@ export default {
   .list .listHead .select div{
     position: relative;
     top: 0;
-    width: 23%;
+    width: 20%;
     height: 100%;
     margin-right: 2%;
     font-family: AppleSystemUIFont;
@@ -1255,7 +1126,7 @@ export default {
     background: #D8D8D8;
     border-radius: 1em;
   }
-  .list .listHead  .button{
+  .list .button{
     position: absolute;
     top: 66%;
     width: 100%;
@@ -1267,7 +1138,7 @@ export default {
     color: #151515;
     letter-spacing: -0.45px;
   }
-  .list .listHead  .ordering{
+  .list .ordering{
     position: absolute;
     top: 86%;
     width: 100%;
@@ -1294,9 +1165,9 @@ export default {
   }
   .list .listTable{
     position: absolute;
-    top: 25%;
+    top: 30%;
     width: 100%;
-    height: 75%;
+    height: 70%;
   }
   .list .listTable .table{
     height: 90%;
@@ -1346,6 +1217,25 @@ export default {
     line-height: 2em;
     border: 1px solid #363E42;
     border-radius: 1em;
+  }
+  .list .listTree{
+    position: absolute;
+    top: 10%;
+    width: 100%;
+    height: 90%;
+  }
+  .list .listTree .tree{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 70%;
+    overflow: auto;
+  }
+  .list .listTree .button{
+    position: absolute;
+    top: 75%;
+    width: 100%;
+    height: 20%;
   }
   .detail{
     position: relative;

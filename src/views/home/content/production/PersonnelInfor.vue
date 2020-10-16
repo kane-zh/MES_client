@@ -97,10 +97,9 @@
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="content">
         <ul>
-          <li>{{"人员信息名称:"+"&#12288;"+detail.name}}</li>
-          <li>{{"人员信息编码:"+"&#12288;"+detail.code}}</li>
-          <li>{{"班组名称:"+"&#12288;"+team.name}}</li>
-          <li>{{"班组编码:"+"&#12288;"+team.code}}</li>
+          <li>{{"名称:"+"&#12288;"+detail.name}}</li>
+          <li>{{"编码:"+"&#12288;"+detail.code}}</li>
+          <li>{{"班组:"+"&#12288;"+team.name+"("+team.code+")"}}</li>
           <li>{{"人员工号:"+"&#12288;"+detail.job_number}}</li>
           <li>{{"人员职位:"+"&#12288;"+detail.post}}</li>
           <li>{{"人员微信:"+"&#12288;"+detail.wechat}}</li>
@@ -145,7 +144,7 @@
           </template>
         </dl>
         <dl>
-          <dt>人员信息文件:</dt>
+          <dt>文件附件:</dt>
           <template v-for="(value,id) in detail.file">
             <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
           </template>
@@ -158,11 +157,11 @@
     <!--    /*创建页显示*/-->
     <div  class="create"  v-show="showViewid==='create'">
       <form >
-        <div>人员名称:
-          <input v-model="formItem.name"  placeholder="请输入人员名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>人员编码:
-          <input v-model="formItem.code"  placeholder="请输入人员编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -207,7 +206,7 @@
           <input v-model="formItem.attribute5"  placeholder="...">
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
         <div>
 
@@ -219,7 +218,7 @@
             </li>
           </ul>
           <input type="file"  @change="imageBeforeUpload"/>
-          <textarea  v-model="imageItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="imageItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadImage">上传</button>
         </div>
         <div class="annex">文件附件:
@@ -227,7 +226,7 @@
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
       </form>
@@ -239,11 +238,11 @@
     <!--    /*更新页显示*/-->
     <div  class="update"  v-show="showViewid==='update'">
       <form >
-        <div>人员名称:
-          <input v-model="formItem.name"  placeholder="请输入人员名称...">
+        <div>名称:
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
-        <div>人员编码:
-          <input v-model="formItem.code"  placeholder="请输入人员编码...">
+        <div>编码:
+          <input v-model="formItem.code"  placeholder="请输入编码">
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -288,7 +287,7 @@
           <input v-model="formItem.attribute5"  placeholder="...">
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
         <div>
 
@@ -300,7 +299,7 @@
             </li>
           </ul>
           <input type="file"  @change="imageBeforeUpload"/>
-          <textarea  v-model="imageItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="imageItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadImage">上传</button>
         </div>
           <div class="annex">文件附件:
@@ -308,7 +307,7 @@
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
           <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息..."></textarea>
+          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadFile">上传</button>
         </div>
       </form>

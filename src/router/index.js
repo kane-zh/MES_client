@@ -406,6 +406,18 @@ export default new Router({
               component: () => import('@/views/home/content/production/AssessmentType')
             },
             {
+              // 产品过程数据类型
+              path: 'productDataType',
+              name: 'productDataType',
+              component: () => import('@/views/home/content/production/ProductDataType')
+            },
+            {
+              // 半成品品过程数据类型
+              path: 'semifinishedDataType',
+              name: 'semifinishedDataType',
+              component: () => import('@/views/home/content/production/SemifinishedDataType')
+            },
+            {
               // 考核等级
               path: 'assessmentLevel',
               name: 'assessmentLevel',
@@ -428,6 +440,18 @@ export default new Router({
               path: 'productDailyReport',
               name: 'productDailyReport',
               component: () => import('@/views/home/content/production/ProductDailyReport')
+            },
+            {
+              // 产品过程数据
+              path: 'productData',
+              name: 'productData',
+              component: () => import('@/views/home/content/production/ProductData')
+            },
+            {
+              // 半成品过程数据
+              path: 'semifinishedData',
+              name: 'semifinishedData',
+              component: () => import('@/views/home/content/production/SemifinishedData')
             },
             {
               // 生产看板信息

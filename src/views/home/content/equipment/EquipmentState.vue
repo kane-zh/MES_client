@@ -48,8 +48,7 @@
                 <th>序号</th>
                 <th>名称</th>
                 <th>编码</th>
-                <th>设备名称</th>
-                <th>设备编码</th>
+                <th>设备</th>
                 <th>状态</th>
                 <th>开机时长</th>
                 <th>运行时长</th>
@@ -63,8 +62,7 @@
                 <td>{{index}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>
-                <td>{{item.equipment.name}}</td>
-                <td>{{item.equipment.code}}</td>
+                <td>{{item.equipment.name+"("+item.equipment.code+")"}}</td>
                 <td>{{item.type}}</td>
                 <td>{{item.allTime}}</td>
                 <td>{{item.runTime}}</td>
@@ -93,8 +91,8 @@
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="content">
         <ul>
-          <li>{{"设备状态名称:"+"&#12288;"+detail.name}}</li>
-          <li>{{"设备状态编码:"+"&#12288;"+detail.code}}</li>
+          <li>{{"名称:"+"&#12288;"+detail.name}}</li>
+          <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"设备状态:"+"&#12288;"+detail.type}}</li>
           <li>{{"运行时长:"+"&#12288;"+detail.runTime}}</li>
           <li>{{"开机时长:"+"&#12288;"+detail.allTime}}</li>
@@ -127,10 +125,10 @@
     <div  class="create"  v-show="showViewid==='create'">
       <form >
         <div>名称:
-          <input v-model="formItem.name"  placeholder="请输入名称...">
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
         <div>编码:
-          <input v-model="formItem.code"  placeholder="请输入编码...">
+          <input v-model="formItem.code"  placeholder="请输入编码">
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -147,7 +145,7 @@
           <span class="message" v-if="!$v.formItem.equipment.required">请选择设备</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
       </form>
       <div class="button">
@@ -159,10 +157,10 @@
     <div  class="update"  v-show="showViewid==='update'">
       <form >
         <div>名称:
-          <input v-model="formItem.name"  placeholder="请输入名称...">
+          <input v-model="formItem.name"  placeholder="请输入名称">
         </div>
         <div>编码:
-          <input v-model="formItem.code"  placeholder="请输入编码...">
+          <input v-model="formItem.code"  placeholder="请输入编码">
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
@@ -179,7 +177,7 @@
           <span class="message" v-if="!$v.formItem.equipment.required">请选择设备</span>
         </div>
         <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息..."></textarea>
+          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
       </form>
       <div class="button">
