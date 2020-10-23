@@ -14,11 +14,16 @@
               <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
-<!--          <div>车间:-->
-<!--            <select v-model="selectItem.workshop" placeholder="请选择车间"      >-->
-<!--              <option v-for="item in " :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>-->
-<!--            </select>-->
-<!--          </div>-->
+          <div>任务类型:
+            <select v-model="selectItem.taskType" placeholder="请选择任务类型"      >
+              <option v-for="item in taskType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
+          <div>产品类型:
+            <select v-model="selectItem.productType" placeholder="请选择产品类型"      >
+              <option v-for="item in productType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
           <div>开始时间:
             <input v-model="selectItem.start_time"  type="datetime-local" placeholder="选择日期和时间">
           </div>
@@ -65,6 +70,8 @@
                 <th>类型</th>
                 <th>产品类型</th>
                 <th>产品</th>
+                <th>任务类型</th>
+                <th>任务</th>
                 <th>批次号</th>
                 <th>序列号</th>
                 <th>时间</th>
@@ -76,6 +83,8 @@
                 <td>{{item.type.name+"("+item.type.code+")"}}</td>
                 <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
                 <td>{{item.product_name+"("+item.product_code+")"}}</td>
+                <td>{{item.taskType_name+"("+item.taskType_code+")"}}</td>
+                <td>{{item.task_name+"("+item.task_code+")"}}</td>
                 <td>{{item.batch}}</td>
                 <td>{{item.sn}}</td>
                 <td>{{item.dataTime}}</td>
@@ -101,8 +110,10 @@
       <div class="content">
         <ul>
           <li>{{"类型:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
-          <li>{{"产品类型:"+"&#12288;"+detail.productType_name+"("+productType_code+")"}}</li>
-          <li>{{"产品:"+"&#12288;"+detail.product_name+"("+product_code+")"}}</li>
+          <li>{{"产品类型:"+"&#12288;"+detail.productType_name+"("+detail.productType_code+")"}}</li>
+          <li>{{"产品:"+"&#12288;"+detail.product_name+"("+detail.product_code+")"}}</li>
+          <li>{{"任务类型:"+"&#12288;"+detail.taskType_name+"("+detail.taskType_code+")"}}</li>
+          <li>{{"任务:"+"&#12288;"+detail.task_name+"("+detail.task_code+")"}}</li>
           <li>{{"批次号:"+"&#12288;"+detail.batch}}</li>
           <li>{{"序列号:"+"&#12288;"+detail.sn}}</li>
           <li>{{"人员信息:"+"&#12288;"+detail.personnel}}</li>
@@ -131,6 +142,7 @@
           <li v-if="attribute_title.attribute19!==''">{{attribute_title.attribute19 +":"+"&#12288;"+detail.attribute19}}</li>
           <li v-if="attribute_title.attribute20!==''">{{attribute_title.attribute20 +":"+"&#12288;"+detail.attribute20}}</li>
           <li>{{"创建账号:"+"&#12288;"+detail.create_user}}</li>
+          <li>{{"记录时间:"+"&#12288;"+detail.dataTime}}</li>
           <li>{{"创建时间:"+"&#12288;"+detail.create_time}}</li>
           <li>{{"备注信息:"+"&#12288;"+detail.desc}}</li>
         </ul>
@@ -155,14 +167,28 @@
           </select>
           <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
         </div>
-        <div>产品类型:
-          <select v-model="formItem.productType" >
-            <option v-for="item in productType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+        <div>任务类型:
+          <select v-model="formItem.taskType" >
+            <option v-for="item in taskType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
           </select>
         </div>
+        <div>任务信息:
+          <select v-model="formItem.task" >
+            <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+          </select>
+        </div>
+<!--        <div>产品类型:-->
+<!--          <select v-model="formItem.productType" >-->
+<!--            <option v-for="item in productType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>-->
+<!--          </select>-->
+<!--        </div>-->
+<!--        <div>产品信息:-->
+<!--          <select v-model="formItem.product" >-->
+<!--            <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>-->
+<!--          </select>-->
         <div>产品信息:
           <select v-model="formItem.product" >
-            <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
+            <option v-for="(item,index) in productInfor1" :value="item.product_id" :key="index">{{item.product_name +"("+ item.product_code+")"}}</option>
           </select>
         </div>
         <div>批次号:
@@ -287,8 +313,11 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        productType: '',
+        taskType: '',
+        product: '',
+        task: '',
         create_user: '',
-        auditor: '',
         type: '',
         searchValue: '',
         start_time: '',
@@ -319,6 +348,8 @@ export default {
         type: null,
         productType: null,
         product: null,
+        taskType: null,
+        task: null,
         batch: '',
         sn: '',
         personnel: '',
@@ -364,6 +395,11 @@ export default {
       productType: [],
       /* 产品信息 */
       productInfor: [],
+      productInfor1: [],
+      /* 任务类型信息 */
+      taskType: [],
+      /* 任务信息 */
+      taskInfor: [],
       /* 过程数据类型信息 */
       typeInfor: [],
       /* 具有审核权限的账号信息 */
@@ -441,6 +477,10 @@ export default {
       this.listNextUrl = ''
       var self = this
       this.$axios.get('production/productData/?create_user=' + self.selectItem.create_user +
+              '&productType_code=' + self.selectItem.productType +
+              '&taskType_code=' + self.selectItem.taskType +
+              '&product_id=' + self.selectItem.product +
+              '&task_id=' + self.selectItem.task +
               '&type=' + self.selectItem.type +
               '&search=' + self.selectItem.searchValue +
               '&start_time=' + self.selectItem.start_time +
@@ -608,6 +648,7 @@ export default {
       this.$axios.post(`production/productData/`, {
         type: self.formItem.type,
         product_id: self.formItem.product,
+        task_id: self.formItem.task,
         batch: self.formItem.batch,
         sn: self.formItem.sn,
         personnel: self.formItem.personnel,
@@ -679,7 +720,16 @@ export default {
         self.typeInfor = response.data.results
         self.$axios.get('process/productType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
           self.productType = response.data.results
-          self.showListView()
+          self.$axios.get('plan/productTaskType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
+            self.taskType = response.data.results
+            self.showListView()
+          }).catch(function (err) {
+            if (err.request) {
+              alert(err.request.response)
+            } else {
+              console.log('Error', err.message)
+            }
+          })
         }).catch(function (err) {
           if (err.request) {
             alert(err.request.response)
@@ -770,6 +820,61 @@ export default {
           alert(err.request.response)
         } else {
           console.log('Error', err.message)
+        }
+      })
+    },
+    'formItem.taskType': function (newval, oldval) {
+      var self = this
+      this.taskInfor = []
+      if (newval === undefined) {
+        return
+      }
+      this.$axios.get(`plan/productTaskType/` + newval).then(function (response) {
+        self.taskInfor = response.data.productTaskType_item
+      }).catch(function (err) {
+        if (err.request) {
+          alert(err.request.response)
+        } else {
+          console.log('Error', err.message)
+        }
+      })
+    },
+    'formItem.task': function (newval, oldval) {
+      var self = this
+      this.productInfor1 = []
+      if (newval === undefined) {
+        return
+      }
+      this.$axios.get(`plan/productTaskCreate/` + newval).then(function (response) {
+        response.data.child.forEach(function (value, i) {
+          var obj
+          obj = {
+            batch: value.salesOrderItem.batch,
+            id: value.salesOrderItem.id,
+            productType_code: value.salesOrderItem.productType_code,
+            productType_name: value.salesOrderItem.productType_name,
+            product_code: value.salesOrderItem.product_code,
+            product_id: value.salesOrderItem.product_id,
+            product_name: value.salesOrderItem.product_name
+          }
+          self.productInfor1.push(obj)
+        })
+      }).catch(function (err) {
+        if (err.request) {
+          alert(err.request.response)
+        } else {
+          console.log('Error', err.message)
+        }
+      })
+    },
+    'formItem.product': function (newval, oldval) {
+      var self = this
+      if (newval === undefined) {
+        return
+      }
+      this.productInfor1.forEach(function (value, i) {
+        if (newval === value.product_id) {
+          self.formItem.batch = value.batch
         }
       })
     }

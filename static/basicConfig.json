@@ -547,6 +547,14 @@
             "attribute3": "",
             "attribute4": "",
             "attribute5": ""
+          },
+          "事件信息":
+          {
+            "attribute1": "",
+            "attribute2": "",
+            "attribute3": "",
+            "attribute4": "",
+            "attribute5": ""
           }
         },
   "function_select": {
@@ -634,7 +642,9 @@
             "供应商类型": true,
             "供应商信息": true,
             "销售订单": true,
+            "产品生产任务类型": true,
             "产品生产任务": true,
+            "半成品生产任务类型": true,
             "半成品生产任务": true,
             "物料需求": true,
             "物料管理计划": true,
@@ -643,7 +653,9 @@
             "计划看板": true
           },
           "精益管理": {
-            "enable": true
+            "enable": true,
+            "事件类型": true,
+            "事件信息": true
           }
   }
 }

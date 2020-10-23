@@ -499,10 +499,22 @@ export default new Router({
               component: () => import('@/views/home/content/plan/SalesOrderCreate')
             },
             {
+              // 产品生产任务类型
+              path: 'productTaskType',
+              name: 'productTaskType',
+              component: () => import('@/views/home/content/plan/ProductTaskType')
+            },
+            {
               // 产品生产任务单创建
               path: 'productTaskCreate',
               name: 'productTaskCreate',
               component: () => import('@/views/home/content/plan/ProductTaskCreate')
+            },
+            {
+              // 半成品生产任务类型
+              path: 'semifinishedTaskType',
+              name: 'semifinishedTaskType',
+              component: () => import('@/views/home/content/plan/SemifinishedTaskType')
             },
             {
               // 半成品生产任务单创建
@@ -545,6 +557,18 @@ export default new Router({
               path: 'planBoard',
               name: 'planBoard',
               component: () => import('@/views/home/content/plan/PlanBoard')
+            },
+            {
+              // 事件类型
+              path: 'eventType',
+              name: 'eventType',
+              component: () => import('@/views/home/content/lean/EventType')
+            },
+            {
+              // 事件信息
+              path: 'eventInfor',
+              name: 'eventInfor',
+              component: () => import('@/views/home/content/lean/EventInfor')
             }
 
           ]

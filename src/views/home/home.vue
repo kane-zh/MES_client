@@ -357,13 +357,13 @@
                   v-if="function_select['生产管理'].产品记录类型===true">
                 <router-link to="/home/production/productDataType">产品记录类型</router-link>
               </li>
-              <li :class="childMenuSelect==='semifinishedDataType'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedDataType'"
-                  v-if="function_select['生产管理'].半成品记录类型===true">
-                <router-link to="/home/production/semifinishedDataType">半成品记录类型</router-link>
-              </li>
               <li :class="childMenuSelect==='productData'? 'isActive':'isInActive'"  @click="childMenuSelect='productData'"
                   v-if="function_select['生产管理'].产品过程数据===true">
                 <router-link to="/home/production/productData">产品过程数据</router-link>
+              </li>
+              <li :class="childMenuSelect==='semifinishedDataType'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedDataType'"
+                  v-if="function_select['生产管理'].半成品记录类型===true">
+                <router-link to="/home/production/semifinishedDataType">半成品记录类型</router-link>
               </li>
               <li :class="childMenuSelect==='semifinishedData'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedData'"
                   v-if="function_select['生产管理'].半成品过程数据===true">
@@ -397,9 +397,17 @@
                   v-if="function_select['计划管理'].销售订单===true">
                 <router-link to="/home/plan/salesOrderCreate">销售订单</router-link>
               </li>
+              <li :class="childMenuSelect==='productTaskType'? 'isActive':'isInActive'"  @click="childMenuSelect='productTaskType'"
+                  v-if="function_select['计划管理'].产品生产任务类型===true">
+                <router-link to="/home/plan/productTaskType">产品生产类型</router-link>
+              </li>
               <li :class="childMenuSelect==='productTaskCreate'? 'isActive':'isInActive'"  @click="childMenuSelect='productTaskCreate'"
                   v-if="function_select['计划管理'].产品生产任务===true">
                 <router-link to="/home/plan/productTaskCreate">产品生产任务</router-link>
+              </li>
+              <li :class="childMenuSelect==='semifinishedTaskType'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedTaskType'"
+                  v-if="function_select['计划管理'].半成品生产任务类型===true">
+                <router-link to="/home/plan/semifinishedTaskType">半成品生产类型</router-link>
               </li>
               <li :class="childMenuSelect==='seminishedTaskCreate'? 'isActive':'isInActive'"  @click="childMenuSelect='seminishedTaskCreate'"
                   v-if="function_select['计划管理'].半成品生产任务===true">
@@ -433,11 +441,13 @@
           </div>
           <div  v-show="MenuItem==='lean'">
             <ul>
-              <li :class="childMenuSelect==='option1'? 'isActive':'isInActive'"  @click="childMenuSelect='option1'">
-                <router-link >option1</router-link>
+              <li :class="childMenuSelect==='eventType'? 'isActive':'isInActive'"  @click="childMenuSelect='eventType'"
+                  v-if="function_select['精益管理'].事件类型===true">
+                <router-link to="/home/plan/eventType">事件类型</router-link>
               </li>
-              <li :class="childMenuSelect==='option2'? 'isActive':'isInActive'"  @click="childMenuSelect='option2'">
-                <router-link >option2</router-link>
+              <li :class="childMenuSelect==='eventInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='eventInfor'"
+                  v-if="function_select['精益管理'].事件信息===true">
+                <router-link to="/home/plan/eventInfor">事件信息</router-link>
               </li>
             </ul>
           </div>

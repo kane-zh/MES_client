@@ -14,6 +14,11 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
+          <div>类型:
+            <select v-model="selectItem.type" placeholder="请选择类型"      >
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
           <div>状态:
             <select v-model="selectItem.state"  placeholder="请选择状态"    >
               <option value="新建">新建</option>
@@ -76,6 +81,7 @@
                 <th>序号</th>
                 <th>名称</th>
                 <th>编码</th>
+                <th>类型</th>
                 <th>状态</th>
                 <th>优先级</th>
                 <th>交期</th>
@@ -88,6 +94,7 @@
                 <td>{{index}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>
+                <td>{{item.type.name+"("+item.type.code+")"}}</td>
                 <td>{{item.state}}</td>
                 <td>{{item.priority}}</td>
                 <td>{{item.delivery_time}}</td>
@@ -117,6 +124,7 @@
         <ul>
           <li>{{"名称:"+"&#12288;"+detail.name}}</li>
           <li>{{"编码:"+"&#12288;"+detail.code}}</li>
+          <li>{{"类型:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
           <li>{{"优先级:"+"&#12288;"+detail.priority}}</li>
           <li>{{"交付日期:"+"&#12288;"+detail.delivery_time}}</li>
@@ -218,6 +226,12 @@
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
+        </div>
+        <div>类型:
+          <select v-model="formItem.type"   placeholder="请选择类型">
+            <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+          </select>
+          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
         </div>
         <div>优先级:
           <select  v-model="formItem.priority" placeholder="请选择优先级"     >
@@ -375,6 +389,12 @@
           <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
+        </div>
+        <div>类型:
+          <select v-model="formItem.type"   placeholder="请选择类型">
+            <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+          </select>
+          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
         </div>
         <div>优先级:
           <select  v-model="formItem.priority" placeholder="请选择优先级"     >
@@ -551,6 +571,7 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        type: '',
         priority: '',
         create_user: '',
         auditor: '',
@@ -562,6 +583,7 @@ export default {
       ordering: '-id',
       /* 详情页数据 */
       detail: [],
+      type: {},
       /* 详情页审核记录项表单 */
       alterItem: {
         desc: '',
@@ -582,6 +604,7 @@ export default {
         id: '',
         name: '',
         code: '',
+        type: null,
         state: '',
         priority: '',
         delivery_time: '',
@@ -618,6 +641,7 @@ export default {
         uri: 'semifinishedTaskcreate'
       },
       fileData: [],
+      typeInfor: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
       /* 工艺路线类型 */
@@ -647,6 +671,9 @@ export default {
         required,
         minLength: minLength(2),
         maxLength: maxLength(32)
+      },
+      type: {
+        required
       },
       auditor: {
         required
@@ -696,6 +723,7 @@ export default {
       this.listNextUrl = ''
       var self = this
       this.$axios.get('plan/semifinishedTaskCreate/?state=' + self.selectItem.state +
+             '&type=' + self.selectItem.type +
               '&priority=' + self.selectItem.priority +
               '&auditor=' + self.selectItem.auditor +
               '&create_user=' + self.selectItem.create_user +
@@ -766,9 +794,12 @@ export default {
       this.detail = [] // 清空详情数据
       this.alterData = []// 清空审核数据
       this.list_child = []
+      this.type = {}
       var self = this
       this.$axios.get(`plan/semifinishedTaskCreate/` + id).then(function (response) {
         self.detail = response.data
+        self.type = self.detail.type
+        self.formItem.type = self.detail.type.id
         response.data.child.forEach(function (value, i) {
           var obj1 = {'id': value.id,
             'state': value.state,
@@ -958,6 +989,9 @@ export default {
         self.formItem.desc = response.data.desc
         self.formItem.auditor = response.data.auditor
         self.alterList = response.data.alter
+        if (response.data.type !== null) {
+          self.formItem.type = response.data.type.id
+        } else { self.formItem.type = response.data.type }
         response.data.child.forEach(function (value, i) {
           var obj1 = {'id': value.id,
             'state': value.state,
@@ -1142,6 +1176,7 @@ export default {
       this.$axios.post(`plan/semifinishedTaskCreate/`, {
         name: self.formItem.name,
         code: self.formItem.code,
+        type: self.formItem.type,
         priority: self.formItem.priority,
         delivery_time: self.formItem.delivery_time,
         child: self.formItem.child,
@@ -1174,6 +1209,7 @@ export default {
       this.$axios.put(`plan/semifinishedTaskCreate/` + self.formItem.id + '/', {
         name: self.formItem.name,
         code: self.formItem.code,
+        type: self.formItem.type,
         priority: self.formItem.priority,
         delivery_time: self.formItem.delivery_time,
         child: self.formItem.child,
@@ -1204,6 +1240,7 @@ export default {
       this.$axios.post(`plan/semifinishedTaskCreate/`, {
         name: self.formItem.name,
         code: self.formItem.code,
+        type: self.formItem.type,
         priority: self.formItem.priority,
         delivery_time: self.formItem.delivery_time,
         child: self.formItem.child,
@@ -1247,6 +1284,7 @@ export default {
       this.$axios.put(`plan/semifinishedTaskCreate/` + self.formItem.id + '/', {
         name: self.formItem.name,
         code: self.formItem.code,
+        type: self.formItem.type,
         priority: self.formItem.priority,
         delivery_time: self.formItem.delivery_time,
         child: self.formItem.child,
@@ -1292,7 +1330,16 @@ export default {
         self.productRouteType = response.data.results
         self.$axios.get('plan/salesOrderCreate/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
           self.salesOrder = response.data.results
-          self.showListView()
+          self.$axios.get('plan/semifinishedTaskType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
+            self.typeInfor = response.data.results
+            self.showListView()
+          }).catch(function (err) {
+            if (err.request) {
+              alert(err.request.response)
+            } else {
+              console.log('Error', err.message)
+            }
+          })
         }).catch(function (err) {
           if (err.request) {
             alert(err.request.response)
@@ -1341,7 +1388,35 @@ export default {
     formItem: {
       deep: true
     },
-    /* 监控状态信息变化,控制操作按钮的显示 */
+    /* 监控用户选择的类别变化时,更新附加属性标题 */
+    'formItem.type': function (newval, oldval) {
+      var self = this
+      for (let key in self.attribute_title) {
+        self.attribute_title[key] = ''
+      }
+      if (newval === undefined) {
+        return
+      }
+      this.$axios.get(`plan/semifinishedTaskType/` + newval).then(function (response) {
+        if (response.data.attach_attribute !== null) {
+          var result = response.data.attach_attribute.split(';')
+          if (result.length > 0) {
+            result.forEach(function (value, i) {
+              var data = value.split(':')
+              if (data.length === 2) {
+                self.attribute_title[data[0]] = data[1]
+              }
+            })
+          }
+        }
+      }).catch(function (err) {
+        if (err.request) {
+          alert(err.request.response)
+        } else {
+          console.log('Error', err.message)
+        }
+      })
+    },
     /* 监控信息状态改变时,更新操作按钮状态 */
     'detail.state': function (newval, oldval) {
       var self = this
