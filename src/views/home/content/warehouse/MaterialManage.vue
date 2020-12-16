@@ -15,19 +15,19 @@
             </select>
           </div>
           <div>状态:
-          <select v-model="selectItem.state"  placeholder="请选择状态"    >
-            <option value="新建">新建</option>
-            <option value="审核中">审核中</option>
-            <option value="完成">完成</option>
-          </select>
+            <select v-model="selectItem.state"  placeholder="请选择状态"    >
+              <option value="新建">新建</option>
+              <option value="审核中">审核中</option>
+              <option value="完成">完成</option>
+            </select>
           </div>
           <div>仓库:
             <select v-model="selectItem.warehouse" placeholder="请选择仓库" >
               <option v-for="item in warehouse" :value="item.code" :key="item.code">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
-          <div>操作类型:
-            <select v-model="selectItem.type"  placeholder="请选择操作类型"    >
+          <div>操作分类:
+            <select v-model="selectItem.type"  placeholder="请选择操作分类"    >
               <option value="增加操作">增加操作</option>
               <option value="入库操作">入库操作</option>
               <option value="退库操作">退库操作</option>
@@ -45,84 +45,67 @@
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
           <div>
-             <button type="button" @click="select" >搜索</button>
+            <button type="button" @click="select" >搜索</button>
           </div>
           <div>
-             <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
+            <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
           </div>
         </form>
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加物料管理</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
-          <div class="table">
-            <table >
-              <tr align="center"  type="height:2em">
-                <th>序号</th>
-                <th>名称</th>
-                <th>编码</th>
-                <th>状态</th>
-                <th>仓库</th>
-                <th>仓位</th>
-                <th>物料类型</th>
-                <th>物料</th>
-                <th>操作者</th>
-                <th>数量</th>
-                <th>操作类型</th>
-                <th>操作时间</th>
-                <th>创建账号</th>
-                <th>审核账号</th>
-                <th>操作</th>
-              </tr>
-              <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
-                <td>{{index}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.code}}</td>
-                <td>{{item.state}}</td>
-                <td>{{item.warehouse_name+"("+item.warehouse_code+")"}}</td>
-                <td>{{item.position_name+"("+item.position_code+")"}}</td>
-                <td>{{item.materialType_name+"("+item.materialType_code+")"}}</td>
-                <td>{{item.material_name+"("+item.material_code+")"}}</td>
-                <td>{{item.handler}}</td>
-                <td>{{item.sum}}</td>
-                <td>{{item.type}}</td>
-                <td>{{item.dataTime}}</td>
-                <td>{{item.create_user}}</td>
-                <td>{{item.auditor}}</td>
-                <td>
-                  <button type="button" @click="showDetailView(item.id)" v-if="item.create_user===username ||
+        <div class="table">
+          <table >
+            <tr align="center"  type="height:2em">
+              <th>序号</th>
+              <th>名称</th>
+              <th>编码</th>
+              <th>状态</th>
+              <th>仓库</th>
+              <th>仓位</th>
+              <th>物料分类</th>
+              <th>物料</th>
+              <th>操作者</th>
+              <th>数量</th>
+              <th>操作分类</th>
+              <th>操作时间</th>
+              <th>创建账号</th>
+              <th>审核账号</th>
+              <th>操作</th>
+            </tr>
+            <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
+              <td>{{index}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.code}}</td>
+              <td>{{item.state}}</td>
+              <td>{{item.warehouse_name+"("+item.warehouse_code+")"}}</td>
+              <td>{{item.position_name+"("+item.position_code+")"}}</td>
+              <td>{{item.materialType_name+"("+item.materialType_code+")"}}</td>
+              <td>{{item.material_name+"("+item.material_code+")"}}</td>
+              <td>{{item.handler}}</td>
+              <td>{{item.sum}}</td>
+              <td>{{item.type}}</td>
+              <td>{{item.dataTime}}</td>
+              <td>{{item.create_user}}</td>
+              <td>{{item.auditor}}</td>
+              <td>
+                <button type="button" @click="showDetailView(item.id)" v-if="item.create_user===username ||
                   item.auditor===username||canRead===true">详情</button>
-                  <button type="button" @click="showUpdateView(item.id)" v-if="item.state==='新建'">更改</button>
-                </td>
-              </tr>
-              <tr>
+                <button type="button" @click="showUpdateView(item.id)" v-if="item.state==='新建'">更改</button>
+              </td>
+            </tr>
+            <tr>
 
-              </tr>
-            </table>
-          </div><div class="page">
-          <div>总共：{{listCount}}</div>
-          <button type="button" @click="listPre" v-if="listPreUrl!==''">上一页</button>
-          <button type="button" @click="listNext" v-if="listNextUrl!==''">下一页</button>
-        </div>
+            </tr>
+          </table>
+        </div><div class="page">
+        <div>总共：{{listCount}}</div>
+        <button type="button" @click="listPre" v-if="listPreUrl!==''">上一页</button>
+        <button type="button" @click="listNext" v-if="listNextUrl!==''">下一页</button>
+      </div>
       </div>
     </div>
     <!--   /*详情页显示*/-->
@@ -132,11 +115,11 @@
           <li>{{"名称:"+"&#12288;"+detail.name}}</li>
           <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li>{{"类型:"+"&#12288;"+detail.type}}</li>
+          <li>{{"分类:"+"&#12288;"+detail.type}}</li>
           <li>{{"仓库:"+"&#12288;"+detail.warehouse_code+"("+warehouse_name+")"}}</li>
           <li>{{"仓位:"+"&#12288;"+detail.position_code+"("+position_name+")"}}</li>
-          <li>{{"物料类型:"+"&#12288;"+detail.materialType_name+"("+materialType_code+")"}}</li>
-          <li>{{"物料:"+"&#12288;"+detail.material_code+"("+material_name+")"}}</li>
+          <li>{{"物料分类:"+"&#12288;"+detail.materialType_name+"("+materialType_code+")"}}</li>
+          <li>{{"物料:"+"&#12288;"+detail.material_name+"("+material_code+")"}}</li>
           <li>{{"批次:"+"&#12288;"+detail.batch}}</li>
           <li>{{"操作者:"+"&#12288;"+detail.handler}}</li>
           <li>{{"数量:"+"&#12288;"+detail.sum}}</li>
@@ -200,15 +183,15 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>操作类型:
-          <select v-model="formItem.type"  placeholder="请选择操作类型"   >
+        <div>操作分类:
+          <select v-model="formItem.type"  placeholder="请选择操作分类"   >
             <option value="增加操作">增加操作</option>
             <option value="入库操作">入库操作</option>
             <option value="退库操作">退库操作</option>
             <option value="出库操作">出库操作</option>
             <option value="盘点操作">盘点管理</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>数量:
           <input v-model="formItem.sum" type="number" placeholder="请输入操作数量..." >
@@ -225,8 +208,8 @@
           </select>
           <span class="message" v-if="!$v.formItem.position.required">请选择仓位</span>
         </div>
-        <div>物料类型:
-          <select v-model="formItem.materialType"   placeholder="请选择物料类型"      :disabled="inputDisable">
+        <div>物料分类:
+          <select v-model="formItem.materialType"   placeholder="请选择物料分类"      :disabled="inputDisable">
             <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -237,7 +220,7 @@
           <span class="message" v-if="!$v.formItem.material.required">请选择物料</span>
         </div>
         <div>批次:
-        <input v-model="formItem.batch"  placeholder="请输入批次.." :disabled="inputDisable">
+          <input v-model="formItem.batch"  placeholder="请输入批次.." :disabled="inputDisable">
         </div>
         <div>操作者:
           <input v-model="formItem.handler"  placeholder="请输入操作者...">
@@ -245,12 +228,6 @@
         <div>操作时间:
           <input v-model="formItem.dataTime"  type="datetime-local" placeholder="选择日期和时间">
           <span class="message" v-if="!$v.formItem.dataTime.required">请选择日期</span>
-        </div>
-        <div>审核账号:
-          <select v-model="formItem.auditor"  placeholder="请选择审核账号">
-            <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
-          </select>
-          <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
           <input v-model="formItem.attribute1"  placeholder="...">
@@ -267,10 +244,16 @@
         <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
           <input v-model="formItem.attribute5"  placeholder="...">
         </div>
+        <div>审核账号:
+          <select v-model="formItem.auditor"  placeholder="请选择审核账号">
+            <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
+          </select>
+          <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
+        </div>
         <div >备注信息:
           <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
-          <div class="annex">文件附件:
+        <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
@@ -297,15 +280,15 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>操作类型:
-          <select v-model="formItem.type"  placeholder="请选择操作类型"   >
+        <div>操作分类:
+          <select v-model="formItem.type"  placeholder="请选择操作分类"   >
             <option value="增加操作">增加操作</option>
             <option value="入库操作">入库操作</option>
             <option value="退库操作">退库操作</option>
             <option value="出库操作">出库操作</option>
             <option value="盘点操作">盘点管理</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>数量:
           <input v-model="formItem.sum" type="number" placeholder="请输入操作数量..." >
@@ -322,8 +305,8 @@
           </select>
           <span class="message" v-if="!$v.formItem.position.required">请选择仓位</span>
         </div>
-        <div>物料类型:
-          <select v-model="formItem.materialType"   placeholder="请选择物料类型"      :aria-disabled="inputDisable">
+        <div>物料分类:
+          <select v-model="formItem.materialType"   placeholder="请选择物料分类"      :aria-disabled="inputDisable">
             <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -367,7 +350,7 @@
         <div >备注信息:
           <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
-          <div class="annex">文件附件:
+        <div class="annex">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
@@ -392,7 +375,7 @@
   </div>
 </template>
 <script>
-import {required} from 'vuelidate/lib/validators'
+import {maxLength, minLength, required} from 'vuelidate/lib/validators'
 export default {
   name: 'materialManage',
   components: {
@@ -418,8 +401,7 @@ export default {
         start_time: '',
         stop_time: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       /* 详情页审核记录项表单 */
@@ -466,7 +448,7 @@ export default {
       warehouse: [],
       /* 仓位信息 */
       positionInfor: [],
-      /* 物料类型信息 */
+      /* 物料分类信息 */
       materialType: [],
       /* 物料信息 */
       materialInfor: [],
@@ -474,7 +456,7 @@ export default {
       userinfor: [],
       /* 附加属性标题 */
       attribute_title: {
-        attribute1: '检验汇报编码',
+        attribute1: '',
         attribute2: '',
         attribute3: '',
         attribute4: '',
@@ -486,6 +468,11 @@ export default {
   },
   validations: {
     formItem: {
+      code: {
+        required,
+        minLength: minLength(2),
+        maxLength: maxLength(32)
+      },
       auditor: {
         required
       },
@@ -543,14 +530,14 @@ export default {
       this.listNextUrl = ''
       var self = this
       this.$axios.get('warehouse/materialManage/?state=' + self.selectItem.state +
-              '&warehouse_code=' + self.selectItem.warehouse +
-              '&type=' + self.selectItem.type +
-              '&auditor=' + self.selectItem.auditor +
-              '&create_user=' + self.selectItem.create_user +
-              '&search=' + self.selectItem.searchValue +
-              '&start_time=' + self.selectItem.start_time +
-              '&stop_time=' + self.selectItem.stop_time +
-              '&ordering=' + self.ordering).then(function (response) {
+          '&warehouse_code=' + self.selectItem.warehouse +
+          '&type=' + self.selectItem.type +
+          '&auditor=' + self.selectItem.auditor +
+          '&create_user=' + self.selectItem.create_user +
+          '&search=' + self.selectItem.searchValue +
+          '&start_time=' + self.selectItem.start_time +
+          '&stop_time=' + self.selectItem.stop_time +
+          '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -846,6 +833,7 @@ export default {
             }
           }
         }
+
         alert('数据保存成功')
       }).catch(function (error) {
         if (error.request) {
@@ -1015,7 +1003,7 @@ export default {
     })
   },
   mounted () {
-    this.attribute_title = this.$store.getters.getConfig.attach_attribute.物料库存
+    this.attribute_title = this.$store.getters.getConfig.attach_attribute.物料管理
   },
   computed: {
     username () {
@@ -1056,7 +1044,7 @@ export default {
         }
       })
     },
-    /* 监控用户选择的物料类型变化时,更新物料信息 */
+    /* 监控用户选择的物料分类变化时,更新物料信息 */
     'formItem.materialType': function (newval, oldval) {
       if (this.formItem.type !== '入库操作' && this.formItem.type !== '退库操作') {
         return
@@ -1076,7 +1064,7 @@ export default {
         }
       })
     },
-    /* 监控用户选择的操作类型变化时,更新仓位下拉框显示条件 */
+    /* 监控用户选择的操作分类变化时,更新仓位下拉框显示条件 */
     'formItem.type': function (newval, oldval) {
       if ((newval === '入库操作') || (newval === '退库操作')) {
         this.showKey = '闲置'
@@ -1103,7 +1091,7 @@ export default {
         this.inputDisable = true
       }
     },
-    /* 监控用户选择的操作类型变化时,更新仓位下拉框显示条件 */
+    /* 监控用户选择的操作分类变化时,更新仓位下拉框显示条件 */
     'formItem.position': function (newval, oldval) {
       var self = this
       var warehouseCode = ''
@@ -1115,7 +1103,7 @@ export default {
           }
         }
         this.$axios.get('warehouse/materialStockDetail/?warehouse_code=' + warehouseCode +
-                   '&page_size=99999&ordering=-id').then(function (response) {
+            '&page_size=99999&ordering=-id').then(function (response) {
           response.data.results.forEach(function (value, i) {
             if (newval === parseInt(value.position_id) && (value.state === '使用中')) {
               for (var j = 0; j < self.materialType.length; j++) {
@@ -1221,16 +1209,6 @@ export default {
     background: #D8D8D8;
     border-radius: 1em;
   }
-  .list .listHead .select button{
-    position: absolute;
-    right: 0;
-    width: 40%;
-    border-radius: 1em;
-    border: none;
-    border: 1px solid #D8D8D8;
-    background: #D8D8D8;
-    border-radius: 1em;
-  }
   .list .listHead  .button{
     position: absolute;
     top: 66%;
@@ -1255,13 +1233,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;
@@ -1282,7 +1254,7 @@ export default {
   .list .listTable .table table{
     height: 100%;
     width: 100%;
-        /*table-layout: fixed;*/
+    /*table-layout: fixed;*/
     empty-cells:hide;
   }
   .list .listTable .table  th{
@@ -1345,7 +1317,7 @@ export default {
   .detail table{
     height: 30%;
     width: 100%;
-        /*table-layout: fixed;*/
+    /*table-layout: fixed;*/
     empty-cells:hide;
   }
   .detail  th{
@@ -1462,7 +1434,7 @@ export default {
     color: #f5222d;
     display: block;
   }
- .create .child {
+  .create .child {
     position: relative;
     width: 100%;
     height: 20%;
@@ -1553,7 +1525,7 @@ export default {
   }
   .create table{
     width: 100%;
-        /*table-layout: fixed;*/
+    /*table-layout: fixed;*/
     empty-cells:hide;
   }
   .create  th{
@@ -1617,7 +1589,7 @@ export default {
     height: 12%;
     float: left;
   }
-    .update form div select,.update form div input,.update form div textarea{
+  .update form div select,.update form div input,.update form div textarea{
     position: absolute;
     width: 15em;
     right: 4em;
@@ -1638,7 +1610,7 @@ export default {
     color: #f5222d;
     display: block;
   }
- .update .child {
+  .update .child {
     position: relative;
     width: 100%;
     height: 20%;
@@ -1729,7 +1701,7 @@ export default {
   }
   .update table{
     width: 100%;
-        /*table-layout: fixed;*/
+    /*table-layout: fixed;*/
     empty-cells:hide;
   }
   .update  th{

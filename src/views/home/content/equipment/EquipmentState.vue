@@ -22,24 +22,7 @@
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加设备状态信息</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
           <div class="table">
@@ -133,8 +116,8 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>设备类型:
-          <select v-model="formItem.equipmentType"   placeholder="请选择设备类型">
+        <div>设备分类:
+          <select v-model="formItem.equipmentType"   placeholder="请选择设备分类">
             <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -165,8 +148,8 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>设备类型:
-          <select v-model="formItem.equipmentType"   placeholder="请选择设备类型">
+        <div>设备分类:
+          <select v-model="formItem.equipmentType"   placeholder="请选择设备分类">
             <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -220,7 +203,7 @@ export default {
         equipment: null,
         desc: ''
       },
-      /* 设备类型信息 */
+      /* 设备分类信息 */
       equipmentType: [],
       /* 设备信息 */
       equipmentInfor: [],
@@ -292,7 +275,7 @@ export default {
       var self = this
       this.$axios.get('equipment/equipmentState/?create_user=' + self.selectItem.create_user +
               '&search=' + self.selectItem.searchValue +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -508,7 +491,7 @@ export default {
     formItem: {
       deep: true
     },
-    /* 监控用户选择的设备类型变化时,更新设备信息 */
+    /* 监控用户选择的设备分类变化时,更新设备信息 */
     'formItem.equipmentType': function (newval, oldval) {
       var self = this
       this.equipmentInfor = []
@@ -616,13 +599,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;

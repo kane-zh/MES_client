@@ -12,8 +12,8 @@
                 <option v-for="item in warehouseInfor" :value="item.code" :key="item.code">{{item.name}}</option>
               </select>
             </div>
-            <div>半成品类型:
-              <select v-model="selectItem.semifinishedType" placeholder="请选择半成品类型"      >
+            <div>半成品分类:
+              <select v-model="selectItem.semifinishedType" placeholder="请选择半成品分类"      >
                 <option v-for="item in semifinishedTypeInfor" :value="item.code" :key="item.code">{{item.name}}</option>
               </select>
             </div>
@@ -27,24 +27,7 @@
             <button type="button" @click="showListView" style="background: #FCC400;border: none">重置</button>
           </div>
         </form>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
         <div class="table">
@@ -52,7 +35,7 @@
             <tr align="center"  type="height:2em">
               <th>序号</th>
               <th>仓库</th>
-              <th>半成品类型</th>
+              <th>半成品分类</th>
               <th>半成品</th>
               <th>数量</th>
             </tr>
@@ -84,8 +67,8 @@
               <option v-for="item in warehouseInfor" :value="item.code" :key="item.code">{{item.name}}</option>
             </select>
           </div>
-          <div>半成品类型:
-            <select v-model="selectItem.semifinishedType" placeholder="请选择半成品类型"      >
+          <div>半成品分类:
+            <select v-model="selectItem.semifinishedType" placeholder="请选择半成品分类"      >
               <option v-for="item in semifinishedTypeInfor" :value="item.code" :key="item.code">{{item.name}}</option>
             </select>
           </div>
@@ -105,24 +88,7 @@
             <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
           </div>
         </form>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
         <div class="table">
@@ -131,7 +97,7 @@
               <th>序号</th>
               <th>仓库</th>
               <th>仓位</th>
-              <th>半成品类型</th>
+              <th>半成品分类</th>
               <th>半成品</th>
               <th>数量</th>
               <th>状态</th>
@@ -173,14 +139,14 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>操作类型:
-          <select v-model="formItem.type"  placeholder="请选择操作类型"   >
+        <div>操作分类:
+          <select v-model="formItem.type"  placeholder="请选择操作分类"   >
             <option value="增加操作">增加操作</option>
             <option value="退库操作">退库操作</option>
             <option value="出库操作">出库操作</option>
             <option value="盘点操作">盘点管理</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>数量:
           <input v-model="formItem.sum" type="number" placeholder="请输入操作数量..." >
@@ -258,8 +224,7 @@ export default {
         state: '',
         searchValue: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       warehouseInfor: [],
@@ -362,7 +327,7 @@ export default {
       this.$axios.get('warehouse/semifinishedStockInfor/?warehouse_code=' + self.selectItem.warehouse +
               '&semifinishedType_code=' + self.selectItem.semifinishedType +
               '&search=' + self.selectItem.searchValue +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -418,7 +383,7 @@ export default {
               '&semifinishedType_code=' + self.selectItem.semifinishedType +
               '&state=' + self.selectItem.state +
               '&search=' + self.selectItem.searchValue +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -777,25 +742,6 @@ export default {
     border: 1px solid #D8D8D8;
     background: #D8D8D8;
     border-radius: 1em;
-  }
-  .list .ordering{
-    position: absolute;
-    top: 80%;
-    width: 100%;
-    height: 20%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #ffffff;
-    letter-spacing: -0.45px;
-    background: #dcdcdc;
-  }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
   }
   .list .listTable{
     position: absolute;

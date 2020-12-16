@@ -14,9 +14,17 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
-          <div>类型:
-            <select v-model="selectItem.type" placeholder="请选择类型"      >
+          <div>分类:
+            <select v-model="selectItem.type" placeholder="请选择分类"      >
               <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
+          <div>排序:
+            <select v-model="selectItem.ordering"  placeholder="请选择排序方式"    >
+              <option value="id">添加时间-正排序</option>
+              <option value="-id">添加时间-倒排序</option>
+              <option value="update_time">更新时间-正排序</option>
+              <option value="-update_time">更新时间-倒排序</option>
             </select>
           </div>
           <div>状态:
@@ -39,24 +47,7 @@
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加物料信息</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
           <div class="table">
@@ -65,7 +56,7 @@
                 <th>序号</th>
                 <th>名称</th>
                 <th>编码</th>
-                <th>类型</th>
+                <th>分类</th>
                 <th>状态</th>
                 <th>更新时间</th>
                 <th>创建账号</th>
@@ -105,11 +96,11 @@
           <li>{{"名称:"+"&#12288;"+detail.name}}</li>
           <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li>{{"类型:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
+          <li>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
           <li>{{"单位:"+"&#12288;"+unit.symbol+"("+unit.name+")"}}</li>
           <li>{{"供应商1:"+"&#12288;"+vendor1.name+"("+vendor1.code+")"}}</li>
           <li>{{"供应商2:"+"&#12288;"+vendor2.name+"("+vendor2.code+")"}}</li>
-          <li>{{"供应商3:"+"&#12288;"+vendor3.name+"("+vendor13.code+")"}}</li>
+          <li>{{"供应商3:"+"&#12288;"+vendor3.name+"("+vendor3.code+")"}}</li>
           <li>{{"质地:"+"&#12288;"+detail.character}}</li>
           <li v-if="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
           <li v-if="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
@@ -182,17 +173,17 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div >类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div >分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div >质地:
           <input v-model="formItem.character"  placeholder="请输入物料质地...">
         </div>
-        <div >计量单位类型:
-          <select v-model="formItem.unitType"   placeholder="请选择计量单位类型">
+        <div >计量单位分类:
+          <select v-model="formItem.unitType"   placeholder="请选择计量单位分类">
             <option v-for="item in unitType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -302,17 +293,17 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div >质地:
           <input v-model="formItem.character"  placeholder="请输入物料质地...">
         </div>
-        <div>计量单位类型:
-          <select v-model="formItem.unitType"   placeholder="请选择计量单位类型">
+        <div>计量单位分类:
+          <select v-model="formItem.unitType"   placeholder="请选择计量单位分类">
             <option v-for="item in unitType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -439,13 +430,13 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        ordering: '',
         create_user: '',
         auditor: '',
         type: '',
         searchValue: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       qrcode: '',
       detail: [],
@@ -514,9 +505,9 @@ export default {
         uri: 'materialInfor'
       },
       fileData: [],
-      /* 物料类型信息 */
+      /* 物料分类信息 */
       typeInfor: [],
-      /* 计量单位类型信息 */
+      /* 计量单位分类信息 */
       unitType: [],
       /* 计量单位信息 */
       unitInfor: [],
@@ -599,7 +590,7 @@ export default {
               '&create_user=' + self.selectItem.create_user +
               '&type=' + self.selectItem.type +
               '&search=' + self.selectItem.searchValue +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -1245,7 +1236,7 @@ export default {
         }
       })
     },
-    /* 监控用户选择的计量单位类型变化时,更新计量单位信息 */
+    /* 监控用户选择的计量单位分类变化时,更新计量单位信息 */
     'formItem.unitType': function (newval, oldval) {
       var self = this
       this.unitInfor = []
@@ -1370,13 +1361,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;

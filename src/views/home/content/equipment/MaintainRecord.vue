@@ -14,8 +14,8 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
-          <div>类型:
-            <select v-model="selectItem.type" placeholder="请选择类型"      >
+          <div>分类:
+            <select v-model="selectItem.type" placeholder="请选择分类"      >
               <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
@@ -45,24 +45,7 @@
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加维护记录</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
           <div class="table">
@@ -72,7 +55,7 @@
                 <th>名称</th>
                 <th>编码</th>
                 <th>操作者</th>
-                <th>类型</th>
+                <th>分类</th>
                 <th>状态</th>
                 <th>操作时间</th>
                 <th>创建账号</th>
@@ -113,7 +96,7 @@
           <li>{{"名称:"+"&#12288;"+detail.name}}</li>
           <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li>{{"类型:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
+          <li>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
           <li>{{"设备:"+"&#12288;"+equipment.name+"("+equipment.code+")"}}</li>
           <li>{{"维护结果:"+"&#12288;"+detail.result}}</li>
           <li>{{"维护人员:"+"&#12288;"+detail.handler}}</li>
@@ -231,17 +214,17 @@
         <div>编码:
           <input v-model="formItem.code"  placeholder="请输入编码">
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>维护者:
           <input v-model="formItem.handler"  placeholder="请输入维护者...">
         </div>
-        <div>设备类型:
-          <select v-model="formItem.equipmentType"   placeholder="请选择设备类型">
+        <div>设备分类:
+          <select v-model="formItem.equipmentType"   placeholder="请选择设备分类">
             <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -366,17 +349,17 @@
         <div>编码:
           <input v-model="formItem.code"  placeholder="请输入编码">
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>，
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>，
         </div>
         <div>维护者:
           <input v-model="formItem.handler"  placeholder="请输入维护者...">
         </div>
-        <div>设备类型:
-          <select v-model="formItem.equipmentType"   placeholder="请选择设备类型">
+        <div>设备分类:
+          <select v-model="formItem.equipmentType"   placeholder="请选择设备分类">
             <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
         </div>
@@ -523,6 +506,7 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        ordering: '',
         create_user: '',
         auditor: '',
         type: '',
@@ -530,8 +514,7 @@ export default {
         start_time: '',
         stop_time: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       type: {},
@@ -597,9 +580,9 @@ export default {
         uri: 'maintainRecord'
       },
       fileData: [],
-      /* 维护记录类型信息 */
+      /* 维护记录分类信息 */
       typeInfor: [],
-      /* 设备类型信息 */
+      /* 设备分类信息 */
       equipmentType: [],
       /* 设备信息 */
       equipmentInfor: [],
@@ -676,7 +659,7 @@ export default {
               '&search=' + self.selectItem.searchValue +
               '&start_time=' + self.selectItem.start_time +
               '&stop_time=' + self.selectItem.stop_time +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -1407,7 +1390,7 @@ export default {
         }
       })
     },
-    /* 监控用户选择的设备类型变化时,更新设备信息 */
+    /* 监控用户选择的设备分类变化时,更新设备信息 */
     'formItem.equipmentType': function (newval, oldval) {
       var self = this
       this.equipmentInfor = []
@@ -1532,13 +1515,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;

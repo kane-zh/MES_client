@@ -14,6 +14,14 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
+            <div>排序:
+            <select v-model="selectItem.ordering"  placeholder="请选择排序方式"    >
+              <option value="id">添加时间-正排序</option>
+              <option value="-id">添加时间-倒排序</option>
+              <option value="update_time">更新时间-正排序</option>
+              <option value="-update_time">更新时间-倒排序</option>
+            </select>
+          </div>
           <div>状态:
             <select v-model="selectItem.state"  placeholder="请选择状态"    >
               <option value="新建">新建</option>
@@ -21,8 +29,8 @@
               <option value="使用中">使用中</option>
             </select>
           </div>
-          <div>操作类型:
-            <select v-model="selectItem.state"  placeholder="请选择操作类型"    >
+          <div>操作分类:
+            <select v-model="selectItem.state"  placeholder="请选择操作分类"    >
               <option value="入库操作">入库操作</option>
               <option value="出库操作">出库操作</option>
               <option value="盘点操作">盘点管理</option>
@@ -47,24 +55,7 @@
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加物料管理计划</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
           <div class="table">
@@ -172,13 +163,13 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>操作类型:
-          <select v-model="formItem.type"  placeholder="请选择操作类型"   >
+        <div>操作分类:
+          <select v-model="formItem.type"  placeholder="请选择操作分类"   >
             <option value="入库操作">入库操作</option>
             <option value="出库操作">出库操作</option>
             <option value="盘点操作">盘点管理</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>审核账号:
           <select v-model="formItem.auditor"  placeholder="请选择审核账号">
@@ -216,13 +207,13 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>操作类型:
-          <select v-model="formItem.type"  placeholder="请选择操作类型"   >
+        <div>操作分类:
+          <select v-model="formItem.type"  placeholder="请选择操作分类"   >
             <option value="入库操作">入库操作</option>
             <option value="出库操作">出库操作</option>
             <option value="盘点操作">盘点管理</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>审核账号:
           <select v-model="formItem.auditor"  placeholder="请选择审核账号">
@@ -275,6 +266,7 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        ordering: '',
         type: '',
         create_user: '',
         auditor: '',
@@ -282,8 +274,7 @@ export default {
         start_time: '',
         stop_time: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       /* 详情页审核记录项表单 */
@@ -387,7 +378,7 @@ export default {
               '&search=' + self.selectItem.searchValue +
               '&start_time=' + self.selectItem.start_time +
               '&stop_time=' + self.selectItem.stop_time +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -901,13 +892,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;

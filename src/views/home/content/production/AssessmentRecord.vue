@@ -14,8 +14,8 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
-          <div>类型:
-            <select v-model="selectItem.type" placeholder="请选择类型"      >
+          <div>分类:
+            <select v-model="selectItem.type" placeholder="请选择分类"      >
               <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
@@ -50,24 +50,7 @@
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加考核记录</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
           <div class="table">
@@ -79,7 +62,7 @@
                 <th>考核者</th>
                 <th>车间</th>
                 <th>班组</th>
-                <th>类型</th>
+                <th>分类</th>
                 <th>状态</th>
                 <th>操作时间</th>
                 <th>创建账号</th>
@@ -122,7 +105,7 @@
           <li>{{"名称:"+"&#12288;"+detail.name}}</li>
           <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li>{{"类型:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
+          <li>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
           <li>{{"考核时间:"+"&#12288;"+detail.dataTime}}</li>
           <li>{{"人员:"+"&#12288;"+personnel.name+"("+personnel.code+")"}}</li>
           <li>{{"等级:"+"&#12288;"+level.name+"("+level.code+")"}}</li>
@@ -182,11 +165,11 @@
         <div>编码:
           <input v-model="formItem.code"  placeholder="请输入编码">
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>人员:
           <select v-model="formItem.personnel"   placeholder="请选择人员">
@@ -250,11 +233,11 @@
         <div>编码:
           <input v-model="formItem.code"  placeholder="请输入编码">
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>人员:
           <select v-model="formItem.personnel"   placeholder="请选择人员">
@@ -337,6 +320,7 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        ordering: '',
         create_user: '',
         auditor: '',
         type: '',
@@ -344,8 +328,7 @@ export default {
         start_time: '',
         stop_time: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       type: {},
@@ -391,7 +374,7 @@ export default {
         uri: 'assessmentRecord'
       },
       fileData: [],
-      /* 考核记录类型信息 */
+      /* 考核记录分类信息 */
       typeInfor: [],
       /* 考核人员信息 */
       personnelInfor: [],
@@ -466,7 +449,7 @@ export default {
               '&search=' + self.selectItem.searchValue +
               '&start_time=' + self.selectItem.start_time +
               '&stop_time=' + self.selectItem.stop_time +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -1092,13 +1075,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;

@@ -1,22 +1,16 @@
 <template>
   <div class="body">
       <div class="heard">
-          <div class="heard-logo" :style ="{'background-image':
-          'url('+require('../../../static/icons/logo.png')+')'}">
+          <div class="logo">
+            MES 制造执行系统
           </div>
           <div class="heard-nav" >
-            <div> {{username}}
-            </div>
-            <div>
-                <button type="button" @click="logout" >
-                <img  height=90% src="../../../static/icons/set-up.png"/>
-              </button>
-            </div>
-            <div>
-              <router-link to="/register">
-                <img  height=90% src="../../../static/icons/login.jpg"/>
-              </router-link>
-            </div>
+            <span>
+              欢迎 {{username}}
+            </span>
+            <button type="button" @click="logout" >
+              退出
+            </button>
           </div>
       </div>
       <div class="sliders" >
@@ -110,48 +104,48 @@
           <div  v-show="MenuItem==='process'">
             <ul>
               <li :class="childMenuSelect==='unitType'? 'isActive':'isInActive'"  @click="childMenuSelect='unitType'"
-                  v-if="function_select['工艺管理'].计量单位类型===true">
-                <router-link to="/home/process/unitType">计量单位类型</router-link>
+                  v-if="function_select['工艺管理'].计量单位分类===true">
+                <router-link to="/home/process/unitType">计量单位分类</router-link>
               </li>
               <li :class="childMenuSelect==='unitInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='unitInfor'"
                   v-if="function_select['工艺管理'].计量单位信息===true">
-                <router-link to="/home/process/unitInfor">计量单位信息</router-link>
+                <router-link to="/home/process/unitInfor">计量单位</router-link>
               </li>
               <li :class="childMenuSelect==='materialType'? 'isActive':'isInActive'"  @click="childMenuSelect='materialType'"
-                  v-if="function_select['工艺管理'].物料类型===true">
-                <router-link to="/home/process/materialType">物料类型</router-link>
+                  v-if="function_select['工艺管理'].物料分类===true">
+                <router-link to="/home/process/materialType">物料分类</router-link>
               </li>
               <li :class="childMenuSelect==='materialInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='materialInfor'"
                   v-if="function_select['工艺管理'].物料信息===true">
                 <router-link to="/home/process/materialInfor">物料信息</router-link>
               </li>
               <li :class="childMenuSelect==='semifinishedType'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedType'"
-                  v-if="function_select['工艺管理'].半成品类型===true">
-                <router-link to="/home/process/semifinishedType">半成品类型</router-link>
+                  v-if="function_select['工艺管理'].半成品分类===true">
+                <router-link to="/home/process/semifinishedType">半成品分类</router-link>
               </li>
               <li :class="childMenuSelect==='semifinishedInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedInfor'"
                   v-if="function_select['工艺管理'].半成品信息===true">
                 <router-link to="/home/process/semifinishedInfor">半成品信息</router-link>
               </li>
               <li :class="childMenuSelect==='productType'? 'isActive':'isInActive'"  @click="childMenuSelect='productType'"
-                  v-if="function_select['工艺管理'].产品类型===true">
-                <router-link to="/home/process/productType">产品类型</router-link>
+                  v-if="function_select['工艺管理'].产品分类===true">
+                <router-link to="/home/process/productType">产品分类</router-link>
               </li>
               <li :class="childMenuSelect==='productInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='productInfor'"
                   v-if="function_select['工艺管理'].产品信息===true">
                 <router-link to="/home/process/productInfor">产品信息</router-link>
               </li>
               <li :class="childMenuSelect==='stationType'? 'isActive':'isInActive'"  @click="childMenuSelect='stationType'"
-                  v-if="function_select['工艺管理'].工位类型===true">
-                <router-link to="/home/process/stationType">工位类型</router-link>
+                  v-if="function_select['工艺管理'].工序分类===true">
+                <router-link to="/home/process/stationType">工序分类</router-link>
               </li>
               <li :class="childMenuSelect==='stationInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='stationInfor'"
-                  v-if="function_select['工艺管理'].工位信息===true">
-                <router-link to="/home/process/stationInfor">工位信息</router-link>
+                  v-if="function_select['工艺管理'].工序信息===true">
+                <router-link to="/home/process/stationInfor">工序信息</router-link>
               </li>
               <li :class="childMenuSelect==='productRouteType'? 'isActive':'isInActive'"  @click="childMenuSelect='productRouteType'"
-                  v-if="function_select['工艺管理'].生产路线类型===true">
-                <router-link to="/home/process/productRouteType">生产路线类型</router-link>
+                  v-if="function_select['工艺管理'].生产路线分类===true">
+                <router-link to="/home/process/productRouteType">生产路线分类</router-link>
               </li>
               <li :class="childMenuSelect==='productRouteInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='productRouteInfor'"
                   v-if="function_select['工艺管理'].生产路线===true">
@@ -234,8 +228,8 @@
           <div  v-show="MenuItem==='quality'">
             <ul >
               <li :class="childMenuSelect==='defectType'? 'isActive':'isInActive'"  @click="childMenuSelect='defectType'"
-                  v-if="function_select['品质管理'].缺陷类型===true">
-                <router-link to="/home/quality/defectType">缺陷类型</router-link>
+                  v-if="function_select['品质管理'].缺陷分类===true">
+                <router-link to="/home/quality/defectType">缺陷分类</router-link>
               </li>
               <li :class="childMenuSelect==='defectGrade'? 'isActive':'isInActive'"  @click="childMenuSelect='defectGrade'"
                   v-if="function_select['品质管理'].缺陷等级===true">
@@ -246,16 +240,16 @@
                 <router-link to="/home/quality/defectInfor">缺陷信息</router-link>
               </li>
               <li :class="childMenuSelect==='inspectionStandardType'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionStandardType'"
-                  v-if="function_select['品质管理'].检验标准类型===true">
-                <router-link to="/home/quality/inspectionStandardType">检验标准类型</router-link>
+                  v-if="function_select['品质管理'].检验标准分类===true">
+                <router-link to="/home/quality/inspectionStandardType">检验标准分类</router-link>
               </li>
               <li :class="childMenuSelect==='inspectionStandard'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionStandard'"
                   v-if="function_select['品质管理'].检验标准信息===true">
-                <router-link to="/home/quality/inspectionStandard">检验标准信息</router-link>
+                <router-link to="/home/quality/inspectionStandard">检验标准</router-link>
               </li>
               <li :class="childMenuSelect==='inspectionReportType'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionReportType'"
-                  v-if="function_select['品质管理'].检验汇报类型===true">
-                <router-link to="/home/quality/inspectionReportType">检验汇报类型</router-link>
+                  v-if="function_select['品质管理'].检验汇报分类===true">
+                <router-link to="/home/quality/inspectionReportType">检验汇报分类</router-link>
               </li>
               <li :class="childMenuSelect==='inspectionReport'? 'isActive':'isInActive'"  @click="childMenuSelect='inspectionReport'"
                   v-if="function_select['品质管理'].检验汇报===true">
@@ -271,39 +265,39 @@
             <ul>
               <li :class="childMenuSelect==='equipmentVendor'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentVendor'"
                   v-if="function_select['设备管理'].设备厂商信息===true">
-                <router-link to="/home/equipment/equipmentVendor">设备厂商信息</router-link>
+                <router-link to="/home/equipment/equipmentVendor">设备厂商</router-link>
               </li>
               <li :class="childMenuSelect==='partsType'? 'isActive':'isInActive'"  @click="childMenuSelect='partsType'"
-                  v-if="function_select['设备管理'].备品类型===true">
-                <router-link to="/home/equipment/partsType">备品类型</router-link>
+                  v-if="function_select['设备管理'].备品分类===true">
+                <router-link to="/home/equipment/partsType">备品分类</router-link>
               </li>
               <li :class="childMenuSelect==='partsInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='partsInfor'"
                   v-if="function_select['设备管理'].备品信息===true">
                 <router-link to="/home/equipment/partsInfor">备品信息</router-link>
               </li>
               <li :class="childMenuSelect==='equipmentType'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentType'"
-                  v-if="function_select['设备管理'].设备类型===true">
-                <router-link to="/home/equipment/equipmentType">设备类型</router-link>
+                  v-if="function_select['设备管理'].设备分类===true">
+                <router-link to="/home/equipment/equipmentType">设备分类</router-link>
               </li>
               <li :class="childMenuSelect==='equipmentInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentInfor'"
                   v-if="function_select['设备管理'].设备台账===true">
                 <router-link to="/home/equipment/equipmentInfor">设备台账</router-link>
               </li>
+              <li :class="childMenuSelect==='partsUseRecord'? 'isActive':'isInActive'"  @click="childMenuSelect='partsUseRecord'"
+                  v-if="function_select['设备管理'].备品消耗记录===true">
+                <router-link to="/home/equipment/partsUseRecord">备品消耗</router-link>
+              </li>
               <li :class="childMenuSelect==='maintainRecordType'? 'isActive':'isInActive'"  @click="childMenuSelect='maintainRecordType'"
-                  v-if="function_select['设备管理'].维护记录类型===true">
-                <router-link to="/home/equipment/maintainRecordType">维护记录类型</router-link>
+                  v-if="function_select['设备管理'].维护记录分类===true">
+                <router-link to="/home/equipment/maintainRecordType">维护记录分类</router-link>
               </li>
               <li :class="childMenuSelect==='maintainRecord'? 'isActive':'isInActive'"  @click="childMenuSelect='maintainRecord'"
                   v-if="function_select['设备管理'].维护记录===true">
                 <router-link to="/home/equipment/maintainRecord">维护记录</router-link>
               </li>
-              <li :class="childMenuSelect==='partsUseRecord'? 'isActive':'isInActive'"  @click="childMenuSelect='partsUseRecord'"
-                  v-if="function_select['设备管理'].备品消耗记录===true">
-                <router-link to="/home/equipment/partsUseRecord">备品消耗记录</router-link>
-              </li>
               <li :class="childMenuSelect==='equipmentState'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentState'"
                   v-if="function_select['设备管理'].设备状态信息===true">
-                <router-link to="/home/equipment/equipmentState">设备状态信息</router-link>
+                <router-link to="/home/equipment/equipmentState">设备状态</router-link>
               </li>
               <li :class="childMenuSelect==='equipmentBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='equipmentBoard'"
                   v-if="function_select['设备管理'].设备看板===true">
@@ -322,8 +316,8 @@
                 <router-link to="/home/production/teamInfor">班组信息</router-link>
               </li>
               <li :class="childMenuSelect==='skillType'? 'isActive':'isInActive'"  @click="childMenuSelect='skillType'"
-                  v-if="function_select['生产管理'].技能类型===true">
-                <router-link to="/home/production/skillType">技能类型</router-link>
+                  v-if="function_select['生产管理'].技能分类===true">
+                <router-link to="/home/production/skillType">技能分类</router-link>
               </li>
               <li :class="childMenuSelect==='skillInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='skillInfor'"
                   v-if="function_select['生产管理'].技能信息===true">
@@ -334,8 +328,8 @@
                 <router-link to="/home/production/personnelInfor">人员信息</router-link>
               </li>
               <li :class="childMenuSelect==='assessmentType'? 'isActive':'isInActive'"  @click="childMenuSelect='assessmentType'"
-                  v-if="function_select['生产管理'].考核类型===true">
-                <router-link to="/home/production/assessmentType">考核类型</router-link>
+                  v-if="function_select['生产管理'].考核分类===true">
+                <router-link to="/home/production/assessmentType">考核分类</router-link>
               </li>
               <li :class="childMenuSelect==='assessmentLevel'? 'isActive':'isInActive'"  @click="childMenuSelect='assessmentLevel'"
                   v-if="function_select['生产管理'].考核等级===true">
@@ -354,16 +348,16 @@
                 <router-link to="/home/production/productDailyReport">产品生产汇报</router-link>
               </li>
               <li :class="childMenuSelect==='productDataType'? 'isActive':'isInActive'"  @click="childMenuSelect='productDataType'"
-                  v-if="function_select['生产管理'].产品记录类型===true">
-                <router-link to="/home/production/productDataType">产品记录类型</router-link>
+                  v-if="function_select['生产管理'].产品记录分类===true">
+                <router-link to="/home/production/productDataType">产品记录分类</router-link>
               </li>
               <li :class="childMenuSelect==='productData'? 'isActive':'isInActive'"  @click="childMenuSelect='productData'"
                   v-if="function_select['生产管理'].产品过程数据===true">
                 <router-link to="/home/production/productData">产品过程数据</router-link>
               </li>
               <li :class="childMenuSelect==='semifinishedDataType'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedDataType'"
-                  v-if="function_select['生产管理'].半成品记录类型===true">
-                <router-link to="/home/production/semifinishedDataType">半成品记录类型</router-link>
+                  v-if="function_select['生产管理'].半成品记录分类===true">
+                <router-link to="/home/production/semifinishedDataType">半成品记录分类</router-link>
               </li>
               <li :class="childMenuSelect==='semifinishedData'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedData'"
                   v-if="function_select['生产管理'].半成品过程数据===true">
@@ -378,16 +372,16 @@
           <div  v-show="MenuItem==='plan'">
             <ul>
               <li :class="childMenuSelect==='clientType'? 'isActive':'isInActive'"  @click="childMenuSelect='clientType'"
-                  v-if="function_select['计划管理'].客户类型===true">
-                <router-link to="/home/plan/clientType">客户类型</router-link>
+                  v-if="function_select['计划管理'].客户分类===true">
+                <router-link to="/home/plan/clientType">客户分类</router-link>
               </li>
               <li :class="childMenuSelect==='clientInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='clientInfor'"
                   v-if="function_select['计划管理'].客户信息===true">
                 <router-link to="/home/plan/clientInfor">客户信息</router-link>
               </li>
               <li :class="childMenuSelect==='vendorType'? 'isActive':'isInActive'"  @click="childMenuSelect='vendorType'"
-                  v-if="function_select['计划管理'].供应商类型===true">
-                <router-link to="/home/plan/vendorType">供应商类型</router-link>
+                  v-if="function_select['计划管理'].供应商分类===true">
+                <router-link to="/home/plan/vendorType">供应商分类</router-link>
               </li>
               <li :class="childMenuSelect==='vendorInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='vendorInfor'"
                   v-if="function_select['计划管理'].供应商信息===true">
@@ -398,16 +392,16 @@
                 <router-link to="/home/plan/salesOrderCreate">销售订单</router-link>
               </li>
               <li :class="childMenuSelect==='productTaskType'? 'isActive':'isInActive'"  @click="childMenuSelect='productTaskType'"
-                  v-if="function_select['计划管理'].产品生产任务类型===true">
-                <router-link to="/home/plan/productTaskType">产品生产类型</router-link>
+                  v-if="function_select['计划管理'].产品生产任务分类===true">
+                <router-link to="/home/plan/productTaskType">产品生产分类</router-link>
               </li>
               <li :class="childMenuSelect==='productTaskCreate'? 'isActive':'isInActive'"  @click="childMenuSelect='productTaskCreate'"
                   v-if="function_select['计划管理'].产品生产任务===true">
                 <router-link to="/home/plan/productTaskCreate">产品生产任务</router-link>
               </li>
               <li :class="childMenuSelect==='semifinishedTaskType'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedTaskType'"
-                  v-if="function_select['计划管理'].半成品生产任务类型===true">
-                <router-link to="/home/plan/semifinishedTaskType">半成品生产类型</router-link>
+                  v-if="function_select['计划管理'].半成品生产任务分类===true">
+                <router-link to="/home/plan/semifinishedTaskType">半成品生产分类</router-link>
               </li>
               <li :class="childMenuSelect==='seminishedTaskCreate'? 'isActive':'isInActive'"  @click="childMenuSelect='seminishedTaskCreate'"
                   v-if="function_select['计划管理'].半成品生产任务===true">
@@ -442,8 +436,8 @@
           <div  v-show="MenuItem==='lean'">
             <ul>
               <li :class="childMenuSelect==='eventType'? 'isActive':'isInActive'"  @click="childMenuSelect='eventType'"
-                  v-if="function_select['精益管理'].事件类型===true">
-                <router-link to="/home/plan/eventType">事件类型</router-link>
+                  v-if="function_select['精益管理'].事件分类===true">
+                <router-link to="/home/plan/eventType">事件分类</router-link>
               </li>
               <li :class="childMenuSelect==='eventInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='eventInfor'"
                   v-if="function_select['精益管理'].事件信息===true">
@@ -453,7 +447,7 @@
           </div>
         </div>
       </div>
-      <div class="content">
+      <div class="certer">
         <router-view></router-view>
       </div>
   </div>
@@ -492,143 +486,137 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
   .body{
     position:fixed ;
     top: 0;
     height: 100%;
     width: 100%;
-  }
-  .heard{
-    position: absolute;
-    top:0;
-    height: 8%;
-    width: 100%;
-    background: #22272A;
-  }
-  .heard-logo{
-    position: absolute;
-    bottom:10%;
-    left: 5%;
-    width: 20%;
-    padding-top: 1em;
-    background-size: 100%;
-    background-size: cover;
-    background-position: center;
-  }
-  .heard-nav{
-    position: absolute;
-    top:0;
-    width: 40%;
-    right: 10%;
-    height: 100%;
-    font-family: GurmukhiMN;
-    font-size: 0.4em;
-    line-height: 4em;
-    letter-spacing: 0.1em;
-    color: #FCC400 ;
-  }
-  .heard-nav div{
-    position: relative;
-    height: 100%;
-    margin-right: 3em;
-    text-align: center;
-    float: right;
-
-  }
-  .heard-nav button{
-    position:relative ;
-    top: 10%;
-    height: 90%;
-    background: #22272A;
-    border:none;
-    color: #FCC400 ;
-  }
-  .heard-nav a{
-    position:relative ;
-    top: 10%;
-    height: 90%;
-    display: block;
-    color: #FCC400 ;
-  }
-  .sliders{
-    position: absolute;
-    top: 8%;
-    height:92% ;
-    width: 14%;
-  }
-  .mainSlider{
-    position: absolute;
-    top: 0;
-    height:100% ;
-    width: 45%;
-    background: #22272A;
-    scroll-behavior: auto;
-  }
-  .childSlider{
-    position: absolute;
-    top: 0;
-    left: 45%;
-    height:100% ;
-    width: 55%;
-    background: rgba(255, 255, 255, 0.57);
-    overflow: auto;
-  }
-  .mainSlider ul{
-    width: 100%;
-    height: 100%;
-  }
-  .mainSlider dl{
-    height: 10%;
-    width: 100%;
-    font-family: "Microsoft YaHei";
-    font-size: 0.35em;
-    line-height: 2em;
-    color: #ffffff;
-    text-align: center;
-  }
-  .mainSlider dt{
-    height: 40%;
-    width: 100%;
-  }
-  .mainSlider dt img{
-    height: 100%;
-  }
-  .childSlider ul{
-    position: relative;
-    width: 100%;
-    height: 100%;
-   }
-  .childSlider li{
-    position: relative;
-    width: 100%;
-    height: 1.2em;
-  }
-  .childSlider a{
-    position: absolute;
-    buttom:30%;
-    width: 100%;
-    height: 100%;
-    font-family: "Microsoft YaHei";
-    padding: 1em;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #333333;
-    display: block;
-    text-align: center;
-  }
-  .content{
-    position: absolute;
-    top: 8%;
-    left: 14%;
-    height:92% ;
-    width: 86%;
-    background: #f0f0f0;
-  }
-  .isActive{
-    background:#FCC400 ;
-  }
-  .isInActive{
-    background: rgba(255, 255, 255, 0.57);
+    .heard{
+      position: absolute;
+      top:0;
+      height: 5%;
+      width: 100%;
+      background: #123658;
+      .logo{
+        position: absolute;
+        top:10%;
+        left: 0;
+        width: 30%;
+        height: 80%;
+        font-family: "Microsoft YaHei";
+        font-size: 0.6em;
+        line-height: 1.25em;
+        text-align: center;
+        color: #ffffff;
+    }
+      .heard-nav{
+        position: absolute;
+        top:10%;
+        width: 20%;
+        right: 0;
+        height: 80%;
+        font-family: "Microsoft YaHei";
+        font-size: 0.4em;
+        line-height: 2.5em;
+        color: #ffffff;
+        span{
+          position: relative;
+          height: 100%;
+          text-align: center;
+          color: #ffffff;
+          float: left;
+        }
+        button{
+          position:relative ;
+          top: 0;
+          height: 100%;
+          background: #123658;
+          border:none;
+          color: #ffffff;
+          margin-left: 3em;
+        }
+      }
+    }
+    .sliders{
+      position: absolute;
+      top: 5%;
+      height:95% ;
+      width: 14%;
+      .mainSlider{
+        position: absolute;
+        top: 0;
+        height:100% ;
+        width: 45%;
+        background: #123658;
+        scroll-behavior: auto;
+        ul{
+          width: 100%;
+          height: 100%;
+          dl{
+            height: 10%;
+            width: 100%;
+            font-family: "Microsoft YaHei";
+            font-size: 0.35em;
+            line-height: 2em;
+            color: #ffffff;
+            text-align: center;
+          }
+          dt{
+            height: 40%;
+            width: 100%;
+            img{
+              height: 100%;
+            }
+          }
+        }
+      }
+      .childSlider{
+        position: absolute;
+        top: 0;
+        right: 0;
+        height:100% ;
+        width: 55%;
+        background: #ffffff;
+        scroll-behavior: auto;
+        overflow: auto;
+        ul{
+          position: relative;
+          width: 100%;
+          height: 100%;
+          li{
+            position: relative;
+            width: 100%;
+            height: 1.2em;
+          }
+          a{
+            position: absolute;
+            buttom:30%;
+            width: 100%;
+            height: 100%;
+            font-family: "Microsoft YaHei";
+            font-size: 0.3em;
+            line-height: 3.4em;
+            color: #333333;
+            display: block;
+            text-align: center;
+          }
+        }
+        .isActive{
+          background: #bbb9b0;
+        }
+        .isInActive{
+          background: rgba(255, 255, 255, 0.1);
+        }
+      }
+    }
+    .certer{
+      position: absolute;
+      top: 5%;
+      left: 14%;
+      height:95% ;
+      width: 86%;
+      background: #f0f0f0;
+    }
   }
 </style>

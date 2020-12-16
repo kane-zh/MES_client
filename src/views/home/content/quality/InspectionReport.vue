@@ -14,8 +14,8 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
-          <div>类型:
-            <select v-model="selectItem.type" placeholder="请选择类型"      >
+          <div>分类:
+            <select v-model="selectItem.type" placeholder="请选择分类"      >
               <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
@@ -45,24 +45,7 @@
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加检验汇报</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
           <div class="table">
@@ -72,7 +55,7 @@
                 <th>名称</th>
                 <th>编码</th>
                 <th>操作者</th>
-                <th>类型</th>
+                <th>分类</th>
                 <th>状态</th>
                 <th>操作时间</th>
                 <th>创建账号</th>
@@ -113,7 +96,7 @@
           <li>{{"名称:"+"&#12288;"+detail.name}}</li>
           <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li>{{"类型:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
+          <li>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
           <li>{{"报检数量:"+"&#12288;"+detail.submit_sum}}</li>
           <li>{{"抽检数量:"+"&#12288;"+detail.samples_sum}}</li>
           <li>{{"合格数量:"+"&#12288;"+detail.ok_sum}}</li>
@@ -207,11 +190,11 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>报检数量:
           <input v-model="formItem.submit_sum" type="number" >
@@ -279,7 +262,7 @@
         </div>
         <div v-show="showChildForm==='true'" class="child">
           <form>
-            <div>缺陷类型:
+            <div>缺陷分类:
               <select v-model="formItem_child.defectType" >
                 <option v-for="item in defectType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -359,11 +342,11 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>报检数量:
           <input v-model="formItem.submit_sum" type="number"  >
@@ -431,7 +414,7 @@
         </div>
         <div v-show="showChildForm==='true'" class="child">
           <form>
-            <div>缺陷类型:
+            <div>缺陷分类:
               <select v-model="formItem_child.defectType" >
                 <option v-for="item in defectType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -503,7 +486,7 @@
 </template>
 <script>
 
-import {required} from 'vuelidate/lib/validators'
+import {maxLength, minLength, required} from 'vuelidate/lib/validators'
 export default {
   name: 'inspectionReport',
   components: {
@@ -524,6 +507,7 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        ordering: '',
         create_user: '',
         auditor: '',
         type: '',
@@ -531,8 +515,7 @@ export default {
         start_time: '',
         stop_time: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       type: {},
@@ -599,7 +582,7 @@ export default {
       typeInfor: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
-      /* 缺陷类型信息 */
+      /* 缺陷分类信息 */
       defectType: [],
       /* 缺陷信息 */
       defectInfor: [],
@@ -615,6 +598,11 @@ export default {
   },
   validations: {
     formItem: {
+      code: {
+        required,
+        minLength: minLength(2),
+        maxLength: maxLength(32)
+      },
       auditor: {
         required
       },
@@ -669,7 +657,7 @@ export default {
               '&search=' + self.selectItem.searchValue +
               '&start_time=' + self.selectItem.start_time +
               '&stop_time=' + self.selectItem.stop_time +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -1469,13 +1457,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;

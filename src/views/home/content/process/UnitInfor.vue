@@ -5,22 +5,30 @@
       <div class="listHead">
         <form class="select">
           <div>创建账号:
-            <select v-model="selectItem.create_user" placeholder="请选择创建账号" >
+            <select v-model="selectItem.create_user">
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
           <div>审核账号:
-            <select v-model="selectItem.auditor" placeholder="请选择审核账号"      >
+            <select v-model="selectItem.auditor">
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
-          <div>类型:
-            <select v-model="selectItem.type" placeholder="请选择类型"      >
+          <div>分类:
+            <select v-model="selectItem.type">
               <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
+          <div>排序:
+          <select v-model="selectItem.ordering">
+            <option value="id">添加时间-正排序</option>
+            <option value="-id">添加时间-倒排序</option>
+            <option value="update_time">更新时间-正排序</option>
+            <option value="-update_time">更新时间-倒排序</option>
+          </select>
+        </div>
           <div>状态:
-            <select v-model="selectItem.state"  placeholder="请选择状态"    >
+            <select v-model="selectItem.state">
               <option value="新建">新建</option>
               <option value="审核中">审核中</option>
               <option value="使用中">使用中</option>
@@ -29,33 +37,15 @@
           <div>关键字:
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
-           <div>
-               <button type="button" @click="select" >搜索</button>
-            </div>
-            <div>
-              <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
-            </div>
+          <div>
+            <button type="button" @click="select" >搜索</button>
+          </div>
+          <div>
+            <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
+          </div>
         </form>
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加计量单位信息</button>
-        </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
         </div>
       </div>
       <div class="listTable">
@@ -66,7 +56,7 @@
                 <th>名称</th>
                 <th>编码</th>
                 <th>符号</th>
-                <th>类型</th>
+                <th>分类</th>
                 <th>状态</th>
                 <th>更新时间</th>
                 <th>创建账号</th>
@@ -84,9 +74,9 @@
                 <td>{{item.create_user}}</td>
                 <td>{{item.auditor}}</td>
                 <td>
-                  <button type="button" @click="showDetailView(item.id)" v-if="item.create_user===username ||
-                  item.auditor===username||canRead===true">详情</button>
-                  <button type="button" @click="showUpdateView(item.id)" v-if="item.state==='新建'">更改</button>
+                  <span @click="showDetailView(item.id)" v-if="item.create_user===username ||
+                  item.auditor===username||canRead===true" style="color: #FF1A5EC4">详情</span>
+                  <span @click="showUpdateView(item.id)" v-if="item.state==='新建'" style="color: #52c41a">更改</span>
                 </td>
               </tr>
               <tr>
@@ -107,7 +97,7 @@
           <li>{{"名称:"+"&#12288;"+detail.name}}</li>
           <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li>{{"类型:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
+          <li>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
           <li>{{"符号:"+"&#12288;"+detail.symbol}}</li>
           <li v-if="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
           <li v-if="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
@@ -168,11 +158,11 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>计量单位符号:
           <input v-model="formItem.symbol"  placeholder="请输入计量单位符号...">
@@ -229,11 +219,11 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>计量单位符号:
           <input v-model="formItem.symbol"  placeholder="请输入计量单位符号...">
@@ -306,13 +296,13 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        ordering: '',
         create_user: '',
         auditor: '',
         type: '',
         searchValue: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       type: {},
@@ -425,7 +415,7 @@ export default {
               '&create_user=' + self.selectItem.create_user +
               '&type=' + self.selectItem.type +
               '&search=' + self.selectItem.searchValue +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -921,604 +911,516 @@ export default {
   }
 }
 </script>
-<style scoped>
-  .unitInfor{
-    position: relative;
+<style scoped lang="scss" >
+  .unitInfor {
+    position: absolute;
     top: 0;
-    width: 100%;
+    width: 98%;
     height: 100%;
-  }
-  .list{
-    position: relative;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .list .listHead{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 25%;
-    background: rgba(255, 255, 255, 0.57);
-  }
-  .list .listHead .select{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 33%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #151515;
-    letter-spacing: -0.45px;
-  }
-  .list .listHead .select div{
-    position: relative;
-    top: 0;
-    width: 23%;
-    height: 100%;
-    margin-right: 2%;
-    font-family: AppleSystemUIFont;
-    float: left;
-  }
-  .list .listHead .select select{
-    position: absolute;
-    width: 60%;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .list .listHead .select input{
-    position: absolute;
-    width: 90%;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .list .listHead .select button{
-    position: absolute;
-    right: 0;
-    width: 40%;
-    border-radius: 1em;
-    border: none;
-    border: 1px solid #D8D8D8;
-    background: #D8D8D8;
-    border-radius: 1em;
-  }
-  .list .listHead  .button{
-    position: absolute;
-    top: 66%;
-    width: 100%;
-    height: 20%;
-    margin-left: 30%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #151515;
-    letter-spacing: -0.45px;
-  }
-  .list .listHead  .ordering{
-    position: absolute;
-    top: 86%;
-    width: 100%;
-    height: 14%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #ffffff;
-    letter-spacing: -0.45px;
-    background: #dcdcdc;
-  }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
-  .list .button button{
-    width: 15em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .list .listTable{
-    position: absolute;
-    top: 25%;
-    width: 100%;
-    height: 75%;
-  }
-  .list .listTable .table{
-    height: 90%;
-    width: 100%;
-    overflow: auto;
-  }
-  .list .listTable .table table{
-    height: 100%;
-    width: 100%;
-        /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .list .listTable .table  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #ffffff;
-    text-align: center;
-    letter-spacing: -0.45px;
-    background: #191A1E;
-  }
-  .list .listTable .table  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.4em;
-    color: #191A1E;
-    letter-spacing: -0.45px;
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .list .listTable .page{
-    position: absolute;
-    right: 5%;
-    bottom: 0;
-    height: 10%;
-    font-size: 0.3em;
-    line-height: 2em;
-  }
-  .list .listTable button{
-    position: relative;
-    width: 20em;
-    font-size: 0.3em;
-    line-height: 2em;
-    border: 1px solid #363E42;
-    border-radius: 1em;
-  }
-  .detail{
-    position: relative;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .detail .content{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 80%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    line-height: 2em;
-    color: #000000;
-    letter-spacing: -0.45px;
-    overflow: auto;
-    background: rgba(255, 255, 255, 0.57);
-  }
-  .detail table{
-    height: 30%;
-    width: 100%;
-        /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .detail  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #ffffff;
-    text-align: center;
-    letter-spacing: -0.45px;
-    background: #191A1E;
-  }
-  .detail  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.4em;
-    color: #191A1E;
-    letter-spacing: -0.45px;
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .detail .alter{
-    position: absolute;
-    top: 80%;
-    width: 100%;
-    height: 10%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    line-height: 2em;
-    color: #000000;
-    letter-spacing: -0.45px;
-    background: #4d5669;
-  }
-  .detail .alter textarea{
-    position: absolute;
-    width: 60%;
-    height: 100%;
-    left: 5em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .detail .alter button{
-    position: absolute;
-    bottom: 40%;
-    right: 15%;
-    width: 6em;
-    font-size: 0.5em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .detail .button{
-    position: absolute;
-    top: 90%;
-    width: 100%;
-    height: 10%;
-  }
-  .detail .button button{
-    width: 12em;
-    margin: 4em;
-    font-size: 0.3em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .create{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .create form{
-    position: absolute;
-    top: 0;
-    left: 2%;
-    width: 80%;
-    height: 90%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #151515;
-    letter-spacing: -0.45px;
-    overflow: auto;
-  }
-  .create form div{
-    position: relative;
-    width: 50%;
-    height: 12%;
-    float: left;
-  }
-  .create form div select,.create form div input,.create form div textarea{
-    position: absolute;
-    width: 15em;
-    right: 4em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.8em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .create form div span{
-    position: absolute;
-    width: 15em;
-    right: 6em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.6em;
-    color: #f5222d;
-    display: block;
-  }
- .create .child {
-    position: relative;
-    width: 100%;
-    height: 20%;
-    float: left;
-    background: #4d5669;
-  }
-  .create .child form{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    padding-top: 1%;
-    overflow: auto;
-  }
-  .create .child div{
-    position: relative;
-    width: 50%;
-    height: 30%;
-    font-size: 1.5em;
-    float: left;
-  }
-  .create .child select,.create .child input,.create .child textarea{
-    position: absolute;
-    width: 60%;
-    height: 80%;
-    right: 4em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .create .annex{
-    position: relative;
-    width: 45%;
-    height: 30%;
-    margin-right: 5%;
-    background: #4d5669;
-    float: left;
-  }
-  .create .annex ul{
-    position: absolute;
-    top: 5%;
-    left: 2.5em;
-    right: 10%;
-    height: 35%;
-    margin-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .create .annex ul li{
-    position: relative;
-    width: 80%;
-    height: 2em;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 1em;
-  }
-  .create .annex input{
-    position: absolute;
-    top: 45%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .create .annex textarea {
-    position: absolute;
-    top: 65%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    padding-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .create .annex button{
-    position: absolute;
-    bottom: 0.2em;
-    width: 6em;
-    margin: 0.2em;
-    font-size: 0.8em;
-    line-height: 2em;
-    background: #2d59ff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .create table{
-    width: 100%;
-        /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .create  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 1em;
-    color: #ffffff;
-    text-align: center;
-    letter-spacing: -0.45px;
-    background: #191A1E;
-  }
-  .create  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.8em;
-    color: #191A1E;
-    letter-spacing: -0.45px;
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .create .button{
-    position: absolute;
-    top: 90%;
-    width: 100%;
-    height: 10%;
-    float: left;
-  }
-  .create .button button{
-    width: 12em;
-    margin: 0.2em;
-    font-size: 0.4em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .update{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .update form{
-    position: absolute;
-    top: 0;
-    left: 2%;
-    width: 80%;
-    height: 90%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #151515;
-    letter-spacing: -0.45px;
-    overflow: auto;
-  }
-  .update form div{
-    position: relative;
-    width: 50%;
-    height: 12%;
-    float: left;
-  }
-    .update form div select,.update form div input,.update form div textarea{
-    position: absolute;
-    width: 15em;
-    right: 4em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.8em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .update form div span{
-    position: absolute;
-    width: 15em;
-    right: 6em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.6em;
-    color: #f5222d;
-    display: block;
-  }
- .update .child {
-    position: relative;
-    width: 100%;
-    height: 20%;
-    float: left;
-    background: #4d5669;
-  }
-  .update .child form{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    padding-top: 1%;
-    overflow: auto;
-  }
-  .update .child div{
-    position: relative;
-    width: 50%;
-    height: 30%;
-    font-size: 1.5em;
-    float: left;
-  }
-  .update .child select,.update .child input,.update .child textarea{
-    position: absolute;
-    width: 60%;
-    height: 80%;
-    right: 4em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .update .annex{
-    position: relative;
-    width: 45%;
-    height: 30%;
-    margin-right: 5%;
-    background: #4d5669;
-    float: left;
-  }
-  .update .annex ul{
-    position: absolute;
-    top: 5%;
-    left: 2.5em;
-    right: 10%;
-    height: 35%;
-    margin-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .update .annex ul li{
-    position: relative;
-    width: 80%;
-    height: 2em;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 1em;
-  }
-  .update .annex input{
-    position: absolute;
-    top: 45%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .update .annex textarea {
-    position: absolute;
-    top: 65%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    padding-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .update .annex button{
-    position: absolute;
-    bottom: 0.2em;
-    width: 6em;
-    margin: 0.2em;
-    font-size: 0.8em;
-    line-height: 2em;
-    background: #2d59ff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .update table{
-    width: 100%;
-        /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .update  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 1em;
-    color: #ffffff;
-    text-align: center;
-    letter-spacing: -0.45px;
-    background: #191A1E;
-  }
-  .update  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.8em;
-    color: #191A1E;
-    letter-spacing: -0.45px;
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .update .button{
-    position: absolute;
-    top: 90%;
-    width: 100%;
-    height: 10%;
-    float: left;
-  }
-  .update .button button{
-    width: 12em;
-    margin: 0.2em;
-    font-size: 0.4em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
+    margin-right: 1%;
+    margin-left: 1%;
+    .list {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+        .listHead {
+          position: absolute;
+          top: 1%;
+          width: 100%;
+          height: 19%;
+          background: rgba(255, 255, 255, 0.57);
+          .select {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 80%;
+            div {
+              position: relative;
+              top: 0;
+              width: 20%;
+              height: 50%;
+              font-family: PingFangSC-Regular;
+              font-size: 0.4em;
+              color: #151515;
+              float: left;
+              select {
+                position: absolute;
+                width: 10em;
+                font-size: 0.8em;
+                color: #151515;
+                border: 1px solid #D8D8D8;
+                background: #ffffff;
+                border-radius: 1em;
+                margin-left: 1em;
+                padding-left: 1em;
+              }
+              input {
+                position: absolute;
+                width: 15em;
+                font-size: 0.8em;
+                color: #151515;
+                border: 1px solid #D8D8D8;
+                background: #ffffff;
+                border-radius: 1em;
+                margin-left: 1em;
+                padding-left: 1em;
+              }
+              button {
+                position: absolute;
+                right: 0;
+                width: 6em;
+                border: 1px solid #D8D8D8;
+                background: #D8D8D8;
+                border-radius: 1em;
+              }
+            }
+          }
+          .button{
+            position: absolute;
+            top: 80%;
+            width: 100%;
+            height: 20%;
+            color: #151515;
+            letter-spacing: -0.45px;
+            button{
+              position: absolute;
+              right: 40%;
+              width: 15em;
+              font-family: PingFangSC-Regular;
+              font-size: 0.35em;
+              line-height: 2em;
+              border: 1px solid #D8D8D8;
+              background: #D8D8D8;
+              border-radius: 1em;
+            }
+          }
+        }
+        .listTable{
+          position: absolute;
+          top: 22%;
+          bottom: 0;
+          width: 100%;
+          .table{
+            height: 90%;
+            width: 100%;
+            overflow: auto;
+            table{
+              height: 100%;
+              width: 100%;
+              table-layout: auto;
+              empty-cells:hide;
+              word-break : normal;
+              th{
+                position: sticky;
+                top:0;
+                height: 1em;
+                font-family: PingFangSC-Regular;
+                font-size: 0.4em;
+                line-height: 2.5em;
+                color: #000000;
+                text-align: center;
+                background: #ffffff;
+                border:1px solid #275b76;
+                &:nth-child(1){
+                  width: 3em;
+                }
+                &:nth-child(2){
+                  width: 8em;
+                }
+                &:nth-child(3){
+                  width: 8em;
+                }
+                &:nth-child(4){
+                  width: 4em;
+                }
+                &:nth-child(5){
+                  width: 10em;
+                }
+                &:nth-child(6){
+                  width: 4em;
+                }
+                &:nth-child(7){
+                  width: 14em;
+                }
+                &:nth-child(8){
+                  width: 5em;
+                }
+                &:nth-child(9){
+                  width: 5em;
+                }
+              }
+              td{
+                height: 1em;
+                font-family: PingFangSC-Regular;
+                font-size: 0.4em;
+                color: #191A1E;
+                letter-spacing: -0.45px;
+                text-align: center;
+                background: #ffffff;
+                border:1px solid #275b76;
+                button{
+                  position: relative;
+                  height: 1em;
+                  width: 4em;
+                  font-size: 0.8em;
+                  line-height: 1em;
+                  border: 1px solid #363E42;
+                  border-radius: 1em;
+                }
+              }
+            }
+          }
+          .page{
+            position: absolute;
+            right: 5%;
+            bottom: 0;
+            height: 10%;
+            font-size: 0.3em;
+            line-height: 2em;
+            button{
+              position: relative;
+              width: 20em;
+              font-size: 0.3em;
+              line-height: 2em;
+              border: 1px solid #363E42;
+              border-radius: 1em;
+            }
+          }
+        }
+    }
+    .detail {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      .content {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 80%;
+        font-family: PingFangSC-Regular;
+        font-size: 0.5em;
+        line-height: 2em;
+        color: #000000;
+        letter-spacing: -0.45px;
+        overflow: auto;
+        background: rgba(255, 255, 255, 0.57);
+        table {
+          height: 30%;
+          width: 100%;
+          /*table-layout: fixed;*/
+          empty-cells: hide;
+          th {
+            position: sticky;
+            top: 0;
+            height: 2em;
+            font-family: PingFangSC-Regular;
+            font-size: 0.5em;
+            color: #ffffff;
+            text-align: center;
+            letter-spacing: -0.45px;
+            background: #191A1E;
+          }
+          td {
+            height: 1em;
+            font-family: PingFangSC-Regular;
+            font-size: 0.4em;
+            color: #191A1E;
+            letter-spacing: -0.45px;
+            text-align: center;
+            background: #ffffff;
+            border: 1px solid #999;
+          }
+        }
+      }
+      .alter{
+        position: absolute;
+        top: 80%;
+        width: 100%;
+        height: 10%;
+        font-family: PingFangSC-Regular;
+        font-size: 0.5em;
+        line-height: 2em;
+        color: #000000;
+        letter-spacing: -0.45px;
+        background: #4d5669;
+        textarea{
+          position: absolute;
+          width: 60%;
+          height: 100%;
+          left: 5em;
+          border: 1px solid #D8D8D8;
+          background: #ffffff;
+          border-radius: 1em;
+        }
+        button{
+          position: absolute;
+          bottom: 40%;
+          right: 15%;
+          width: 6em;
+          font-size: 0.5em;
+          line-height: 2em;
+          background: #ffffff;
+          border: 1px solid #363E42;
+          border-radius: 13px;
+        }
+      }
+      .button{
+        position: absolute;
+        top: 90%;
+        width: 100%;
+        height: 10%;
+        button{
+          width: 12em;
+          margin: 4em;
+          font-size: 0.3em;
+          line-height: 2em;
+          background: #ffffff;
+          border: 1px solid #363E42;
+          border-radius: 13px;
+        }
+      }
+    }
+    .create {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      form {
+        position: absolute;
+        top: 0;
+        left: 2%;
+        width: 80%;
+        height: 90%;
+        font-family: PingFangSC-Regular;
+        font-size: 0.5em;
+        color: #151515;
+        letter-spacing: -0.45px;
+        overflow: auto;
+        div {
+          position: relative;
+          width: 50%;
+          height: 12%;
+          float: left;
+          select, input, textarea {
+            position: absolute;
+            width: 15em;
+            right: 4em;
+            font-family: AppleSystemUIFont;
+            padding-left: 2em;
+            font-size: 0.8em;
+            border: 1px solid #D8D8D8;
+            background: #ffffff;
+            border-radius: 1em;
+          }
+          span {
+            position: absolute;
+            width: 15em;
+            right: 6em;
+            font-family: AppleSystemUIFont;
+            padding-left: 2em;
+            font-size: 0.6em;
+            color: #f5222d;
+            display: block;
+          }
+        }
+        .annex {
+          position: relative;
+          width: 45%;
+          height: 30%;
+          margin-right: 5%;
+          background: #4d5669;
+          float: left;
+          ul {
+            position: absolute;
+            top: 5%;
+            left: 2.5em;
+            right: 10%;
+            height: 35%;
+            margin-left: 2em;
+            background: #ffffff;
+            overflow: auto;
+            li {
+              position: relative;
+              width: 80%;
+              height: 2em;
+              margin-left: 0;
+              margin-right: 0;
+              margin-bottom: 1em;
+            }
+          }
+          input {
+            position: absolute;
+            top: 45%;
+            left: 10%;
+            width: 80%;
+            height: 15%;
+            margin: 0;
+            padding: 0;
+            border: none;
+            background: #ffffff;
+            border-radius: 1em;
+          }
+          textarea {
+            position: absolute;
+            top: 65%;
+            left: 10%;
+            width: 80%;
+            height: 15%;
+            padding-left: 2em;
+            background: #ffffff;
+            overflow: auto;
+          }
+          button {
+            position: absolute;
+            bottom: 0.2em;
+            width: 6em;
+            margin: 0.2em;
+            font-size: 0.8em;
+            line-height: 2em;
+            background: #2d59ff;
+            border: 1px solid #363E42;
+            border-radius: 13px;
+          }
+        }
+      }
+      .button {
+        position: absolute;
+        top: 90%;
+        width: 100%;
+        height: 10%;
+        float: left;
+        button {
+          width: 12em;
+          margin: 0.2em;
+          font-size: 0.4em;
+          line-height: 2em;
+          background: #ffffff;
+          border: 1px solid #363E42;
+          border-radius: 13px;
+        }
+      }
+    }
+    .update {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      form {
+        position: absolute;
+        top: 0;
+        left: 2%;
+        width: 80%;
+        height: 90%;
+        font-family: PingFangSC-Regular;
+        font-size: 0.5em;
+        color: #151515;
+        letter-spacing: -0.45px;
+        overflow: auto;
+        div {
+          position: relative;
+          width: 50%;
+          height: 12%;
+          float: left;
+          select, input, textarea {
+            position: absolute;
+            width: 15em;
+            right: 4em;
+            font-family: AppleSystemUIFont;
+            padding-left: 2em;
+            font-size: 0.8em;
+            border: 1px solid #D8D8D8;
+            background: #ffffff;
+            border-radius: 1em;
+          }
+          span {
+            position: absolute;
+            width: 15em;
+            right: 6em;
+            font-family: AppleSystemUIFont;
+            padding-left: 2em;
+            font-size: 0.6em;
+            color: #f5222d;
+            display: block;
+          }
+        }
+        .annex {
+          position: relative;
+          width: 45%;
+          height: 30%;
+          margin-right: 5%;
+          background: #4d5669;
+          float: left;
+          ul {
+            position: absolute;
+            top: 5%;
+            left: 2.5em;
+            right: 10%;
+            height: 35%;
+            margin-left: 2em;
+            background: #ffffff;
+            overflow: auto;
+            li {
+              position: relative;
+              width: 80%;
+              height: 2em;
+              margin-left: 0;
+              margin-right: 0;
+              margin-bottom: 1em;
+            }
+          }
+          input {
+            position: absolute;
+            top: 45%;
+            left: 10%;
+            width: 80%;
+            height: 15%;
+            margin: 0;
+            padding: 0;
+            border: none;
+            background: #ffffff;
+            border-radius: 1em;
+          }
+          textarea {
+            position: absolute;
+            top: 65%;
+            left: 10%;
+            width: 80%;
+            height: 15%;
+            padding-left: 2em;
+            background: #ffffff;
+            overflow: auto;
+          }
+          button {
+            position: absolute;
+            bottom: 0.2em;
+            width: 6em;
+            margin: 0.2em;
+            font-size: 0.8em;
+            line-height: 2em;
+            background: #2d59ff;
+            border: 1px solid #363E42;
+            border-radius: 13px;
+          }
+        }
+      }
+      .button {
+        position: absolute;
+        top: 90%;
+        width: 100%;
+        height: 10%;
+        float: left;
+        button {
+          width: 12em;
+          margin: 0.2em;
+          font-size: 0.4em;
+          line-height: 2em;
+          background: #ffffff;
+          border: 1px solid #363E42;
+          border-radius: 13px;
+        }
+      }
+    }
   }
 </style>

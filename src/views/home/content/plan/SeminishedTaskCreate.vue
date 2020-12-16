@@ -14,8 +14,8 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
-          <div>类型:
-            <select v-model="selectItem.type" placeholder="请选择类型"      >
+          <div>分类:
+            <select v-model="selectItem.type" placeholder="请选择分类"      >
               <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
@@ -55,24 +55,7 @@
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加生产任务</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
           <div class="table">
@@ -81,7 +64,7 @@
                 <th>序号</th>
                 <th>名称</th>
                 <th>编码</th>
-                <th>类型</th>
+                <th>分类</th>
                 <th>状态</th>
                 <th>优先级</th>
                 <th>交期</th>
@@ -124,7 +107,7 @@
         <ul>
           <li>{{"名称:"+"&#12288;"+detail.name}}</li>
           <li>{{"编码:"+"&#12288;"+detail.code}}</li>
-          <li>{{"类型:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
+          <li>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
           <li>{{"优先级:"+"&#12288;"+detail.priority}}</li>
           <li>{{"交付日期:"+"&#12288;"+detail.delivery_time}}</li>
@@ -146,9 +129,9 @@
               <table >
                 <tr align="center"  type="height:2em">
                   <th>序号</th>
-                  <th>半成品类型</th>
+                  <th>半成品分类</th>
                   <th>半成品</th>
-                  <th>生产线路类型</th>
+                  <th>生产线路分类</th>
                   <th>生产线路</th>
                   <th>状态</th>
                   <th>数量</th>
@@ -227,11 +210,11 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>优先级:
           <select  v-model="formItem.priority" placeholder="请选择优先级"     >
@@ -288,7 +271,7 @@
         </div>
         <div  v-show="showChildForm==='true'" class="child">
           <form>
-            <div>半成品类型:
+            <div>半成品分类:
               <select v-model="formItem_child.semifinishedType" >
                 <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -298,7 +281,7 @@
                 <option v-for="item in semifinishedInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
               </select>
             </div>
-            <div>生产线路类型:
+            <div>生产线路分类:
               <select v-model="formItem_child.productRouteType" >
                 <option v-for="item in productRouteType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -339,12 +322,12 @@
             <caption align="top">已添加子项:</caption>
             <tr align="center"  type="height:2em">
               <th>序号</th>
-              <th>半成品类型名称</th>
-              <th>半成品类型编码</th>
+              <th>半成品分类名称</th>
+              <th>半成品分类编码</th>
               <th>半成品名称</th>
               <th>半成品编码</th>
-              <th>生产线路类型名称</th>
-              <th>生产线路类型编码</th>
+              <th>生产线路分类名称</th>
+              <th>生产线路分类编码</th>
               <th>生产线路名称</th>
               <th>生产线路编码</th>
               <th>数量</th>
@@ -390,11 +373,11 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>优先级:
           <select  v-model="formItem.priority" placeholder="请选择优先级"     >
@@ -451,7 +434,7 @@
         </div>
         <div  v-show="showChildForm==='true'" class="child">
           <form>
-            <div>半成品类型:
+            <div>半成品分类:
               <select v-model="formItem_child.semifinishedType" >
                 <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -461,7 +444,7 @@
                 <option v-for="item in semifinishedInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
               </select>
             </div>
-            <div>生产线路类型:
+            <div>生产线路分类:
               <select v-model="formItem_child.productRouteType" >
                 <option v-for="item in productRouteType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -502,12 +485,12 @@
           <caption align="top">已添加子项:</caption>
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>半成品类型名称</th>
-            <th>半成品类型编码</th>
+            <th>半成品分类名称</th>
+            <th>半成品分类编码</th>
             <th>半成品名称</th>
             <th>半成品编码</th>
-            <th>生产线路类型名称</th>
-            <th>生产线路类型编码</th>
+            <th>生产线路分类名称</th>
+            <th>生产线路分类编码</th>
             <th>生产线路名称</th>
             <th>生产线路编码</th>
             <th>数量</th>
@@ -571,6 +554,7 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        ordering: '',
         type: '',
         priority: '',
         create_user: '',
@@ -579,8 +563,7 @@ export default {
         start_time: '',
         stop_time: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       type: {},
@@ -644,7 +627,7 @@ export default {
       typeInfor: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
-      /* 工艺路线类型 */
+      /* 工艺路线分类 */
       productRouteType: [],
       productRoute: [],
       /* 附加属性标题 */
@@ -730,7 +713,7 @@ export default {
               '&search=' + self.selectItem.searchValue +
               '&start_time=' + self.selectItem.start_time +
               '&stop_time=' + self.selectItem.stop_time +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -1573,13 +1556,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;

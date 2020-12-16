@@ -40,24 +40,7 @@
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加半成品生产汇报</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
           <div class="table">
@@ -217,7 +200,7 @@
         </div>
         <div v-show="showChildForm==='true'" class="child">
           <form>
-            <div>半成品类型:
+            <div>半成品分类:
               <select v-model="formItem_child.semifinishedType" >
                 <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -270,7 +253,7 @@
             <caption align="top">已添加子项:</caption>
             <tr align="center"  type="height:2em">
               <th>序号</th>
-              <th>半成品类型</th>
+              <th>半成品分类</th>
               <th>半成品</th>
               <th>操作者</th>
               <th>总数量</th>
@@ -365,7 +348,7 @@
         </div>
         <div v-show="showChildForm==='true'" class="child">
           <form>
-            <div>半成品类型:
+            <div>半成品分类:
               <select v-model="formItem_child.semifinishedType" >
                 <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -418,7 +401,7 @@
           <caption align="top">已添加子项:</caption>
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>半成品类型</th>
+            <th>半成品分类</th>
             <th>半成品</th>
             <th>操作者</th>
             <th>总数量</th>
@@ -484,14 +467,14 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        ordering: '',
         create_user: '',
         auditor: '',
         searchValue: '',
         start_time: '',
         stop_time: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       team: {},
@@ -556,7 +539,7 @@ export default {
       teamInfor: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
-      /* 半成品类型信息 */
+      /* 半成品分类信息 */
       semifinishedType: [],
       /* 半成品信息 */
       semifinishedInfor: [],
@@ -628,7 +611,7 @@ export default {
               '&auditor=' + self.selectItem.auditor +
               '&create_user=' + self.selectItem.create_user +
               '&search=' + self.selectItem.searchValue +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -1409,13 +1392,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;

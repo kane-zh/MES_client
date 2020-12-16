@@ -101,13 +101,13 @@ export default new Router({
               component: () => import('@/views/home/content/process/ProductInfor')
             },
             {
-              // 工位类型
+              // 工序类型
               path: 'stationType',
               name: 'stationType',
               component: () => import('@/views/home/content/process/StationType')
             },
             {
-              // 工位信息
+              // 工序信息
               path: 'stationInfor',
               name: 'stationInfor',
               component: () => import('@/views/home/content/process/StationInfor')

@@ -14,6 +14,14 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
+            <div>排序:
+            <select v-model="selectItem.ordering"  placeholder="请选择排序方式"    >
+              <option value="id">添加时间-正排序</option>
+              <option value="-id">添加时间-倒排序</option>
+              <option value="update_time">更新时间-正排序</option>
+              <option value="-update_time">更新时间-倒排序</option>
+            </select>
+          </div>
           <div>状态:
             <select v-model="selectItem.state"  placeholder="请选择状态"    >
               <option value="新建">新建</option>
@@ -34,24 +42,7 @@
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加物料库存预警</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
           <div class="table">
@@ -212,7 +203,7 @@
                 <option v-for="item in warehouseInfor" :value="item.code" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
             </div>
-            <div>物料类型:
+            <div>物料分类:
               <select v-model="formItem_child.materialType" >
                 <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -251,7 +242,7 @@
           <tr align="center"  type="height:2em">
             <th>序号</th>
             <th>仓库</th>
-            <th>物料类型</th>
+            <th>物料分类</th>
             <th>物料</th>
             <th>批次</th>
             <th>最大量</th>
@@ -332,7 +323,7 @@
                 <option v-for="item in warehouseInfor" :value="item.code" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
             </div>
-            <div>物料类型:
+            <div>物料分类:
               <select v-model="formItem_child.materialType" >
                 <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -371,7 +362,7 @@
           <tr align="center"  type="height:2em">
             <th>序号</th>
             <th>仓库</th>
-            <th>物料类型</th>
+            <th>物料分类</th>
             <th>物料</th>
             <th>批次</th>
             <th>最大量</th>
@@ -438,12 +429,12 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        ordering: '',
         create_user: '',
         auditor: '',
         searchValue: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       /* 详情页审核记录项表单 */
@@ -492,7 +483,7 @@ export default {
       fileData: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
-      /* 物料类型信息 */
+      /* 物料分类信息 */
       materialType: [],
       /* 物料信息 */
       materialInfor: [],
@@ -560,7 +551,7 @@ export default {
               '&auditor=' + self.selectItem.auditor +
               '&create_user=' + self.selectItem.create_user +
               '&search=' + self.selectItem.searchValue +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -1282,13 +1273,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;

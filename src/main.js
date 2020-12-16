@@ -8,7 +8,7 @@ import iView from 'iview'
 import Vuelidate from 'vuelidate'
 import axios from './api/axiosRequest'
 import 'iview/dist/styles/iview.css'
-import '../static/main.css'
+import './main.css'
 // 注册到全局
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false

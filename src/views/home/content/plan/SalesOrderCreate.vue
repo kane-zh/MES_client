@@ -42,24 +42,7 @@
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加销售订单</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
           <div class="table">
@@ -130,7 +113,7 @@
               <table >
                 <tr align="center"  type="height:2em">
                   <th>序号</th>
-                  <th>产品类型</th>
+                  <th>产品分类</th>
                   <th>产品</th>
                   <th>批次</th>
                   <th>需求数量</th>
@@ -261,7 +244,7 @@
         </div>
         <div v-show="showChildForm==='true'" class="child">
           <form>
-            <div>产品类型:
+            <div>产品分类:
               <select v-model="formItem_child.productType" >
                 <option v-for="item in productType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -305,7 +288,7 @@
             <caption align="top">已添加子项:</caption>
             <tr align="center"  type="height:2em">
               <th>序号</th>
-              <th>产品类型</th>
+              <th>产品分类</th>
               <th>产品</th>
               <th>批次</th>
               <th>数量</th>
@@ -399,7 +382,7 @@
         </div>
         <div v-show="showChildForm==='true'" class="child">
           <form>
-            <div>产品类型:
+            <div>产品分类:
               <select v-model="formItem_child.productType" >
                 <option v-for="item in productType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -442,7 +425,7 @@
         <table v-show="list_child.length>0">
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>产品类型</th>
+            <th>产品分类</th>
             <th>产品</th>
             <th>批次</th>
             <th>数量</th>
@@ -503,14 +486,14 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        ordering: '',
         create_user: '',
         auditor: '',
         searchValue: '',
         start_time: '',
         stop_time: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       client: {},
@@ -571,7 +554,7 @@ export default {
       clientInfor: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
-      /* 产品类型信息 */
+      /* 产品分类信息 */
       productType: [],
       /* 产品信息 */
       productInfor: [],
@@ -653,7 +636,7 @@ export default {
               '&search=' + self.selectItem.searchValue +
               '&start_time=' + self.selectItem.start_time +
               '&stop_time=' + self.selectItem.stop_time +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -1434,13 +1417,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;

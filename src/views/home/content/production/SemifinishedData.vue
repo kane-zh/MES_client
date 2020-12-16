@@ -9,18 +9,18 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
-          <div>类型:
-            <select v-model="selectItem.type" placeholder="请选择类型"      >
+          <div>分类:
+            <select v-model="selectItem.type" placeholder="请选择分类"      >
               <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
-          <div>任务类型:
-            <select v-model="selectItem.taskType" placeholder="请选择任务类型"      >
+          <div>任务分类:
+            <select v-model="selectItem.taskType" placeholder="请选择任务分类"      >
               <option v-for="item in taskType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
-          <div>半成品类型:
-            <select v-model="selectItem.semifinishedType" placeholder="请选择半成品类型"      >
+          <div>半成品分类:
+            <select v-model="selectItem.semifinishedType" placeholder="请选择半成品分类"      >
               <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
@@ -43,34 +43,17 @@
         <div class="button" >
           <button type="button" @click="showCreatView"  v-show="canCreate===true">添加过程数据</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
         <div class="table">
           <table >
             <tr align="center"  type="height:2em">
               <th>序号</th>
-              <th>类型</th>
-              <th>半成品类型</th>
+              <th>分类</th>
+              <th>半成品分类</th>
               <th>半成品</th>
-              <th>任务类型</th>
+              <th>任务分类</th>
               <th>任务</th>
               <th>批次号</th>
               <th>序列号</th>
@@ -109,17 +92,17 @@
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="content">
         <ul>
-          <li>{{"类型:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
-          <li>{{"半成品类型:"+"&#12288;"+detail.semifinishedType_name+"("+detail.semifinishedType_code+")"}}</li>
+          <li>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
+          <li>{{"半成品分类:"+"&#12288;"+detail.semifinishedType_name+"("+detail.semifinishedType_code+")"}}</li>
           <li>{{"半成品:"+"&#12288;"+detail.semifinished_name+"("+detail.semifinished_code+")"}}</li>
-          <li>{{"任务类型:"+"&#12288;"+detail.taskType_name+"("+detail.taskType_code+")"}}</li>
+          <li>{{"任务分类:"+"&#12288;"+detail.taskType_name+"("+detail.taskType_code+")"}}</li>
           <li>{{"任务:"+"&#12288;"+detail.task_name+"("+detail.task_code+")"}}</li>
           <li>{{"批次号:"+"&#12288;"+detail.batch}}</li>
           <li>{{"序列号:"+"&#12288;"+detail.sn}}</li>
           <li>{{"人员信息:"+"&#12288;"+detail.personnel}}</li>
           <li>{{"设备信息:"+"&#12288;"+detail.equipment}}</li>
           <li>{{"物料信息:"+"&#12288;"+detail.material}}</li>
-          <li>{{"工位信息:"+"&#12288;"+detail.station}}</li>
+          <li>{{"工序信息:"+"&#12288;"+detail.station}}</li>
           <li>{{"质检信息:"+"&#12288;"+detail.quality}}</li>
           <li v-if="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
           <li v-if="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
@@ -161,13 +144,13 @@
     <!--    /*创建页显示*/-->
     <div  class="create"  v-show="showViewid==='create'">
       <form >
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
-        <div>任务类型:
+        <div>任务分类:
           <select v-model="formItem.taskType" >
             <option v-for="item in taskType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
           </select>
@@ -177,7 +160,7 @@
             <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
           </select>
         </div>
-        <!--        <div>半成品类型:-->
+        <!--        <div>半成品分类:-->
         <!--          <select v-model="formItem.semifinishedType" >-->
         <!--            <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>-->
         <!--          </select>-->
@@ -206,8 +189,8 @@
         <div >物料信息:
           <textarea v-model="formItem.material" placeholder="请输入当前的物料信息..."></textarea>
         </div>
-        <div >工位信息:
-          <textarea v-model="formItem.station" placeholder="请输入当前的工位信息..."></textarea>
+        <div >工序信息:
+          <textarea v-model="formItem.station" placeholder="请输入当前的工序信息..."></textarea>
         </div>
         <div >质检信息:
           <textarea v-model="formItem.quality" placeholder="请输入当前的质检信息..."></textarea>
@@ -313,6 +296,7 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        ordering: '',
         semifinishedType: '',
         taskType: '',
         semifinished: '',
@@ -323,8 +307,7 @@ export default {
         start_time: '',
         stop_time: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       type: {},
@@ -391,16 +374,16 @@ export default {
         uri: 'semifinishedData'
       },
       fileData: [],
-      /* 半成品类型信息 */
+      /* 半成品分类信息 */
       semifinishedType: [],
       /* 半成品信息 */
       semifinishedInfor: [],
       semifinishedInfor1: [],
-      /* 任务类型信息 */
+      /* 任务分类信息 */
       taskType: [],
       /* 任务信息 */
       taskInfor: [],
-      /* 过程数据类型信息 */
+      /* 过程数据分类信息 */
       typeInfor: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
@@ -485,7 +468,7 @@ export default {
           '&search=' + self.selectItem.searchValue +
           '&start_time=' + self.selectItem.start_time +
           '&stop_time=' + self.selectItem.stop_time +
-          '&ordering=' + self.ordering).then(function (response) {
+          '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -969,13 +952,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;

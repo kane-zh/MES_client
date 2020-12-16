@@ -14,9 +14,17 @@
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
-          <div>类型:
-            <select v-model="selectItem.type" placeholder="请选择类型"      >
+          <div>分类:
+            <select v-model="selectItem.type" placeholder="请选择分类"      >
               <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
+            <div>排序:
+            <select v-model="selectItem.ordering"  placeholder="请选择排序方式"    >
+              <option value="id">添加时间-正排序</option>
+              <option value="-id">添加时间-倒排序</option>
+              <option value="update_time">更新时间-正排序</option>
+              <option value="-update_time">更新时间-倒排序</option>
             </select>
           </div>
           <div>状态:
@@ -37,26 +45,9 @@
             </div>
         </form>
         <div class="button" >
-          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加工位信息</button>
+          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加工序信息</button>
         </div>
-        <div class="ordering">
-          <div>
-            <input value="id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-正排序
-          </div>
-          <div>
-            <input value="-id" type="radio" name ="ordering" v-model="ordering">
-            添加时间-倒排序
-          </div>
-          <div>
-            <input value="update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-正排序
-          </div>
-          <div>
-            <input value="-update_time" type="radio" name ="ordering" v-model="ordering">
-            更新时间-倒排序
-          </div>
-        </div>
+
       </div>
       <div class="listTable">
           <div class="table">
@@ -65,7 +56,7 @@
                 <th>序号</th>
                 <th>名称</th>
                 <th>编码</th>
-                <th>类型</th>
+                <th>分类</th>
                 <th>状态</th>
                 <th>更新时间</th>
                 <th>创建账号</th>
@@ -105,7 +96,7 @@
           <li>{{"名称:"+"&#12288;"+detail.name}}</li>
           <li>{{"编码:"+"&#12288;"+detail.code}}</li>
           <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li>{{"类型:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
+          <li>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
           <li v-if="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
           <li v-if="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
           <li v-if="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</li>
@@ -118,13 +109,13 @@
           <li>{{"备注信息:"+"&#12288;"+detail.desc}}</li>
         </ul>
         <Collapse active-key="3" accordion v-if="list_material!==undefined && list_material.length > 0">
-          工位物料:
+          工序物料:
           <Panel >
             <div  slot="content">
               <table >
                 <tr align="center"  type="height:2em">
                   <th>序号</th>
-                  <th>物料类型</th>
+                  <th>物料分类</th>
                   <th>物料</th>
                   <th>数量</th>
                   <th>说明</th>
@@ -144,13 +135,13 @@
           </Panel>
         </Collapse>
         <Collapse active-key="3" accordion v-if="list_semifinished!==undefined && list_semifinished.length > 0">
-          工位半成品:
+          工序半成品:
           <Panel >
             <div  slot="content">
               <table >
                 <tr align="center"  type="height:2em">
                   <th>序号</th>
-                  <th>半成品类型</th>
+                  <th>半成品分类</th>
                   <th>半成品</th>
                   <th>数量</th>
                   <th>说明</th>
@@ -170,7 +161,7 @@
           </Panel>
         </Collapse>
         <dl>
-          <dt>工位信息图片:</dt>
+          <dt>工序信息图片:</dt>
           <template v-for="(value,id) in detail.image">
             <a target='_black' v-bind:key="id" :href="value.image"> <img :src="value.image" width="50px"></a>
           </template>
@@ -223,11 +214,11 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>
 
@@ -279,7 +270,7 @@
         </div>
         <div v-show="showChildForm==='material'" class="child">
           <form>
-            <div>物料类型:
+            <div>物料分类:
               <select v-model="formItem_material.materialType" >
                 <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -305,7 +296,7 @@
           <caption align="top">已添加子项:</caption>
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>物料类型</th>
+            <th>物料分类</th>
             <th>物料</th>
             <th>数量</th>
             <th>说明</th>
@@ -330,7 +321,7 @@
         </div>
         <div v-show="showChildForm==='semifinished'" class="child">
           <form>
-              <div>半成品类型:
+              <div>半成品分类:
                 <select v-model="formItem_semifinished.semifinishedType" >
                   <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
                 </select>
@@ -356,7 +347,7 @@
           <caption align="top">已添加子项:</caption>
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>半成品类型</th>
+            <th>半成品分类</th>
             <th>半成品</th>
             <th>数量</th>
             <th>说明</th>
@@ -395,11 +386,11 @@
           <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
           <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
-        <div>类型:
-          <select v-model="formItem.type"   placeholder="请选择类型">
+        <div>分类:
+          <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择类型</span>
+          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>
 
@@ -451,7 +442,7 @@
         </div>
         <div v-show="showChildForm==='material'" class="child">
           <form>
-            <div>物料类型:
+            <div>物料分类:
               <select v-model="formItem_material.materialType" >
                 <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -477,7 +468,7 @@
           <caption align="top">已添加子项:</caption>
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>物料类型</th>
+            <th>物料分类</th>
             <th>物料</th>
             <th>数量</th>
             <th>说明</th>
@@ -502,7 +493,7 @@
         </div>
         <div v-show="showChildForm==='semifinished'" class="child">
           <form>
-            <div>半成品类型:
+            <div>半成品分类:
               <select v-model="formItem_semifinished.semifinishedType" >
                 <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
               </select>
@@ -528,7 +519,7 @@
           <caption align="top">已添加子项:</caption>
           <tr align="center"  type="height:2em">
             <th>序号</th>
-            <th>半成品类型</th>
+            <th>半成品分类</th>
             <th>半成品</th>
             <th>数量</th>
             <th>说明</th>
@@ -586,13 +577,13 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         state: '',
+        ordering: '',
         create_user: '',
         auditor: '',
         type: '',
         searchValue: ''
       },
-      /* 列表页数据排序 */
-      ordering: '-id',
+
       /* 详情页数据 */
       detail: [],
       type: {},
@@ -658,13 +649,13 @@ export default {
         uri: 'stationInfor'
       },
       fileData: [],
-      /* 工位类型信息 */
+      /* 工序分类信息 */
       typeInfor: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
-      /* 物料类型信息 */
+      /* 物料分类信息 */
       materialType: [],
-      /* 半成品类型信息 */
+      /* 半成品分类信息 */
       semifinishedType: [],
       /* 物料信息 */
       materialInfor: [],
@@ -736,7 +727,7 @@ export default {
               '&create_user=' + self.selectItem.create_user +
               '&type=' + self.selectItem.type +
               '&search=' + self.selectItem.searchValue +
-              '&ordering=' + self.ordering).then(function (response) {
+              '&ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -1238,7 +1229,7 @@ export default {
         }
       }
     },
-    /* 提交工位半成品项 */
+    /* 提交工序半成品项 */
     uploadSemifinished () {
       var self = this
       this.$axios.post(`process/stationSemifinished/`, {
@@ -1702,13 +1693,7 @@ export default {
     letter-spacing: -0.45px;
     background: #dcdcdc;
   }
-  .list .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
+
   .list .button button{
     width: 15em;
     background: #ffffff;
