@@ -1,5 +1,5 @@
 <template>
-  <div class="register" :style ="{'background-image': 'url('+require('../../../static/icons/beijing.jpg')+')'}">
+  <div class="register" :style ="{'background-image': 'url('+require('../../../static/icons/beijing.png')+')'}">
       <form>
         <div>账号名:
             <input v-model="formItem.username" placeholder="请输入账号名...">

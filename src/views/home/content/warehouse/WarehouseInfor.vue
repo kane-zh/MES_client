@@ -33,7 +33,8 @@
             <dd>{{"库位数量:"+"&#12288;"+detail.position_sum}}</dd>
             <dd>{{"责任人:"+"&#12288;"+detail.principal}}</dd>
             <dd>{{"所在位置:"+"&#12288;"+detail.location}}</dd>
-            <dd>{{"归属单位:"+"&#12288;"+detail.affiliation}}</dd>
+            <dd>{{"归属单位:"+"&#12288;"+detail.affiliation}}
+            <dd>{{"附加属性标题:"+"&#12288;"+detail.attach_attribute}}</dd>
           </div>
           <div class="desc" v-show="detail.desc!=''">
             <dt>备注信息</dt>
@@ -53,30 +54,10 @@
             </dd>
           </div>
           <div class="image">
-              <dt>仓库图片</dt>
-              <dd v-for="(value,id) in detail.image" :key="id">
-                <a target='_black' v-bind:key="id" :href="value.image"> <img :src="value.image" width="50px"></a>
-              </dd>
-          </div>
-          <div class="item" v-if="detail.warehouse_item!==undefined && detail.warehouse_item.length > 0">
-            <dt>包含内容</dt>
-            <table >
-              <tr align="center"  type="height:2em">
-                <th>序号</th>
-                <th>名称</th>
-                <th>编码</th>
-                <th>状态</th>
-              </tr>
-              <tr align="center" v-for="(item,index) in detail.warehouse_item" :key="item.id" type="height:1em" >
-                <td>{{index}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.code}}</td>
-                <td>{{item.state}}</td>
-              </tr>
-              <tr>
-
-              </tr>
-            </table>
+            <dt>图片附件</dt>
+            <dd v-for="(value,id) in detail.image" :key="id">
+              <a target='_black' v-bind:key="id" :href="value.image"> <img :src="value.image" width="50px"></a>
+            </dd>
           </div>
         </div>
         <div class="button">
@@ -84,12 +65,12 @@
           <button type="button" @click="changeState('使用中')" v-show="showApprovedBt===true" >通过审核</button>
           <button type="button" @click="changeState('新建')" v-show="showReturnBt===true">驳回信息</button>
           <button type="button" @click="changeState('作废')" v-show="showDeleteBt===true">删除数据</button>
-          <button type="button" @click="showUpdateView(detail.id)" v-if="detail.state==='新建'">更改</button>
+          <button type="button" @click="showUpdateView(detail.id)" v-show ="detail.state==='新建'">更改</button>
         </div>
       </div>
     </div>
     <!-- 创建页显示-->
-    <div  class="create"  v-if="showViewid==='create'">
+    <div  class="create"  v-show ="showViewid==='create'">
       <div class="center">
         <div class="heard">
           <span>信息创建页</span>
@@ -102,9 +83,9 @@
             </div>
             <div>编码:
               <input v-model="formItem.code"  placeholder="请输入编码">
-              <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
-              <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
-              <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
+              <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
+              <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
+              <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
             </div>
             <div>类别:
               <select v-model="formItem.classes"  placeholder="请选择类别"   >
@@ -113,13 +94,13 @@
                 <option value="三级类别">三级类别</option>
                 <option value="四级类别">四级类别</option>
               </select>
-              <span class="message" v-if="!$v.formItem.classes.required">请选择类别</span>
+              <span class="message" v-show ="!$v.formItem.classes.required">请选择类别</span>
             </div>
             <div v-show="formItem.classes==='二级类别'||formItem.classes==='三级类别'||formItem.classes==='四级类别'">上级类别:
               <select v-model="formItem.parent"   placeholder="请选择上级类别" >
                 <option v-for="item in list" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
               </select>
-              <span class="message" v-if="!$v.formItem.parent.required">请选择父类别</span>
+              <span class="message" v-show ="!$v.formItem.parent.required">请选择父类别</span>
             </div>
             <div v-show="formItem.classes==='一级类别'||formItem.classes===''">
             </div>
@@ -132,7 +113,7 @@
                 <option value="产品库">设备库</option>
                 <option value="产品库">备品库</option>
               </select>
-              <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
+              <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
             <div>归属单位:
               <input v-model="formItem.affiliation"   placeholder="请输入仓库归属单位...">
@@ -150,7 +131,7 @@
               <select v-model="formItem.auditor"  placeholder="请选择审核账号">
                 <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
               </select>
-              <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
+              <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
             </div>
             <div>附加属性:
               <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  style="height: 90%"  multiple="true">
@@ -160,23 +141,23 @@
             <div >备注信息:
               <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
             </div>
-            <div class="annex">文件:
+            <div class="file">文件:
               <span>
-              选择文件
-              <input type="file"  @change="fileBeforeUpload"/>
-            </span>
+                选择文件
+                <input type="file"  @change="fileBeforeUpload"/>
+              </span>
               <ul>
                 <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
               </ul>
             </div>
-            <div class="annex">图片:
+            <div class="image">图片:
               <span>
-              选择图片
-              <input type="file"  @change="imageBeforeUpload"/>
-            </span>
+                  选择图片
+                  <input type="file"  @change="imageBeforeUpload"/>
+               </span>
               <ul>
                 <li v-for="value in imageData" v-bind:key="value.id"  @click="removeImage(value.id)">
-                  <img :src="value.imageUrl" width="50px">
+                  <img :src="value.imageUrl">
                 </li>
               </ul>
             </div>
@@ -189,7 +170,7 @@
       </div>
     </div>
     <!-- 更新页显示-->
-    <div  class="update"  v-if="showViewid==='update'">
+    <div  class="update"  v-show ="showViewid==='update'">
       <div class="center">
         <div class="heard">
           <span>信息更新页</span>
@@ -202,9 +183,9 @@
             </div>
             <div>编码:
               <input v-model="formItem.code"  placeholder="请输入编码">
-              <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
-              <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
-              <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
+              <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
+              <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
+              <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
             </div>
             <div>类别:
               <select v-model="formItem.classes"  placeholder="请选择类别"   >
@@ -213,13 +194,13 @@
                 <option value="三级类别">三级类别</option>
                 <option value="四级类别">四级类别</option>
               </select>
-              <span class="message" v-if="!$v.formItem.classes.required">请选择类别</span>
+              <span class="message" v-show ="!$v.formItem.classes.required">请选择类别</span>
             </div>
             <div v-show="formItem.classes==='二级类别'||formItem.classes==='三级类别'||formItem.classes==='四级类别'">上级类别:
               <select v-model="formItem.parent"   placeholder="请选择上级类别" >
                 <option v-for="item in list" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
               </select>
-              <span class="message" v-if="!$v.formItem.parent.required">请选择父类别</span>
+              <span class="message" v-show ="!$v.formItem.parent.required">请选择父类别</span>
             </div>
             <div v-show="formItem.classes==='一级类别'||formItem.classes===''">
             </div>
@@ -232,7 +213,7 @@
                 <option value="产品库">设备库</option>
                 <option value="产品库">备品库</option>
               </select>
-              <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
+              <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
             <div>归属单位:
               <input v-model="formItem.affiliation"   placeholder="请输入仓库归属单位...">
@@ -250,7 +231,7 @@
               <select v-model="formItem.auditor"  placeholder="请选择审核账号">
                 <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
               </select>
-              <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
+              <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
             </div>
             <div>附加属性:
               <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  style="height: 90%"  multiple="true">
@@ -260,23 +241,23 @@
             <div >备注信息:
               <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
             </div>
-            <div class="annex">文件:
+            <div class="file">文件:
               <span>
-              选择文件
-              <input type="file"  @change="fileBeforeUpload"/>
-            </span>
+                选择文件
+                <input type="file"  @change="fileBeforeUpload"/>
+              </span>
               <ul>
                 <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
               </ul>
             </div>
-            <div class="annex">图片:
+            <div class="image">图片:
               <span>
-              选择图片
-              <input type="file"  @change="imageBeforeUpload"/>
-            </span>
+                  选择图片
+                  <input type="file"  @change="imageBeforeUpload"/>
+               </span>
               <ul>
                 <li v-for="value in imageData" v-bind:key="value.id"  @click="removeImage(value.id)">
-                  <img :src="value.imageUrl" width="50px">
+                  <img :src="value.imageUrl">
                 </li>
               </ul>
             </div>
@@ -385,11 +366,8 @@ export default {
         self.transformToTree(response.data)
         self.showViewid = 'list'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 将数据转换成树形结构数据格式 */
@@ -474,11 +452,8 @@ export default {
         self.parent = self.detail.parent
         self.showViewid = 'detail'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 改变数据项状态 */
@@ -499,11 +474,8 @@ export default {
         }
         alert('数据提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 显示创建视图 */
@@ -592,11 +564,8 @@ export default {
         })
         self.showViewid = 'update'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 提交文件项 */
@@ -627,11 +596,8 @@ export default {
         self.fileData.push(obj)
         alert(self.fileItem.fileName + '文件提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     fileBeforeUpload (event) {
@@ -681,11 +647,8 @@ export default {
         self.imageData.push(obj)
         alert(self.imageItem.imageName + '图片提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     imageBeforeUpload (event) {
@@ -735,12 +698,9 @@ export default {
         self.formItem.file = []
         self.fileData = []
         alert('数据保存成功')
-      }).catch(function (error) {
-        if (error.request) {
-          alert(error.request.response)
-        } else {
-          console.log('Error', error.message)
-        }
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
       })
     },
     /* 更新表单数据 */
@@ -767,11 +727,8 @@ export default {
       }).then(function (response) {
         alert('数据保存成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 保存并提交表单数据 */
@@ -800,22 +757,15 @@ export default {
         self.fileData = []
         self.$axios.patch(`warehouse/warehouse/` + response.data.id + '/', {
           state: '审核中'
-        }).then(function (response
-        ) {
+        }).then(function (response) {
           alert('数据提交成功')
         }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
+          // 错误提示
+          console.log(err)
         })
-      }).catch(function (error) {
-        if (error.request) {
-          alert(error.request.response)
-        } else {
-          console.log('Error', error.message)
-        }
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
       })
     },
     /* 更新并提交表单数据 */
@@ -849,18 +799,12 @@ export default {
           alert('数据提交成功')
           self.showViewid = 'list'
         }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
+          // 错误提示
+          console.log(err)
         })
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     }
   },
@@ -871,11 +815,8 @@ export default {
       self.userinfor = response.data.results
       self.showListView()
     }).catch(function (err) {
-      if (err.request) {
-        alert(err.request.response)
-      } else {
-        console.log('Error', err.message)
-      }
+      // 错误提示
+      console.log(err)
     })
   },
   mounted () {
@@ -915,33 +856,24 @@ export default {
           this.$axios.get('warehouse/warehouse/?state=使用中&classes=一级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
             self.list = response.data.results
           }).catch(function (err) {
-            if (err.request) {
-              alert(err.request.response)
-            } else {
-              console.log('Error', err.message)
-            }
+            // 错误提示
+            console.log(err)
           })
           break
         case '三级类别':
           this.$axios.get('warehouse/warehouse/?state=使用中&classes=二级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
             self.list = response.data.results
           }).catch(function (err) {
-            if (err.request) {
-              alert(err.request.response)
-            } else {
-              console.log('Error', err.message)
-            }
+            // 错误提示
+            console.log(err)
           })
           break
         case '四级类别':
           this.$axios.get('warehouse/warehouse/?state=使用中&classes=三级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
             self.list = response.data.results
           }).catch(function (err) {
-            if (err.request) {
-              alert(err.request.response)
-            } else {
-              console.log('Error', err.message)
-            }
+            // 错误提示
+            console.log(err)
           })
           break
       }
@@ -1099,11 +1031,16 @@ export default {
               line-height: 2em;
               color: #0c0c0c;
             }
-            /*dd:nth-child(6){*/
-            /*  width: 100%;*/
-            /*  display: block;*/
-            /*  float: left;*/
-            /*}*/
+            dd:nth-child(10){
+              width: 100%;
+              display: block;
+              float: left;
+            }
+            dd:nth-child(11){
+              width: 100%;
+              display: block;
+              float: left;
+            }
           }
           .desc{
             position: relative;
@@ -1118,9 +1055,12 @@ export default {
               text-align: center;
             }
             dd{
-              width: 50%;
+              width: 100%;
               display: block;
               float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
               color: #0c0c0c;
             }
           }
@@ -1194,50 +1134,27 @@ export default {
               text-align: center;
             }
             dd{
-              width: 100%;
-              display: block;
+              position: relative;
+              width: 50%;
+              height: 5em;
               float: left;
               font-family: PingFangSC-Regular;
               font-size: 0.5em;
               line-height: 2em;
               color: #0c0c0c;
               a{
-                color: #0c0c0c;
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                img{
+                  position: absolute;
+                  height: 90%;
+                  width: 90%;
+                }
               }
             }
           }
-          .item{
-            position: relative;
-            top: 0;
-            overflow:hidden;
-            width: 100%;
-            dt{
-              font-family: PingFangSC-Regular;
-              font-size: 0.5em;
-              line-height: 2em;
-              color: #9ca022;
-              text-align: center;
-            }
-            table {
-              width: 100%;
-              font-family: PingFangSC-Regular;
-              text-align: center;
-              th {
-                position: sticky;
-                top: 0;
-                height: 1em;
-                font-size: 0.5em;
-                color: #ffffff;
-                background: #191A1E;
-              }
-              td {
-                height: 0.5em;
-                font-size: 0.4em;
-                color: #191A1E;
-                border: 1px solid #999;
-              }
-            }
-          }
+
         }
         .button {
           position: absolute;
@@ -1319,7 +1236,7 @@ export default {
             font-family: PingFangSC-Regular;
             font-size: 0.5em;
             color: #151515;
-            letter-spacing: -0.45px;
+
             div {
               position: relative;
               width: 50%;
@@ -1346,7 +1263,7 @@ export default {
                 text-align: center;
               }
             }
-            .annex {
+            .file {
               position: relative;
               width: 50%;
               height: 30%;
@@ -1389,6 +1306,58 @@ export default {
                   font-family: AppleSystemUIFont;
                   font-size: 0.8em;
                   line-height: 1.25em;
+                }
+              }
+            }
+            .image {
+              position: relative;
+              width: 50%;
+              height: 30%;
+              span{
+                position: absolute;
+                width: 40%;
+                height: 20%;
+                right: 30%;
+                top: 0;
+                font-family: AppleSystemUIFont;
+                color: black;
+                font-size: 0.3em;
+                line-height: 3.3em;
+                background: #ffffff;
+                border: 1px solid #363E42;
+                border-radius: 13px;
+                input {
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  left: 0;
+                  top: 0;
+                  opacity: 0%;
+                }
+              }
+              ul {
+                position: absolute;
+                bottom: 5%;
+                left: 0;
+                width: 100%;
+                height: 65%;
+                background: #ffffff;
+                overflow: auto;
+                li {
+                  position: relative;
+                  width: 50%;
+                  height: 10em;
+                  color: #2b85e4;
+                  overflow:hidden;
+                  font-family: AppleSystemUIFont;
+                  font-size: 0.8em;
+                  line-height: 1.25em;
+                  float: left;
+                  img{
+                    position: absolute;
+                    height: 90%;
+                    width: 90%;
+                  }
                 }
               }
             }
@@ -1474,7 +1443,7 @@ export default {
             font-family: PingFangSC-Regular;
             font-size: 0.5em;
             color: #151515;
-            letter-spacing: -0.45px;
+
             div {
               position: relative;
               width: 50%;
@@ -1501,7 +1470,7 @@ export default {
                 text-align: center;
               }
             }
-            .annex {
+            .file {
               position: relative;
               width: 50%;
               height: 30%;
@@ -1544,6 +1513,58 @@ export default {
                   font-family: AppleSystemUIFont;
                   font-size: 0.8em;
                   line-height: 1.25em;
+                }
+              }
+            }
+            .image {
+              position: relative;
+              width: 50%;
+              height: 30%;
+              span{
+                position: absolute;
+                width: 40%;
+                height: 20%;
+                right: 30%;
+                top: 0;
+                font-family: AppleSystemUIFont;
+                color: black;
+                font-size: 0.3em;
+                line-height: 3.3em;
+                background: #ffffff;
+                border: 1px solid #363E42;
+                border-radius: 13px;
+                input {
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  left: 0;
+                  top: 0;
+                  opacity: 0%;
+                }
+              }
+              ul {
+                position: absolute;
+                bottom: 5%;
+                left: 0;
+                width: 100%;
+                height: 65%;
+                background: #ffffff;
+                overflow: auto;
+                li {
+                  position: relative;
+                  width: 50%;
+                  height: 10em;
+                  color: #2b85e4;
+                  overflow:hidden;
+                  font-family: AppleSystemUIFont;
+                  font-size: 0.8em;
+                  line-height: 1.25em;
+                  float: left;
+                  img{
+                    position: absolute;
+                    height: 90%;
+                    width: 90%;
+                  }
                 }
               }
             }

@@ -41,31 +41,11 @@
             <dd>{{"创建时间:"+"&#12288;"+detail.create_time}}</dd>
             <dd>{{"更新时间:"+"&#12288;"+detail.update_time}}</dd>
           </div>
-          <div class="file">
+           <div class="file">
             <dt>文件附件</dt>
             <dd v-for="(value,id) in detail.file" :key="id">
               <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
             </dd>
-          </div>
-          <div class="item" v-if="detail.inspectionStandardType_item!==undefined && detail.inspectionStandardType_item.length > 0">
-            <dt>包含内容</dt>
-            <table >
-              <tr align="center"  type="height:2em">
-                <th>序号</th>
-                <th>名称</th>
-                <th>编码</th>
-                <th>状态</th>
-              </tr>
-              <tr align="center" v-for="(item,index) in detail.inspectionStandardType_item" :key="item.id" type="height:1em" >
-                <td>{{index}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.code}}</td>
-                <td>{{item.state}}</td>
-              </tr>
-              <tr>
-
-              </tr>
-            </table>
           </div>
         </div>
         <div class="button">
@@ -73,12 +53,12 @@
           <button type="button" @click="changeState('使用中')" v-show="showApprovedBt===true" >通过审核</button>
           <button type="button" @click="changeState('新建')" v-show="showReturnBt===true">驳回信息</button>
           <button type="button" @click="changeState('作废')" v-show="showDeleteBt===true">删除数据</button>
-          <button type="button" @click="showUpdateView(detail.id)" v-if="detail.state==='新建'">更改</button>
+          <button type="button" @click="showUpdateView(detail.id)" v-show ="detail.state==='新建'">更改</button>
         </div>
       </div>
     </div>
     <!-- 创建页显示-->
-    <div  class="create"  v-if="showViewid==='create'">
+    <div  class="create"  v-show ="showViewid==='create'">
       <div class="center">
         <div class="heard">
           <span>信息创建页</span>
@@ -91,9 +71,9 @@
             </div>
             <div>编码:
               <input v-model="formItem.code"  placeholder="请输入编码">
-              <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
-              <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
-              <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
+              <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
+              <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
+              <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
             </div>
             <div>类别:
               <select v-model="formItem.classes"  placeholder="请选择类别"   >
@@ -102,13 +82,13 @@
                 <option value="三级类别">三级类别</option>
                 <option value="四级类别">四级类别</option>
               </select>
-              <span class="message" v-if="!$v.formItem.classes.required">请选择类别</span>
+              <span class="message" v-show ="!$v.formItem.classes.required">请选择类别</span>
             </div>
             <div v-show="formItem.classes==='二级类别'||formItem.classes==='三级类别'||formItem.classes==='四级类别'">上级类别:
               <select v-model="formItem.parent"   placeholder="请选择上级类别" >
                 <option v-for="item in list" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
               </select>
-              <span class="message" v-if="!$v.formItem.parent.required">请选择父类别</span>
+              <span class="message" v-show ="!$v.formItem.parent.required">请选择父类别</span>
             </div>
             <div v-show="formItem.classes==='一级类别'||formItem.classes===''">
             </div>
@@ -116,7 +96,7 @@
               <select v-model="formItem.auditor"  placeholder="请选择审核账号">
                 <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
               </select>
-              <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
+              <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
             </div>
             <div>附加属性:
               <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  style="height: 90%"  multiple="true">
@@ -126,7 +106,7 @@
             <div >备注信息:
               <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
             </div>
-            <div class="annex">文件:
+            <div class="file">文件:
               <span>
               选择文件
               <input type="file"  @change="fileBeforeUpload"/>
@@ -144,7 +124,7 @@
       </div>
     </div>
     <!-- 更新页显示-->
-    <div  class="update"  v-if="showViewid==='update'">
+    <div  class="update"  v-show ="showViewid==='update'">
       <div class="center">
         <div class="heard">
           <span>信息更新页</span>
@@ -157,9 +137,9 @@
             </div>
             <div>编码:
               <input v-model="formItem.code"  placeholder="请输入编码">
-              <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
-              <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
-              <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
+              <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
+              <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
+              <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
             </div>
             <div>类别:
               <select v-model="formItem.classes"  placeholder="请选择类别"   >
@@ -168,13 +148,13 @@
                 <option value="三级类别">三级类别</option>
                 <option value="四级类别">四级类别</option>
               </select>
-              <span class="message" v-if="!$v.formItem.classes.required">请选择类别</span>
+              <span class="message" v-show ="!$v.formItem.classes.required">请选择类别</span>
             </div>
             <div v-show="formItem.classes==='二级类别'||formItem.classes==='三级类别'||formItem.classes==='四级类别'">上级类别:
               <select v-model="formItem.parent"   placeholder="请选择上级类别" >
                 <option v-for="item in list" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
               </select>
-              <span class="message" v-if="!$v.formItem.parent.required">请选择父类别</span>
+              <span class="message" v-show ="!$v.formItem.parent.required">请选择父类别</span>
             </div>
             <div v-show="formItem.classes==='一级类别'||formItem.classes===''">
             </div>
@@ -182,7 +162,7 @@
               <select v-model="formItem.auditor"  placeholder="请选择审核账号">
                 <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
               </select>
-              <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
+              <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
             </div>
             <div>附加属性:
               <select v-model="formItem.attach_attribute"  placeholder="请选择附加属性"  style="height: 90%"  multiple="true">
@@ -192,7 +172,7 @@
             <div >备注信息:
               <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
             </div>
-            <div class="annex">文件:
+            <div class="file">文件:
               <span>
               选择文件
               <input type="file"  @change="fileBeforeUpload"/>
@@ -288,11 +268,8 @@ export default {
         self.transformToTree(response.data)
         self.showViewid = 'list'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 将数据转换成树形结构数据格式 */
@@ -377,11 +354,8 @@ export default {
         self.parent = self.detail.parent
         self.showViewid = 'detail'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 改变数据项状态 */
@@ -402,11 +376,8 @@ export default {
         }
         alert('数据提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 显示创建视图 */
@@ -483,11 +454,8 @@ export default {
         })
         self.showViewid = 'update'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 提交文件项 */
@@ -518,11 +486,8 @@ export default {
         self.fileData.push(obj)
         alert(self.fileItem.fileName + '文件提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     fileBeforeUpload (event) {
@@ -566,12 +531,9 @@ export default {
         self.formItem.file = []
         self.fileData = []
         alert('数据保存成功')
-      }).catch(function (error) {
-        if (error.request) {
-          alert(error.request.response)
-        } else {
-          console.log('Error', error.message)
-        }
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
       })
     },
     /* 更新表单数据 */
@@ -592,11 +554,8 @@ export default {
       }).then(function (response) {
         alert('数据保存成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 保存并提交表单数据 */
@@ -623,18 +582,12 @@ export default {
         ) {
           alert('数据提交成功')
         }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
+          // 错误提示
+          console.log(err)
         })
-      }).catch(function (error) {
-        if (error.request) {
-          alert(error.request.response)
-        } else {
-          console.log('Error', error.message)
-        }
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
       })
     },
     /* 更新并提交表单数据 */
@@ -662,18 +615,12 @@ export default {
           alert('数据提交成功')
           self.showViewid = 'list'
         }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
+          // 错误提示
+          console.log(err)
         })
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     }
   },
@@ -684,11 +631,8 @@ export default {
       self.userinfor = response.data.results
       self.showListView()
     }).catch(function (err) {
-      if (err.request) {
-        alert(err.request.response)
-      } else {
-        console.log('Error', err.message)
-      }
+      // 错误提示
+      console.log(err)
     })
   },
   mounted () {
@@ -728,33 +672,24 @@ export default {
           this.$axios.get('quality/inspectionStandardType/?state=使用中&classes=一级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
             self.list = response.data.results
           }).catch(function (err) {
-            if (err.request) {
-              alert(err.request.response)
-            } else {
-              console.log('Error', err.message)
-            }
+            // 错误提示
+            console.log(err)
           })
           break
         case '三级类别':
           this.$axios.get('quality/inspectionStandardType/?state=使用中&classes=二级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
             self.list = response.data.results
           }).catch(function (err) {
-            if (err.request) {
-              alert(err.request.response)
-            } else {
-              console.log('Error', err.message)
-            }
+            // 错误提示
+            console.log(err)
           })
           break
         case '四级类别':
           this.$axios.get('quality/inspectionStandardType/?state=使用中&classes=三级类别&auditor=&create_user=&page_size=99999&ordering=-id').then(function (response) {
             self.list = response.data.results
           }).catch(function (err) {
-            if (err.request) {
-              alert(err.request.response)
-            } else {
-              console.log('Error', err.message)
-            }
+            // 错误提示
+            console.log(err)
           })
           break
       }
@@ -931,9 +866,12 @@ export default {
               text-align: center;
             }
             dd{
-              width: 50%;
+              width: 100%;
               display: block;
               float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
               color: #0c0c0c;
             }
           }
@@ -994,38 +932,7 @@ export default {
               }
             }
           }
-          .item{
-            position: relative;
-            top: 0;
-            overflow:hidden;
-            width: 100%;
-            dt{
-              font-family: PingFangSC-Regular;
-              font-size: 0.5em;
-              line-height: 2em;
-              color: #9ca022;
-              text-align: center;
-            }
-            table {
-              width: 100%;
-              font-family: PingFangSC-Regular;
-              text-align: center;
-              th {
-                position: sticky;
-                top: 0;
-                height: 1em;
-                font-size: 0.5em;
-                color: #ffffff;
-                background: #191A1E;
-              }
-              td {
-                height: 0.5em;
-                font-size: 0.4em;
-                color: #191A1E;
-                border: 1px solid #999;
-              }
-            }
-          }
+
         }
         .button {
           position: absolute;
@@ -1107,7 +1014,7 @@ export default {
             font-family: PingFangSC-Regular;
             font-size: 0.5em;
             color: #151515;
-            letter-spacing: -0.45px;
+
             div {
               position: relative;
               width: 50%;
@@ -1134,7 +1041,7 @@ export default {
                 text-align: center;
               }
             }
-            .annex {
+            .file {
               position: relative;
               width: 50%;
               height: 30%;
@@ -1262,7 +1169,7 @@ export default {
             font-family: PingFangSC-Regular;
             font-size: 0.5em;
             color: #151515;
-            letter-spacing: -0.45px;
+
             div {
               position: relative;
               width: 50%;
@@ -1289,7 +1196,7 @@ export default {
                 text-align: center;
               }
             }
-            .annex {
+            .file {
               position: relative;
               width: 50%;
               height: 30%;

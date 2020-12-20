@@ -1,7 +1,7 @@
 <template>
   <div class="userAdmin">
     <!-- 列表页显示-->
-    <div  class="list"  v-if="showViewid==='list'">
+    <div  class="list"  v-show ="showViewid==='list'">
       <table >
             <caption align="top">可授权账号</caption>
             <tr align="center"  type="height:2em">
@@ -139,11 +139,8 @@ export default {
         self.list = response.data.results
         self.showViewid = 'list'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 显示授权视图 */
@@ -180,25 +177,16 @@ export default {
             }
             self.showViewid = 'admin'
           }).catch(function (err) {
-            if (err.request) {
-              alert(err.request.response)
-            } else {
-              console.log('Error', err.message)
-            }
+            // 错误提示
+            console.log(err)
           })
         }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
+          // 错误提示
+          console.log(err)
         })
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 创建权限组 */
@@ -217,11 +205,8 @@ export default {
         }
         self.showViewid = 'createGroup'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 显示权限组详情视图 */
@@ -241,11 +226,8 @@ export default {
         }
         self.showViewid = 'groupDetail'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 更新表单数据 */
@@ -260,11 +242,8 @@ export default {
       }).then(function (response) {
         alert('数据提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     handleChange1 (newTargetKeys, direction, moveKeys) {
@@ -282,11 +261,8 @@ export default {
       }).then(function (response) {
         alert('数据提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 删除用户组 */
@@ -304,11 +280,8 @@ export default {
         alert('数据提交成功')
         self.showGroupDetailView()
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     }
   },
@@ -350,7 +323,7 @@ export default {
     font-size: 0.5em;
     color: #ffffff;
     text-align: center;
-    letter-spacing: -0.45px;
+
     background: #191A1E;
   }
   .list  td{
@@ -358,7 +331,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.4em;
     color: #191A1E;
-    letter-spacing: -0.45px;
+
     text-align: center;
     background: #ffffff;
     border:1px solid #999;
@@ -385,7 +358,7 @@ export default {
     height: 12%;
     font-family: PingFangSC-Regular;
     font-size: 0.5em;
-    letter-spacing: -0.45px;
+
   }
   .create .name input{
     position: relative;

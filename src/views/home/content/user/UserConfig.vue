@@ -217,11 +217,8 @@ export default {
         self.formItem.image = response.data.image
         alert('数据提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 改变密码函数 */
@@ -244,11 +241,8 @@ export default {
         alert('修改密码成功')
         self.showViewIndex = 'detail'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     }
   },
@@ -286,7 +280,7 @@ export default {
     font-size: 0.5em;
     line-height: 2em;
     color: #000000;
-    letter-spacing: -0.45px;
+
     overflow: auto;
     background: rgba(255, 255, 255, 0.57);
   }
@@ -320,7 +314,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.5em;
     color: #151515;
-    letter-spacing: -0.45px;
+
     overflow: auto;
   }
   .update form div{
@@ -381,7 +375,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.5em;
     color: #151515;
-    letter-spacing: -0.45px;
+
     overflow: auto;
   }
   .change form div{

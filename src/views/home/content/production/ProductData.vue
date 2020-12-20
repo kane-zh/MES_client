@@ -1,7 +1,7 @@
 <template>
   <div class="productData">
     <!-- 列表页显示-->
-    <div  class="list"  v-if="showViewid==='list'">
+    <div  class="list"  v-show ="showViewid==='list'">
       <div class="listHead">
         <form class="select">
           <div>创建账号:
@@ -73,7 +73,7 @@
                 <td>{{item.dataTime}}</td>
                 <td>{{item.create_user}}</td>
                 <td>
-                  <button type="button" @click="showDetailView(item.id)" v-if="item.create_user===username ||
+                  <button type="button" @click="showDetailView(item.id)" v-show ="item.create_user===username ||
                   canRead===true">详情</button>
                 </td>
               </tr>
@@ -83,8 +83,8 @@
             </table>
           </div><div class="page">
           <div>总共：{{listCount}}</div>
-          <button type="button" @click="listPre" v-if="listPreUrl!==''">上一页</button>
-          <button type="button" @click="listNext" v-if="listNextUrl!==''">下一页</button>
+          <button type="button" @click="listPre" v-show ="listPreUrl!==''">上一页</button>
+          <button type="button" @click="listNext" v-show ="listNextUrl!==''">下一页</button>
         </div>
       </div>
     </div>
@@ -104,26 +104,26 @@
           <li>{{"物料信息:"+"&#12288;"+detail.material}}</li>
           <li>{{"工序信息:"+"&#12288;"+detail.station}}</li>
           <li>{{"质检信息:"+"&#12288;"+detail.quality}}</li>
-          <li v-if="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
-          <li v-if="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
-          <li v-if="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</li>
-          <li v-if="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</li>
-          <li v-if="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</li>
-          <li v-if="attribute_title.attribute6!==''">{{attribute_title.attribute6 +":"+"&#12288;"+detail.attribute6}}</li>
-          <li v-if="attribute_title.attribute7!==''">{{attribute_title.attribute7 +":"+"&#12288;"+detail.attribute7}}</li>
-          <li v-if="attribute_title.attribute8!==''">{{attribute_title.attribute8 +":"+"&#12288;"+detail.attribute8}}</li>
-          <li v-if="attribute_title.attribute9!==''">{{attribute_title.attribute9 +":"+"&#12288;"+detail.attribute9}}</li>
-          <li v-if="attribute_title.attribute10!==''">{{attribute_title.attribute10 +":"+"&#12288;"+detail.attribute10}}</li>
-          <li v-if="attribute_title.attribute11!==''">{{attribute_title.attribute11 +":"+"&#12288;"+detail.attribute11}}</li>
-          <li v-if="attribute_title.attribute12!==''">{{attribute_title.attribute12 +":"+"&#12288;"+detail.attribute12}}</li>
-          <li v-if="attribute_title.attribute13!==''">{{attribute_title.attribute13 +":"+"&#12288;"+detail.attribute13}}</li>
-          <li v-if="attribute_title.attribute14!==''">{{attribute_title.attribute14 +":"+"&#12288;"+detail.attribute14}}</li>
-          <li v-if="attribute_title.attribute15!==''">{{attribute_title.attribute15 +":"+"&#12288;"+detail.attribute15}}</li>
-          <li v-if="attribute_title.attribute16!==''">{{attribute_title.attribute16 +":"+"&#12288;"+detail.attribute16}}</li>
-          <li v-if="attribute_title.attribute17!==''">{{attribute_title.attribute17 +":"+"&#12288;"+detail.attribute17}}</li>
-          <li v-if="attribute_title.attribute18!==''">{{attribute_title.attribute18 +":"+"&#12288;"+detail.attribute18}}</li>
-          <li v-if="attribute_title.attribute19!==''">{{attribute_title.attribute19 +":"+"&#12288;"+detail.attribute19}}</li>
-          <li v-if="attribute_title.attribute20!==''">{{attribute_title.attribute20 +":"+"&#12288;"+detail.attribute20}}</li>
+          <li v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
+          <li v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
+          <li v-show ="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</li>
+          <li v-show ="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</li>
+          <li v-show ="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</li>
+          <li v-show ="attribute_title.attribute6!==''">{{attribute_title.attribute6 +":"+"&#12288;"+detail.attribute6}}</li>
+          <li v-show ="attribute_title.attribute7!==''">{{attribute_title.attribute7 +":"+"&#12288;"+detail.attribute7}}</li>
+          <li v-show ="attribute_title.attribute8!==''">{{attribute_title.attribute8 +":"+"&#12288;"+detail.attribute8}}</li>
+          <li v-show ="attribute_title.attribute9!==''">{{attribute_title.attribute9 +":"+"&#12288;"+detail.attribute9}}</li>
+          <li v-show ="attribute_title.attribute10!==''">{{attribute_title.attribute10 +":"+"&#12288;"+detail.attribute10}}</li>
+          <li v-show ="attribute_title.attribute11!==''">{{attribute_title.attribute11 +":"+"&#12288;"+detail.attribute11}}</li>
+          <li v-show ="attribute_title.attribute12!==''">{{attribute_title.attribute12 +":"+"&#12288;"+detail.attribute12}}</li>
+          <li v-show ="attribute_title.attribute13!==''">{{attribute_title.attribute13 +":"+"&#12288;"+detail.attribute13}}</li>
+          <li v-show ="attribute_title.attribute14!==''">{{attribute_title.attribute14 +":"+"&#12288;"+detail.attribute14}}</li>
+          <li v-show ="attribute_title.attribute15!==''">{{attribute_title.attribute15 +":"+"&#12288;"+detail.attribute15}}</li>
+          <li v-show ="attribute_title.attribute16!==''">{{attribute_title.attribute16 +":"+"&#12288;"+detail.attribute16}}</li>
+          <li v-show ="attribute_title.attribute17!==''">{{attribute_title.attribute17 +":"+"&#12288;"+detail.attribute17}}</li>
+          <li v-show ="attribute_title.attribute18!==''">{{attribute_title.attribute18 +":"+"&#12288;"+detail.attribute18}}</li>
+          <li v-show ="attribute_title.attribute19!==''">{{attribute_title.attribute19 +":"+"&#12288;"+detail.attribute19}}</li>
+          <li v-show ="attribute_title.attribute20!==''">{{attribute_title.attribute20 +":"+"&#12288;"+detail.attribute20}}</li>
           <li>{{"创建账号:"+"&#12288;"+detail.create_user}}</li>
           <li>{{"记录时间:"+"&#12288;"+detail.dataTime}}</li>
           <li>{{"创建时间:"+"&#12288;"+detail.create_time}}</li>
@@ -137,7 +137,7 @@
         </dl>
       </div>
        <div class="button">
-         <button type="button" @click="removeData(detail.id)" v-if="is_superuser===true||canRead===true" >删除</button>
+         <button type="button" @click="removeData(detail.id)" v-show ="is_superuser===true||canRead===true" >删除</button>
         <button type="button" @click="showViewid='list'">返回列表页</button>
       </div>
     </div>
@@ -148,7 +148,7 @@
           <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
+          <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>任务分类:
           <select v-model="formItem.taskType" >
@@ -197,7 +197,7 @@
         </div>
         <div>记录时间:
           <input v-model="formItem.dataTime"  type="datetime-local" placeholder="选择日期和时间">
-          <span class="message" v-if="!$v.formItem.dataTime.required">请选择日期</span>
+          <span class="message" v-show ="!$v.formItem.dataTime.required">请选择日期</span>
         </div>
         <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
           <input v-model="formItem.attribute1"  placeholder="...">
@@ -262,7 +262,7 @@
         <div >备注信息:
           <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
-          <div class="annex">文件附件:
+          <div class="file">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
@@ -445,11 +445,8 @@ export default {
         }
         self.showViewid = 'list'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 列表查询数据 */
@@ -478,11 +475,8 @@ export default {
           self.listPreUrl = response.data.previous.replace(self.$axios.defaults.baseURL, '')
         }
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     listPre () {
@@ -499,11 +493,8 @@ export default {
           self.listPreUrl = response.data.previous.replace(self.$axios.defaults.baseURL, '')
         }
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     listNext () {
@@ -520,11 +511,8 @@ export default {
           self.listPreUrl = response.data.previous.replace(self.$axios.defaults.baseURL, '')
         }
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 显示详情视图 */
@@ -539,11 +527,8 @@ export default {
         self.formItem.type = self.detail.type.id
         self.showViewid = 'detail'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 显示创建视图 */
@@ -593,17 +578,15 @@ export default {
         self.fileData.push(obj)
         alert(self.fileItem.fileName + '文件提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
 
     fileBeforeUpload (event) {
       this.fileItem.file = event.target.files[0]
       this.fileItem.fileName = event.target.files[0].name
+      this.uploadFile()
     },
     removeFile: function (id) {
       var self = this
@@ -666,12 +649,9 @@ export default {
         self.formItem.file = []
         self.fileData = []
         alert('数据保存成功')
-      }).catch(function (error) {
-        if (error.request) {
-          alert(error.request.response)
-        } else {
-          console.log('Error', error.message)
-        }
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
       })
     },
     /* 保存表单数据 */
@@ -684,12 +664,9 @@ export default {
       }).then(function (response) {
         self.showListView()
         alert('数据删除成功')
-      }).catch(function (error) {
-        if (error.request) {
-          alert(error.request.response)
-        } else {
-          console.log('Error', error.message)
-        }
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
       })
     }
   },
@@ -707,32 +684,20 @@ export default {
             self.taskType = response.data.results
             self.showListView()
           }).catch(function (err) {
-            if (err.request) {
-              alert(err.request.response)
-            } else {
-              console.log('Error', err.message)
-            }
+            // 错误提示
+            console.log(err)
           })
         }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
+          // 错误提示
+          console.log(err)
         })
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     }).catch(function (err) {
-      if (err.request) {
-        alert(err.request.response)
-      } else {
-        console.log('Error', err.message)
-      }
+      // 错误提示
+      console.log(err)
     })
   },
   computed: {
@@ -782,11 +747,8 @@ export default {
           }
         }
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /**/
@@ -796,14 +758,12 @@ export default {
       if (newval === undefined) {
         return
       }
-      this.$axios.get(`process/productType/` + newval).then(function (response) {
-        self.productInfor = response.data.productType_item
+      this.$axios.get('process/productInfor/?page_size=99999&ordering=-id&state=使用中' +
+        '&type=' + newval).then(function (response) {
+        self.productInfor = response.data.results
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     'formItem.taskType': function (newval, oldval) {
@@ -812,14 +772,12 @@ export default {
       if (newval === undefined) {
         return
       }
-      this.$axios.get(`plan/productTaskType/` + newval).then(function (response) {
-        self.taskInfor = response.data.productTaskType_item
+      this.$axios.get('plan/productTaskCreate/?page_size=99999&ordering=-id&state=使用中' +
+        '&type=' + newval).then(function (response) {
+        self.taskInfor = response.data.results
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     'formItem.task': function (newval, oldval) {
@@ -843,11 +801,8 @@ export default {
           self.productInfor1.push(obj)
         })
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     'formItem.product': function (newval, oldval) {
@@ -893,7 +848,7 @@ export default {
     font-size: 0.3em;
     line-height: 2em;
     color: #151515;
-    letter-spacing: -0.45px;
+
   }
   .list .listHead .select div{
     position: relative;
@@ -938,7 +893,7 @@ export default {
     font-size: 0.3em;
     line-height: 2em;
     color: #151515;
-    letter-spacing: -0.45px;
+
   }
   .list .listHead  .ordering{
     position: absolute;
@@ -949,7 +904,7 @@ export default {
     font-size: 0.3em;
     line-height: 2em;
     color: #ffffff;
-    letter-spacing: -0.45px;
+
     background: #dcdcdc;
   }
 
@@ -984,7 +939,7 @@ export default {
     font-size: 0.5em;
     color: #ffffff;
     text-align: center;
-    letter-spacing: -0.45px;
+
     background: #191A1E;
   }
   .list .listTable .table  td{
@@ -992,7 +947,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.4em;
     color: #191A1E;
-    letter-spacing: -0.45px;
+
     text-align: center;
     background: #ffffff;
     border:1px solid #999;
@@ -1029,7 +984,7 @@ export default {
     font-size: 0.5em;
     line-height: 2em;
     color: #000000;
-    letter-spacing: -0.45px;
+
     overflow: auto;
     background: rgba(255, 255, 255, 0.57);
   }
@@ -1047,7 +1002,7 @@ export default {
     font-size: 0.5em;
     color: #ffffff;
     text-align: center;
-    letter-spacing: -0.45px;
+
     background: #191A1E;
   }
   .detail  td{
@@ -1055,7 +1010,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.4em;
     color: #191A1E;
-    letter-spacing: -0.45px;
+
     text-align: center;
     background: #ffffff;
     border:1px solid #999;
@@ -1069,7 +1024,7 @@ export default {
     font-size: 0.5em;
     line-height: 2em;
     color: #000000;
-    letter-spacing: -0.45px;
+
     background: #4d5669;
   }
   .detail .alter textarea{
@@ -1122,7 +1077,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.5em;
     color: #151515;
-    letter-spacing: -0.45px;
+
     overflow: auto;
   }
   .create form div{
@@ -1182,7 +1137,7 @@ export default {
     background: #ffffff;
     border-radius: 1em;
   }
-  .create .annex{
+  .create .file{
     position: relative;
     width: 45%;
     height: 30%;
@@ -1190,7 +1145,7 @@ export default {
     background: #4d5669;
     float: left;
   }
-  .create .annex ul{
+  .create .file ul{
     position: absolute;
     top: 5%;
     left: 2.5em;
@@ -1200,7 +1155,7 @@ export default {
     background: #ffffff;
     overflow: auto;
   }
-  .create .annex ul li{
+  .create .file ul li{
     position: relative;
     width: 80%;
     height: 2em;
@@ -1208,7 +1163,7 @@ export default {
     margin-right: 0;
     margin-bottom: 1em;
   }
-  .create .annex input{
+  .create .file input{
     position: absolute;
     top: 45%;
     left: 10%;
@@ -1220,7 +1175,7 @@ export default {
     background: #ffffff;
     border-radius: 1em;
   }
-  .create .annex textarea {
+  .create .file textarea {
     position: absolute;
     top: 65%;
     left: 10%;
@@ -1230,7 +1185,7 @@ export default {
     background: #ffffff;
     overflow: auto;
   }
-  .create .annex button{
+  .create .file button{
     position: absolute;
     bottom: 0.2em;
     width: 6em;
@@ -1254,7 +1209,7 @@ export default {
     font-size: 1em;
     color: #ffffff;
     text-align: center;
-    letter-spacing: -0.45px;
+
     background: #191A1E;
   }
   .create  td{
@@ -1262,7 +1217,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.8em;
     color: #191A1E;
-    letter-spacing: -0.45px;
+
     text-align: center;
     background: #ffffff;
     border:1px solid #999;

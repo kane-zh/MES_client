@@ -1,5 +1,5 @@
 <template>
-    <div class="login"  :style ="{'background-image': 'url('+require('../../../static/icons/beijing.jpg')+')'}">
+    <div class="login"  :style ="{'background-image': 'url('+require('../../../static/icons/beijing.png')+')'}">
        <form>
         <div>账号名:
             <input v-model="formItem.username" placeholder="请输入账号名...">
@@ -30,8 +30,8 @@ export default {
         password: '',
         id: '',
         token: '',
-        permissions: '',
-        is_superuser: false
+        is_superuser: false,
+        permissions: ''
       }
     }
   },
@@ -47,10 +47,10 @@ export default {
           type: 'saveLoginInfor',
           name: self.formItem.username,
           id: self.formItem.id,
-          is_superuser: self.formItem.is_superuser,
           token: self.formItem.token,
+          is_superuser: self.formItem.is_superuser,
           permissions: self.formItem.permissions
-        })
+        }) // 跳转到首页页面
         self.$axios.get('user/userInfor/?username=' + self.formItem.username).then(function (response) {
           self.formItem.id = response.data.results[0].id
           self.$axios.get('user/userInfor/' + self.formItem.id).then(function (response) {
@@ -60,21 +60,21 @@ export default {
               type: 'saveLoginInfor',
               name: self.formItem.username,
               id: self.formItem.id,
-              is_superuser: self.formItem.is_superuser,
               token: self.formItem.token,
+              is_superuser: self.formItem.is_superuser,
               permissions: self.formItem.permissions
             }) // 跳转到首页页面
             sessionStorage.setItem('id', self.formItem.id)
             sessionStorage.setItem('name', self.formItem.username)
-            sessionStorage.setItem('is_superuser', self.formItem.is_superuser)
             sessionStorage.setItem('token', self.formItem.token)
-            sessionStorage.setItem('permissions', self.formItem.uspermissionsername)
+            sessionStorage.setItem('is_superuser', self.formItem.is_superuser)
+            sessionStorage.setItem('permissions', self.formItem.permissions)
             if (self.savePassword === true) {
               var info = {
                 name: self.formItem.username,
                 id: self.formItem.id,
-                is_superuser: self.formItem.is_superuser,
                 token: self.formItem.token,
+                is_superuser: self.formItem.is_superuser,
                 permissions: self.formItem.permissions
               }
               localStorage.setItem('loginInfor', JSON.stringify(info))
@@ -92,7 +92,6 @@ export default {
         } else {
           alert('请输入正确的用户名跟密码')
         }
-
         console.log(err)
       })
     }

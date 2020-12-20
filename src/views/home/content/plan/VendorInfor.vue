@@ -1,7 +1,7 @@
 <template>
   <div class="vendorInfor">
     <!-- 列表页显示-->
-    <div  class="list"  v-if="showViewid==='list'">
+    <div  class="list"  v-show ="showViewid==='list'">
       <div class="listHead">
         <form class="select">
           <div>创建账号:
@@ -73,9 +73,9 @@
                 <td>{{item.create_user}}</td>
                 <td>{{item.auditor}}</td>
                 <td>
-                  <button type="button" @click="showDetailView(item.id)" v-if="item.create_user===username ||
+                  <button type="button" @click="showDetailView(item.id)" v-show ="item.create_user===username ||
                   item.auditor===username||canRead===true">详情</button>
-                  <button type="button" @click="showUpdateView(item.id)" v-if="item.state==='新建'">更改</button>
+                  <button type="button" @click="showUpdateView(item.id)" v-show ="item.state==='新建'">更改</button>
                 </td>
               </tr>
               <tr>
@@ -84,8 +84,8 @@
             </table>
           </div><div class="page">
           <div>总共：{{listCount}}</div>
-          <button type="button" @click="listPre" v-if="listPreUrl!==''">上一页</button>
-          <button type="button" @click="listNext" v-if="listNextUrl!==''">下一页</button>
+          <button type="button" @click="listPre" v-show ="listPreUrl!==''">上一页</button>
+          <button type="button" @click="listNext" v-show ="listNextUrl!==''">下一页</button>
         </div>
       </div>
     </div>
@@ -103,11 +103,11 @@
           <li>{{"公司全称:"+"&#12288;"+detail.company_name}}</li>
           <li>{{"公司简称:"+"&#12288;"+detail.company_abbre}}</li>
           <li>{{"资质:"+"&#12288;"+detail.qualification}}</li>
-          <li v-if="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
-          <li v-if="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
-          <li v-if="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</li>
-          <li v-if="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</li>
-          <li v-if="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</li>
+          <li v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
+          <li v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
+          <li v-show ="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</li>
+          <li v-show ="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</li>
+          <li v-show ="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</li>
           <li>{{"创建账号:"+"&#12288;"+detail.create_user}}</li>
           <li>{{"审核账号:"+"&#12288;"+detail.auditor}}</li>
           <li>{{"创建时间:"+"&#12288;"+detail.create_time}}</li>
@@ -143,7 +143,7 @@
           </template>
         </dl>
       </div>
-      <div class="alter" v-if="detail.state!=='使用中'">
+      <div class="alter" v-show ="detail.state!=='使用中'">
         审核信息:
         <textarea v-model="alterItem.desc"  placeholder="请输入当前信息的审核记录..."></textarea>
         <button type="button" @click="uploadAlter">提交记录</button>
@@ -164,15 +164,15 @@
         </div>
         <div>编码:
           <input v-model="formItem.code"  placeholder="请输入编码">
-          <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
-          <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
-          <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
+          <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
+          <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
+          <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
         <div>分类:
           <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
+          <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>地址:
           <input v-model="formItem.address"  placeholder="请输入供应商地址...">
@@ -215,12 +215,12 @@
           <select v-model="formItem.auditor"  placeholder="请选择审核账号">
             <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
+          <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
           <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
-        <div class="annex">图片附件:
+        <div class="file">图片附件:
           <ul>
             <li v-for="value in imageData" v-bind:key="value.id"  @click="removeImage(value.id)">
               <img :src="value.imageUrl" width="50px">
@@ -230,7 +230,7 @@
           <textarea  v-model="imageItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadImage">上传</button>
         </div>
-          <div class="annex">文件附件:
+          <div class="file">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
@@ -253,15 +253,15 @@
         </div>
         <div>编码:
           <input v-model="formItem.code"  placeholder="请输入编码">
-          <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
-          <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
-          <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
+          <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
+          <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
+          <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
         <div>分类:
           <select v-model="formItem.type"   placeholder="请选择分类">
             <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
+          <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>地址:
           <input v-model="formItem.address"  placeholder="请输入供应商地址...">
@@ -303,12 +303,12 @@
           <select v-model="formItem.auditor"  placeholder="请选择审核账号">
             <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
+          <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
           <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
-        <div class="annex">图片附件:
+        <div class="file">图片附件:
           <ul>
             <li v-for="value in imageData" v-bind:key="value.id"  @click="removeImage(value.id)">
               <img :src="value.imageUrl" width="50px">
@@ -318,7 +318,7 @@
           <textarea  v-model="imageItem.desc"  placeholder="请输入当前的备注信息"></textarea>
           <button type="button" @click="uploadImage">上传</button>
         </div>
-          <div class="annex">文件附件:
+          <div class="file">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
@@ -475,11 +475,8 @@ export default {
         }
         self.showViewid = 'list'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 列表查询数据 */
@@ -504,11 +501,8 @@ export default {
           self.listPreUrl = response.data.previous.replace(self.$axios.defaults.baseURL, '')
         }
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     listPre () {
@@ -525,11 +519,8 @@ export default {
           self.listPreUrl = response.data.previous.replace(self.$axios.defaults.baseURL, '')
         }
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     listNext () {
@@ -546,11 +537,8 @@ export default {
           self.listPreUrl = response.data.previous.replace(self.$axios.defaults.baseURL, '')
         }
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 显示详情视图 */
@@ -565,11 +553,8 @@ export default {
         self.formItem.type = self.detail.type.id
         self.showViewid = 'detail'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 改变数据项状态 */
@@ -592,11 +577,8 @@ export default {
         }
         alert('数据提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 显示创建视图 */
@@ -680,11 +662,8 @@ export default {
         })
         self.showViewid = 'update'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 提交图片项 */
@@ -712,17 +691,15 @@ export default {
         self.imageData.push(obj)
         alert(self.imageItem.imageName + '图片提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
 
     imageBeforeUpload (event) {
       this.imageItem.image = event.target.files[0]
       this.imageItem.imageName = event.target.files[0].name
+      this.uploadImage()
     },
     removeImage: function (id) {
       var self = this
@@ -766,17 +743,15 @@ export default {
         self.fileData.push(obj)
         alert(self.fileItem.fileName + '文件提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
 
     fileBeforeUpload (event) {
       this.fileItem.file = event.target.files[0]
       this.fileItem.fileName = event.target.files[0].name
+      this.uploadFile()
     },
     removeFile: function (id) {
       var self = this
@@ -813,11 +788,8 @@ export default {
         self.alterData.push(obj)
         alert('审核记录提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 保存表单数据 */
@@ -852,12 +824,9 @@ export default {
         self.formItem.image = []
         self.imageData = []
         alert('数据保存成功')
-      }).catch(function (error) {
-        if (error.request) {
-          alert(error.request.response)
-        } else {
-          console.log('Error', error.message)
-        }
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
       })
     },
     /* 更新表单数据 */
@@ -889,11 +858,8 @@ export default {
       }).then(function (response) {
         alert('数据保存成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 保存并提交表单数据 */
@@ -933,18 +899,12 @@ export default {
         ) {
           alert('数据提交成功')
         }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
+          // 错误提示
+          console.log(err)
         })
-      }).catch(function (error) {
-        if (error.request) {
-          alert(error.request.response)
-        } else {
-          console.log('Error', error.message)
-        }
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
       })
     },
     /* 更新并提交表单数据 */
@@ -985,18 +945,12 @@ export default {
           alert('数据提交成功')
           self.showViewid = 'list'
         }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
+          // 错误提示
+          console.log(err)
         })
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     }
   },
@@ -1009,18 +963,12 @@ export default {
         self.typeInfor = response.data.results
         self.showListView()
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     }).catch(function (err) {
-      if (err.request) {
-        alert(err.request.response)
-      } else {
-        console.log('Error', err.message)
-      }
+      // 错误提示
+      console.log(err)
     })
   },
   computed: {
@@ -1067,15 +1015,11 @@ export default {
           }
         }
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 监控状态信息变化,控制操作按钮的显示 */
-    /* 监控信息状态改变时,更新操作按钮状态 */
     'detail.state': function (newval, oldval) {
       var self = this
       self.showSubmitBt = false
@@ -1123,7 +1067,7 @@ export default {
     font-size: 0.3em;
     line-height: 2em;
     color: #151515;
-    letter-spacing: -0.45px;
+
   }
   .list .listHead .select div{
     position: relative;
@@ -1168,7 +1112,7 @@ export default {
     font-size: 0.3em;
     line-height: 2em;
     color: #151515;
-    letter-spacing: -0.45px;
+
   }
   .list .listHead  .ordering{
     position: absolute;
@@ -1179,7 +1123,7 @@ export default {
     font-size: 0.3em;
     line-height: 2em;
     color: #ffffff;
-    letter-spacing: -0.45px;
+
     background: #dcdcdc;
   }
 
@@ -1214,7 +1158,7 @@ export default {
     font-size: 0.5em;
     color: #ffffff;
     text-align: center;
-    letter-spacing: -0.45px;
+
     background: #191A1E;
   }
   .list .listTable .table  td{
@@ -1222,7 +1166,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.4em;
     color: #191A1E;
-    letter-spacing: -0.45px;
+
     text-align: center;
     background: #ffffff;
     border:1px solid #999;
@@ -1259,7 +1203,7 @@ export default {
     font-size: 0.5em;
     line-height: 2em;
     color: #000000;
-    letter-spacing: -0.45px;
+
     overflow: auto;
     background: rgba(255, 255, 255, 0.57);
   }
@@ -1277,7 +1221,7 @@ export default {
     font-size: 0.5em;
     color: #ffffff;
     text-align: center;
-    letter-spacing: -0.45px;
+
     background: #191A1E;
   }
   .detail  td{
@@ -1285,7 +1229,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.4em;
     color: #191A1E;
-    letter-spacing: -0.45px;
+
     text-align: center;
     background: #ffffff;
     border:1px solid #999;
@@ -1299,7 +1243,7 @@ export default {
     font-size: 0.5em;
     line-height: 2em;
     color: #000000;
-    letter-spacing: -0.45px;
+
     background: #4d5669;
   }
   .detail .alter textarea{
@@ -1352,7 +1296,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.5em;
     color: #151515;
-    letter-spacing: -0.45px;
+
     overflow: auto;
   }
   .create form div{
@@ -1412,7 +1356,7 @@ export default {
     background: #ffffff;
     border-radius: 1em;
   }
-  .create .annex{
+  .create .file{
     position: relative;
     width: 45%;
     height: 30%;
@@ -1420,7 +1364,7 @@ export default {
     background: #4d5669;
     float: left;
   }
-  .create .annex ul{
+  .create .file ul{
     position: absolute;
     top: 5%;
     left: 2.5em;
@@ -1430,7 +1374,7 @@ export default {
     background: #ffffff;
     overflow: auto;
   }
-  .create .annex ul li{
+  .create .file ul li{
     position: relative;
     width: 80%;
     height: 2em;
@@ -1438,7 +1382,7 @@ export default {
     margin-right: 0;
     margin-bottom: 1em;
   }
-  .create .annex input{
+  .create .file input{
     position: absolute;
     top: 45%;
     left: 10%;
@@ -1450,7 +1394,7 @@ export default {
     background: #ffffff;
     border-radius: 1em;
   }
-  .create .annex textarea {
+  .create .file textarea {
     position: absolute;
     top: 65%;
     left: 10%;
@@ -1460,7 +1404,7 @@ export default {
     background: #ffffff;
     overflow: auto;
   }
-  .create .annex button{
+  .create .file button{
     position: absolute;
     bottom: 0.2em;
     width: 6em;
@@ -1484,7 +1428,7 @@ export default {
     font-size: 1em;
     color: #ffffff;
     text-align: center;
-    letter-spacing: -0.45px;
+
     background: #191A1E;
   }
   .create  td{
@@ -1492,7 +1436,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.8em;
     color: #191A1E;
-    letter-spacing: -0.45px;
+
     text-align: center;
     background: #ffffff;
     border:1px solid #999;
@@ -1528,7 +1472,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.5em;
     color: #151515;
-    letter-spacing: -0.45px;
+
     overflow: auto;
   }
   .update form div{
@@ -1588,7 +1532,7 @@ export default {
     background: #ffffff;
     border-radius: 1em;
   }
-  .update .annex{
+  .update .file{
     position: relative;
     width: 45%;
     height: 30%;
@@ -1596,7 +1540,7 @@ export default {
     background: #4d5669;
     float: left;
   }
-  .update .annex ul{
+  .update .file ul{
     position: absolute;
     top: 5%;
     left: 2.5em;
@@ -1606,7 +1550,7 @@ export default {
     background: #ffffff;
     overflow: auto;
   }
-  .update .annex ul li{
+  .update .file ul li{
     position: relative;
     width: 80%;
     height: 2em;
@@ -1614,7 +1558,7 @@ export default {
     margin-right: 0;
     margin-bottom: 1em;
   }
-  .update .annex input{
+  .update .file input{
     position: absolute;
     top: 45%;
     left: 10%;
@@ -1626,7 +1570,7 @@ export default {
     background: #ffffff;
     border-radius: 1em;
   }
-  .update .annex textarea {
+  .update .file textarea {
     position: absolute;
     top: 65%;
     left: 10%;
@@ -1636,7 +1580,7 @@ export default {
     background: #ffffff;
     overflow: auto;
   }
-  .update .annex button{
+  .update .file button{
     position: absolute;
     bottom: 0.2em;
     width: 6em;
@@ -1660,7 +1604,7 @@ export default {
     font-size: 1em;
     color: #ffffff;
     text-align: center;
-    letter-spacing: -0.45px;
+
     background: #191A1E;
   }
   .update  td{
@@ -1668,7 +1612,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.8em;
     color: #191A1E;
-    letter-spacing: -0.45px;
+
     text-align: center;
     background: #ffffff;
     border:1px solid #999;

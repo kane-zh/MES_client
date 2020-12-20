@@ -4,7 +4,7 @@
       <button type="button" @click="changeMode">{{btTitle}}</button>
     </div>
     <!-- 列表页显示-->
-    <div  class="list"  v-if="showViewid==='list'">
+    <div  class="list"  v-show ="showViewid==='list'">
         <div class="listHead">
           <form class="select">
             <div>仓库:
@@ -53,13 +53,13 @@
           </div>
           <div class="page">
             <div>总共：{{listCount}}</div>
-            <button type="button" @click="listPre" v-if="listPreUrl!==''">上一页</button>
-            <button type="button" @click="listNext" v-if="listNextUrl!==''">下一页</button>
+            <button type="button" @click="listPre" v-show ="listPreUrl!==''">上一页</button>
+            <button type="button" @click="listNext" v-show ="listNextUrl!==''">下一页</button>
           </div>
         </div>
       </div>
     <!-- 详情页显示-->
-    <div  class="detail"  v-if="showViewid==='detail'">
+    <div  class="detail"  v-show ="showViewid==='detail'">
       <div class="listHead">
         <form class="select">
           <div>仓库:
@@ -122,8 +122,8 @@
         </div>
         <div class="page">
           <div>总共：{{listCount}}</div>
-          <button type="button" @click="listPre" v-if="listPreUrl!==''">上一页</button>
-          <button type="button" @click="listNext" v-if="listNextUrl!==''">下一页</button>
+          <button type="button" @click="listPre" v-show ="listPreUrl!==''">上一页</button>
+          <button type="button" @click="listNext" v-show ="listNextUrl!==''">下一页</button>
         </div>
       </div>
     </div>
@@ -135,9 +135,9 @@
         </div>
         <div>编码:
           <input v-model="formItem.code"  placeholder="请输入编码">
-          <span class="message" v-if="!$v.formItem.code.required">编码不能为空</span>
-          <span class="message" v-if="!$v.formItem.code.minLength">最少长度为2</span>
-          <span class="message" v-if="!$v.formItem.code.maxLength">最大长度位32</span>
+          <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
+          <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
+          <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
         </div>
         <div>操作分类:
           <select v-model="formItem.type"  placeholder="请选择操作分类"   >
@@ -146,18 +146,18 @@
             <option value="出库操作">出库操作</option>
             <option value="盘点操作">盘点管理</option>
           </select>
-          <span class="message" v-if="!$v.formItem.type.required">请选择分类</span>
+          <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
         </div>
         <div>数量:
           <input v-model="formItem.sum" type="number" placeholder="请输入操作数量..." >
-          <span class="message" v-if="!$v.formItem.sum.required">请输入数量值</span>
+          <span class="message" v-show ="!$v.formItem.sum.required">请输入数量值</span>
         </div>
         <div>操作者:
           <input v-model="formItem.handler"  placeholder="请输入操作者...">
         </div>
         <div>操作时间:
           <input v-model="formItem.dataTime"  type="datetime-local" placeholder="选择日期和时间">
-          <span class="message" v-if="!$v.formItem.dataTime.required">请选择日期</span>
+          <span class="message" v-show ="!$v.formItem.dataTime.required">请选择日期</span>
         </div>
         <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
           <input v-model="formItem.attribute1"  placeholder="...">
@@ -178,12 +178,12 @@
           <select v-model="formItem.auditor"  placeholder="请选择审核账号">
             <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
           </select>
-          <span class="message" v-if="!$v.formItem.auditor.required">请选择审核账号</span>
+          <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
         </div>
         <div >备注信息:
           <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
         </div>
-        <div class="annex">文件附件:
+        <div class="file">文件附件:
           <ul>
             <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
           </ul>
@@ -309,11 +309,8 @@ export default {
         }
         self.showViewid = 'list'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 列表查询数据 */
@@ -336,11 +333,8 @@ export default {
           self.listPreUrl = response.data.previous.replace(self.$axios.defaults.baseURL, '')
         }
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 显示详情视图 */
@@ -364,11 +358,8 @@ export default {
         }
         self.showViewid = 'detail'
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 列表查询数据 */
@@ -392,11 +383,8 @@ export default {
           self.listPreUrl = response.data.previous.replace(self.$axios.defaults.baseURL, '')
         }
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     listPre () {
@@ -413,11 +401,8 @@ export default {
           self.listPreUrl = response.data.previous.replace(self.$axios.defaults.baseURL, '')
         }
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     listNext () {
@@ -434,11 +419,8 @@ export default {
           self.listPreUrl = response.data.previous.replace(self.$axios.defaults.baseURL, '')
         }
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
     /* 改变列表显示模式 */
@@ -502,17 +484,15 @@ export default {
         self.fileData.push(obj)
         alert(self.fileItem.fileName + '文件提交成功')
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     },
 
     fileBeforeUpload (event) {
       this.fileItem.file = event.target.files[0]
       this.fileItem.fileName = event.target.files[0].name
+      this.uploadFile()
     },
     removeFile: function (id) {
       var self = this
@@ -552,12 +532,9 @@ export default {
       }).then(function (response) {
         self.showViewid = ''
         alert('数据保存成功')
-      }).catch(function (error) {
-        if (error.request) {
-          alert(error.request.response)
-        } else {
-          console.log('Error', error.message)
-        }
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
       })
     },
     /* 保存并提交表单数据 */
@@ -587,18 +564,12 @@ export default {
         ) {
           alert('数据提交成功')
         }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
+          // 错误提示
+          console.log(err)
         })
-      }).catch(function (error) {
-        if (error.request) {
-          alert(error.request.response)
-        } else {
-          console.log('Error', error.message)
-        }
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
       })
     }
   },
@@ -630,25 +601,16 @@ export default {
           self.userinfor = response.data.results
           self.showDetailView()
         }).catch(function (err) {
-          if (err.request) {
-            alert(err.request.response)
-          } else {
-            console.log('Error', err.message)
-          }
+          // 错误提示
+          console.log(err)
         })
       }).catch(function (err) {
-        if (err.request) {
-          alert(err.request.response)
-        } else {
-          console.log('Error', err.message)
-        }
+        // 错误提示
+        console.log(err)
       })
     }).catch(function (err) {
-      if (err.request) {
-        alert(err.request.response)
-      } else {
-        console.log('Error', err.message)
-      }
+      // 错误提示
+      console.log(err)
     })
   },
   mounted () {
@@ -672,7 +634,7 @@ export default {
     font-size: 0.3em;
     line-height: 2em;
     color: #151515;
-    letter-spacing: -0.45px;
+
   }
   .modelSelect button{
     position: absolute;
@@ -704,7 +666,7 @@ export default {
     font-size: 0.3em;
     line-height: 2em;
     color: #151515;
-    letter-spacing: -0.45px;
+
   }
   .list .listHead .select div{
     position: relative;
@@ -764,7 +726,7 @@ export default {
     font-size: 0.5em;
     color: #ffffff;
     text-align: center;
-    letter-spacing: -0.45px;
+
     background: #191A1E;
   }
   .list .listTable .table  td{
@@ -772,7 +734,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.4em;
     color: #191A1E;
-    letter-spacing: -0.45px;
+
     text-align: center;
     background: #ffffff;
     border:1px solid #999;
@@ -815,7 +777,7 @@ export default {
     font-size: 0.3em;
     line-height: 2em;
     color: #151515;
-    letter-spacing: -0.45px;
+
   }
   .detail .listHead .select div{
     position: relative;
@@ -859,7 +821,7 @@ export default {
     font-size: 0.3em;
     line-height: 2em;
     color: #ffffff;
-    letter-spacing: -0.45px;
+
     background: #dcdcdc;
   }
   .detail .listHead  .ordering div{
@@ -894,7 +856,7 @@ export default {
     font-size: 0.5em;
     color: #ffffff;
     text-align: center;
-    letter-spacing: -0.45px;
+
     background: #191A1E;
   }
   .detail .listTable .table  td{
@@ -902,7 +864,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.4em;
     color: #191A1E;
-    letter-spacing: -0.45px;
+
     text-align: center;
     background: #ffffff;
     border:1px solid #999;
@@ -938,7 +900,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.5em;
     color: #151515;
-    letter-spacing: -0.45px;
+
     overflow: auto;
   }
   .create form div{
@@ -998,7 +960,7 @@ export default {
     background: #ffffff;
     border-radius: 1em;
   }
-  .create .annex{
+  .create .file{
     position: relative;
     width: 45%;
     height: 30%;
@@ -1006,7 +968,7 @@ export default {
     background: #4d5669;
     float: left;
   }
-  .create .annex ul{
+  .create .file ul{
     position: absolute;
     top: 5%;
     left: 2.5em;
@@ -1016,7 +978,7 @@ export default {
     background: #ffffff;
     overflow: auto;
   }
-  .create .annex ul li{
+  .create .file ul li{
     position: relative;
     width: 80%;
     height: 2em;
@@ -1024,7 +986,7 @@ export default {
     margin-right: 0;
     margin-bottom: 1em;
   }
-  .create .annex input{
+  .create .file input{
     position: absolute;
     top: 45%;
     left: 10%;
@@ -1036,7 +998,7 @@ export default {
     background: #ffffff;
     border-radius: 1em;
   }
-  .create .annex textarea {
+  .create .file textarea {
     position: absolute;
     top: 65%;
     left: 10%;
@@ -1046,7 +1008,7 @@ export default {
     background: #ffffff;
     overflow: auto;
   }
-  .create .annex button{
+  .create .file button{
     position: absolute;
     bottom: 0.2em;
     width: 6em;
@@ -1070,7 +1032,7 @@ export default {
     font-size: 1em;
     color: #ffffff;
     text-align: center;
-    letter-spacing: -0.45px;
+
     background: #191A1E;
   }
   .create  td{
@@ -1078,7 +1040,7 @@ export default {
     font-family: PingFangSC-Regular;
     font-size: 0.8em;
     color: #191A1E;
-    letter-spacing: -0.45px;
+
     text-align: center;
     background: #ffffff;
     border:1px solid #999;
