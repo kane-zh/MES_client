@@ -1,5 +1,6 @@
+
 <template>
-  <div class="equipmentVendor">
+  <div class="leanBoard">
     <!-- 列表页显示-->
     <div  class="list">
       <div class="heard">
@@ -44,40 +45,19 @@
           </div>
         </form>
         <div class="button" >
-          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加厂商信息</button>
+          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加看板信息</button>
         </div>
       </div>
       <div class="content">
-        <div class="table">
-          <table >
-            <tr align="center"  type="height:2em">
-              <th>序号</th>
-              <th>名称</th>
-              <th>编码</th>
-              <th>状态</th>
-              <th>更新时间</th>
-              <th>创建账号</th>
-              <th>审核账号</th>
-              <th>操作</th>
-            </tr>
-            <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
-              <td>{{index}}</td>
-              <td>{{item.name}}</td>
-              <td>{{item.code}}</td>
-              <td>{{item.state}}</td>
-              <td>{{item.update_time}}</td>
-              <td>{{item.create_user}}</td>
-              <td>{{item.auditor}}</td>
-              <td>
-                  <span @click="showDetailView(item.id)" v-show ="item.create_user===username ||
-                  item.auditor===username||canRead===true" style="color: #FF1A5EC4">详情</span>
-                <span @click="showUpdateView(item.id)" v-show ="item.state==='新建'" style="color: #52c41a">更改</span>
-              </td>
-            </tr>
-            <tr>
-
-            </tr>
-          </table>
+        <div class="listTable">
+          <div class="board" v-for="item in list" :value="item.name" :key="item.code">
+            <img :src="item.image.image" @click="showFile(item)">
+            <span>{{item.name}}</span>
+            <div class="button">
+              <button type="button" @click="showDetailView(item)">详情</button>
+              <button type="button" @click="showUpdateView(item)" v-show ="item.state==='新建'">更改</button>
+            </div>
+          </div>
         </div>
         <div class="page">
           <div>总共：{{listCount}}</div>
@@ -99,17 +79,6 @@
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
-            <dd>{{"地址:"+"&#12288;"+detail.address}}</dd>
-            <dd>{{"电话:"+"&#12288;"+detail.mobile}}</dd>
-            <dd>{{"传真:"+"&#12288;"+detail.fax}}</dd>
-            <dd>{{"微信:"+"&#12288;"+detail.wechat}}</dd>
-            <dd>{{"公司全称:"+"&#12288;"+detail.company_name}}</dd>
-            <dd>{{"公司简称:"+"&#12288;"+detail.company_abbre}}</dd>
-            <dd v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</dd>
-            <dd v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</dd>
-            <dd v-show ="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</dd>
-            <dd v-show ="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</dd>
-            <dd v-show ="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</dd>
           </div>
           <div class="desc" v-show="detail.desc!=''">
             <dt>备注信息</dt>
@@ -130,8 +99,8 @@
           </div>
           <div class="image">
             <dt>图片附件</dt>
-            <dd v-for="(value,id) in detail.image" :key="id">
-              <a target='_black' v-bind:key="id" :href="value.image"> <img :src="value.image" width="50px"></a>
+            <dd>
+              <a target='_black'  :href="imageInfor.image"> <img :src="imageInfor.image" width="50px"></a>
             </dd>
           </div>
         </div>
@@ -140,7 +109,7 @@
           <button type="button" @click="changeState('使用中')" v-show="showApprovedBt===true" >通过审核</button>
           <button type="button" @click="changeState('新建')" v-show="showReturnBt===true">驳回信息</button>
           <button type="button" @click="changeState('作废')" v-show="showDeleteBt===true">删除数据</button>
-          <button type="button" @click="showUpdateView(detail.id)" v-show ="detail.state==='新建'">更改</button>
+          <button type="button" @click="showUpdateView(detail)" v-show ="detail.state==='新建'">更改</button>
         </div>
       </div>
     </div>
@@ -161,39 +130,6 @@
               <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
               <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
               <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
-            </div>
-            <div>地址:
-              <input v-model="formItem.address"  placeholder="请输入厂商地址...">
-            </div>
-            <div>电话:
-              <input v-model="formItem.mobile"  placeholder="请输入厂商电话...">
-            </div>
-            <div>传真:
-              <input v-model="formItem.fax"  placeholder="请输入厂商传真...">
-            </div>
-            <div>微信:
-              <input v-model="formItem.wechat"  placeholder="请输入厂商微信...">
-            </div>
-            <div>公司全称:
-              <input v-model="formItem.company_name"  placeholder="请输入厂商公司全称...">
-            </div>
-            <div>公司简称:
-              <input v-model="formItem.company_abbre"  placeholder="请输入厂商公司简称...">
-            </div>
-            <div v-show="attribute_title.attribute1!==''" >{{attribute_title.attribute1}}
-              <input v-model="formItem.attribute1"  placeholder="...">
-            </div>
-            <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
-              <input v-model="formItem.attribute2"  placeholder="...">
-            </div>
-            <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
-              <input v-model="formItem.attribute3"  placeholder="...">
-            </div>
-            <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
-              <input v-model="formItem.attribute4"  placeholder="...">
-            </div>
-            <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
-              <input v-model="formItem.attribute5"  placeholder="...">
             </div>
             <div>审核账号:
               <select v-model="formItem.auditor"  placeholder="请选择审核账号">
@@ -218,11 +154,9 @@
                   选择图片
                   <input type="file"  @change="imageBeforeUpload"/>
                </span>
-              <ul>
-                <li v-for="value in imageData" v-bind:key="value.id"  @click="removeImage(value.id)">
-                  <img :src="value.imageUrl">
-                </li>
-              </ul>
+              <div>
+                <img :src="imageInfor.image">
+              </div>
             </div>
           </form>
         </div>
@@ -250,39 +184,6 @@
               <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
               <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
             </div>
-            <div>地址:
-              <input v-model="formItem.address"  placeholder="请输入厂商地址...">
-            </div>
-            <div>电话:
-              <input v-model="formItem.mobile"  placeholder="请输入厂商电话...">
-            </div>
-            <div>传真:
-              <input v-model="formItem.fax"  placeholder="请输入厂商传真...">
-            </div>
-            <div>微信:
-              <input v-model="formItem.wechat"  placeholder="请输入厂商微信...">
-            </div>
-            <div>公司全称:
-              <input v-model="formItem.company_name"  placeholder="请输入厂商公司全称...">
-            </div>
-            <div>公司简称:
-              <input v-model="formItem.company_abbre"  placeholder="请输入厂商公司简称...">
-            </div>
-            <div v-show="attribute_title.attribute1!==''" >{{attribute_title.attribute1}}
-              <input v-model="formItem.attribute1"  placeholder="...">
-            </div>
-            <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
-              <input v-model="formItem.attribute2"  placeholder="...">
-            </div>
-            <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
-              <input v-model="formItem.attribute3"  placeholder="...">
-            </div>
-            <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
-              <input v-model="formItem.attribute4"  placeholder="...">
-            </div>
-            <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
-              <input v-model="formItem.attribute5"  placeholder="...">
-            </div>
             <div>审核账号:
               <select v-model="formItem.auditor"  placeholder="请选择审核账号">
                 <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
@@ -303,14 +204,12 @@
             </div>
             <div class="image">图片:
               <span>
-              选择图片
-              <input type="file"  @change="imageBeforeUpload"/>
-            </span>
-              <ul>
-                <li v-for="value in imageData" v-bind:key="value.id"  @click="removeImage(value.id)">
-                  <img :src="value.imageUrl">
-                </li>
-              </ul>
+                  选择图片
+                  <input type="file"  @change="imageBeforeUpload"/>
+               </span>
+              <div>
+                <img :src="imageInfor.image">
+              </div>
             </div>
           </form>
         </div>
@@ -323,12 +222,10 @@
   </div>
 </template>
 <script>
-
 import { required, minLength, maxLength } from 'vuelidate/lib/validators'
 export default {
-  name: 'vendor',
+  name: 'board',
   components: {
-
   },
   data () {
     return {
@@ -343,7 +240,6 @@ export default {
       selectItem: {
         state: '',
         ordering: '',
-        classes: '',
         create_user: '',
         auditor: '',
         searchValue: ''
@@ -354,7 +250,7 @@ export default {
       /* 详情页审核记录项表单 */
       alterItem: {
         desc: '',
-        uri: 'vendor'
+        uri: 'board'
       },
       alterList: [],
       alterData: [],
@@ -369,13 +265,7 @@ export default {
         name: '',
         code: '',
         state: '',
-        address: '',
-        mobile: '',
-        fax: '',
-        wechat: '',
-        company_name: '',
-        company_abbre: '',
-        image: [],
+        image: '',
         file: [],
         alter: [],
         desc: '',
@@ -386,27 +276,22 @@ export default {
         image: null,
         imageName: '',
         desc: '',
-        uri: 'vendor'
+        uri: 'board'
       },
-      imageData: [],
+      imageInfor: {},
       /* 创建页文件项表单 */
       fileItem: {
         file: null,
         fileName: '',
         desc: '',
-        uri: 'vendor'
+        uri: 'board'
       },
       fileData: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
-      /* 附加属性标题 */
-      attribute_title: {
-        attribute1: '',
-        attribute2: '',
-        attribute3: '',
-        attribute4: '',
-        attribute5: ''
-      }
+      /* 文件链接地址 */
+      fileUrl: ''
+
     }
   },
   validations: {
@@ -432,7 +317,7 @@ export default {
         this.selectItem[key] = ''
       }
       var self = this
-      this.$axios.get('equipment/vendor/?ordering=' + self.ordering).then(function (response) {
+      this.$axios.get('lean/board/?ordering=' + self.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -454,7 +339,7 @@ export default {
       this.listPreUrl = ''
       this.listNextUrl = ''
       var self = this
-      this.$axios.get('equipment/vendor/?state=' + self.selectItem.state +
+      this.$axios.get('lean/board/?state=' + self.selectItem.state +
               '&auditor=' + self.selectItem.auditor +
               '&create_user=' + self.selectItem.create_user +
               '&search=' + self.selectItem.searchValue +
@@ -509,12 +394,18 @@ export default {
       })
     },
     /* 显示详情视图 */
-    showDetailView (id) {
+    showDetailView (value) {
       this.detail = [] // 清空详情数据
       this.alterData = []// 清空审核数据
+      this.imageInfor = {}
       var self = this
-      this.$axios.get(`equipment/vendor/` + id).then(function (response) {
+      if (!(('lean.read_leanboardmodel' in this.permissions) || (value.auditor === this.username) || (value.create_user === this.username))) {
+        alert('当前账号不具备查看详情权限')
+        return
+      }
+      this.$axios.get(`lean/board/` + value.id).then(function (response) {
         self.detail = response.data
+        self.imageInfor = self.detail.image
         self.showViewid = 'detail'
       }).catch(function (err) {
         // 错误提示
@@ -528,7 +419,7 @@ export default {
         return
       }
       this.formItem.state = state
-      this.$axios.patch(`equipment/vendor/` + self.detail.id + '/', {
+      this.$axios.patch(`lean/board/` + self.detail.id + '/', {
         state: self.formItem.state,
         alter: self.formItem.alter
       }).then(function (response
@@ -565,11 +456,19 @@ export default {
         }
       }
       this.fileData = []
-      this.imageData = []
+      this.imageInfor = ''
       this.showViewid = 'create'
     },
     /* 显示更新视图 */
-    showUpdateView (id) {
+    showUpdateView (value) {
+      if (value.create_user !== this.username) {
+        alert('当前账号非信息创建账号,不能进行更新操作')
+        return
+      }
+      if (value.state !== '新建') {
+        alert('当前信息非新建状态,禁止更改')
+        return
+      }
       /* 清空表单数据 */
       for (let key in this.formItem) {
         if (Object.prototype.toString.call(this.formItem[key]) === '[object Array]') {
@@ -587,33 +486,24 @@ export default {
           this.formItem[key] = ''
         }
       }
+      this.imageInfor = {}
       this.alterList = []
       this.fileData = []
-      this.imageData = []
       var self = this
-      this.$axios.get(`equipment/vendor/` + id).then(function (response) {
+      this.$axios.get(`lean/board/` + value.id).then(function (response) {
         self.formItem.id = response.data.id
         self.formItem.name = response.data.name
         self.formItem.state = response.data.state
         self.formItem.code = response.data.code
-        self.formItem.address = response.data.address
-        self.formItem.mobile = response.data.mobile
-        self.formItem.fax = response.data.fax
-        self.formItem.wechat = response.data.wechat
-        self.formItem.company_name = response.data.company_name
-        self.formItem.company_abbre = response.data.company_abbre
         self.formItem.desc = response.data.desc
+        self.formItem.image = response.data.image.id
         self.formItem.auditor = response.data.auditor
         self.alterList = response.data.alter
+        self.imageInfor = response.data.image
         response.data.file.forEach(function (value, i) {
           var obj = {'id': value.id, 'fileName': value.file_name, 'fileUrl': value.file, 'desc': value.desc, 'uri': value.uri}
           self.formItem.file.push(value.id)
           self.fileData.push(obj)
-        })
-        response.data.image.forEach(function (value, i) {
-          var obj1 = {'id': value.id, 'imageName': value.image_name, 'imageUrl': value.image, 'desc': value.desc, 'uri': value.uri}
-          self.formItem.image.push(value.id)
-          self.imageData.push(obj1)
         })
         self.showViewid = 'update'
       }).catch(function (err) {
@@ -632,18 +522,13 @@ export default {
       formData.append('desc', this.imageItem.desc)
       formData.append('image', this.imageItem.image)
       var self = this
-      this.$axios.post(`equipment/image/`, formData,
+      this.$axios.post(`lean/image/`, formData,
         {headers: {'Content-Type': 'multipart/form-data'}}
       ).then(function (response) {
-        var obj = {'id': response.data.id,
-          'imageName': self.imageItem.imageName,
-          'imageUrl': response.data.image,
-          'desc': response.data.desc,
-          'uri': response.data.uri}
         self.imageItem.image = null
         self.imageItem.desc = ''
-        self.formItem.image.push(response.data.id)
-        self.imageData.push(obj)
+        self.formItem.image = response.data.id
+        self.imageInfor = response.data
         alert(self.imageItem.imageName + '图片提交成功')
       }).catch(function (err) {
         // 错误提示
@@ -656,23 +541,6 @@ export default {
       this.imageItem.imageName = event.target.files[0].name
       this.uploadImage()
     },
-    removeImage: function (id) {
-      var self = this
-      if (!confirm('是否要删除当前数据' + id)) {
-        // 当用户点击的取消按钮的时候，应该阻断这个方法中的后面代码的继续执行
-        return
-      }
-      for (var i = 0; i < self.formItem.image.length; i++) {
-        if (self.formItem.image[i] === id) {
-          self.formItem.image.splice(i, 1)
-        }
-      }
-      for (var j = 0; j < self.imageData.length; j++) {
-        if (self.imageData[j].id === id) {
-          self.imageData.splice(j, 1)
-        }
-      }
-    },
     /* 提交文件项 */
     uploadFile () {
       if (!confirm('确认提交??')) {
@@ -684,7 +552,7 @@ export default {
       formData.append('desc', this.fileItem.desc)
       formData.append('file', this.fileItem.file)
       var self = this
-      this.$axios.post(`equipment/file/`, formData,
+      this.$axios.post(`lean/file/`, formData,
         {headers: {'Content-Type': 'multipart/form-data'}}
       ).then(function (response) {
         var obj = {'id': response.data.id,
@@ -725,13 +593,27 @@ export default {
         }
       }
     },
+    showFile (value) {
+      if (!(('lean.read_leanboardmodel' in this.permissions) || (value.auditor === this.username) || (value.create_user === this.username))) {
+        alert('当前账号不具备权限')
+        return
+      }
+      this.$axios.get(`lean/board/` + value.id).then(function (response) {
+        response.data.file.forEach(function (value, i) {
+          window.open(value.file + '?videoSource=data', value.file_name)
+        })
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
+      })
+    },
     /* 提交审核记录项 */
     uploadAlter () {
       var self = this
       if (!confirm('确认提交??')) {
         return
       }
-      this.$axios.post(`equipment/alterRecord/`, {
+      this.$axios.post(`lean/alterRecord/`, {
         desc: self.alterItem.desc,
         uri: self.alterItem.uri
       }).then(function (response) {
@@ -753,15 +635,9 @@ export default {
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.post(`equipment/vendor/`, {
+      this.$axios.post(`lean/board/`, {
         name: self.formItem.name,
         code: self.formItem.code,
-        address: self.formItem.address,
-        mobile: self.formItem.mobile,
-        fax: self.formItem.fax,
-        wechat: self.formItem.wechat,
-        company_name: self.formItem.company_name,
-        company_abbre: self.formItem.company_abbre,
         file: self.formItem.file,
         image: self.formItem.image,
         desc: self.formItem.desc,
@@ -783,15 +659,9 @@ export default {
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.put(`equipment/vendor/` + self.formItem.id + '/', {
+      this.$axios.put(`lean/board/` + self.formItem.id + '/', {
         name: self.formItem.name,
         code: self.formItem.code,
-        address: self.formItem.address,
-        mobile: self.formItem.mobile,
-        fax: self.formItem.fax,
-        wechat: self.formItem.wechat,
-        company_name: self.formItem.company_name,
-        company_abbre: self.formItem.company_abbre,
         file: self.formItem.file,
         image: self.formItem.image,
         desc: self.formItem.desc,
@@ -809,15 +679,9 @@ export default {
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.post(`equipment/vendor/`, {
+      this.$axios.post(`lean/board/`, {
         name: self.formItem.name,
         code: self.formItem.code,
-        address: self.formItem.address,
-        mobile: self.formItem.mobile,
-        fax: self.formItem.fax,
-        wechat: self.formItem.wechat,
-        company_name: self.formItem.company_name,
-        company_abbre: self.formItem.company_abbre,
         file: self.formItem.file,
         image: self.formItem.image,
         desc: self.formItem.desc,
@@ -827,7 +691,7 @@ export default {
         self.fileData = []
         self.formItem.image = []
         self.imageData = []
-        self.$axios.patch(`equipment/vendor/` + response.data.id + '/', {
+        self.$axios.patch(`lean/board/` + response.data.id + '/', {
           state: '审核中'
         }).then(function (response
         ) {
@@ -847,15 +711,9 @@ export default {
       if (!confirm('确认保存??')) {
         return
       }
-      this.$axios.put(`equipment/vendor/` + self.formItem.id + '/', {
+      this.$axios.put(`lean/board/` + self.formItem.id + '/', {
         name: self.formItem.name,
         code: self.formItem.code,
-        address: self.formItem.address,
-        mobile: self.formItem.mobile,
-        fax: self.formItem.fax,
-        wechat: self.formItem.wechat,
-        company_name: self.formItem.company_name,
-        company_abbre: self.formItem.company_abbre,
         file: self.formItem.file,
         image: self.formItem.image,
         desc: self.formItem.desc,
@@ -865,7 +723,7 @@ export default {
         self.fileData = []
         self.formItem.image = []
         self.imageData = []
-        self.$axios.patch(`equipment/vendor/` + response.data.id + '/', {
+        self.$axios.patch(`lean/board/` + response.data.id + '/', {
           state: '审核中'
         }).then(function (response
         ) {
@@ -882,7 +740,7 @@ export default {
     }
   },
   created () {
-    this.userinfor = []
+    this.userInfor = []
     var self = this
     this.$axios.get('user/userInfor/?page_size=99999&ordering=-id').then(function (response) {
       self.userinfor = response.data.results
@@ -891,9 +749,6 @@ export default {
       // 错误提示
       console.log(err)
     })
-  },
-  mounted () {
-    this.attribute_title = this.$store.getters.getConfig.attach_attribute.设备状态
   },
   computed: {
     username () {
@@ -906,10 +761,10 @@ export default {
       return this.$store.getters.getLoginInfor.permissions
     },
     canCreate () {
-      return 'equipment.add_equipmentvendordefinitionmodel' in this.permissions
+      return 'lean.add_leanboardmodel' in this.permissions
     },
     canRead () {
-      return 'equipment.read_equipmentvendordefinitionmodel' in this.permissions
+      return 'lean.read_leanboardmodel' in this.permissions
     }
 
   },
@@ -934,7 +789,7 @@ export default {
 }
 </script>
 <style scoped lang="scss" >
-  .equipmentVendor {
+  .leanBoard {
     position: absolute;
     top: 0;
     width: 98%;
@@ -1020,61 +875,54 @@ export default {
         top: 22%;
         bottom: 0;
         width: 100%;
-        .table{
-          height: 90%;
+        .listTable{
+          position: absolute;
+          top: 0;
           width: 100%;
+          height: 90%;
           overflow: auto;
-          table{
-            height: 100%;
-            width: 100%;
-            table-layout: auto;
-            empty-cells:hide;
-            word-break : normal;
-            th{
-              position: sticky;
-              top:0;
-              height: 1em;
+          .board {
+            position: relative;
+            width: 31%;
+            height: 40%;
+            margin: 1%;
+            float: left;
+            background: #dcdcdc;
+            img {
+              position: absolute;
+              top: 0;
+              height: 70%;
+              width: 100%;
+            }
+            span {
+              position: absolute;
+              top: 70%;
+              height: 15%;
+              width: 100%;
               font-family: PingFangSC-Regular;
-              font-size: 0.4em;
-              line-height: 2.5em;
+              font-size: 0.5em;
+              line-height: 2em;
               color: #000000;
               text-align: center;
-              background: #ffffff;
-              border:1px solid rgba(177, 176, 171, 0.89);
-              &:nth-child(1){
-                width: 3em;
-              }
-              &:nth-child(2){
-                width: 15em;
-              }
-              &:nth-child(3){
-                width: 15em;
-              }
-              &:nth-child(4){
-                width: 5em;
-              }
-              &:nth-child(5){
-                width: 15em;
-              }
-              &:nth-child(6){
-                width: 5em;
-              }
-              &:nth-child(7){
-                width: 5em;
-              }
-              &:nth-child(8){
-                width: 5em;
-              }
+              display: block;
             }
-            td{
-              height: 1em;
-              font-family: PingFangSC-Regular;
-              font-size: 0.4em;
-              color: #191A1E;
-
-              text-align: center;
-              background: #ffffff;
-              border:1px solid rgba(177, 176, 171, 0.61);
+            .button {
+              position: absolute;
+              bottom: 0;
+              right: 0;
+              height: 15%;
+              button {
+                position: relative;
+                width: 4em;
+                font-family: PingFangSC-Regular;
+                font-size: 0.25em;
+                line-height: 2em;
+                float: right;
+                margin-left: 1em;
+                background: #ffffff;
+                border: 1px solid #363E42;
+                border-radius: 13px;
+              }
             }
           }
         }
@@ -1463,34 +1311,22 @@ export default {
                   opacity: 0%;
                 }
               }
-              ul {
+              div {
                 position: absolute;
                 bottom: 5%;
                 left: 0;
                 width: 100%;
                 height: 65%;
                 background: #ffffff;
-                overflow: auto;
-                li {
-                  position: relative;
-                  width: 50%;
-                  height: 10em;
-                  color: #2b85e4;
-                  overflow:hidden;
-                  font-family: AppleSystemUIFont;
-                  font-size: 0.8em;
-                  line-height: 1.25em;
-                  float: left;
-                  img{
-                    position: absolute;
-                    height: 90%;
-                    width: 90%;
-                  }
+                img{
+                  position: absolute;
+                  height: 90%;
+                  width: 90%;
+                }
                 }
               }
             }
           }
-        }
         .button {
           position: absolute;
           bottom: 0;
@@ -1670,29 +1506,17 @@ export default {
                   opacity: 0%;
                 }
               }
-              ul {
+              div {
                 position: absolute;
                 bottom: 5%;
                 left: 0;
                 width: 100%;
                 height: 65%;
                 background: #ffffff;
-                overflow: auto;
-                li {
-                  position: relative;
-                  width: 50%;
-                  height: 10em;
-                  color: #2b85e4;
-                  overflow:hidden;
-                  font-family: AppleSystemUIFont;
-                  font-size: 0.8em;
-                  line-height: 1.25em;
-                  float: left;
-                  img{
-                    position: absolute;
-                    height: 90%;
-                    width: 90%;
-                  }
+                img{
+                  position: absolute;
+                  height: 90%;
+                  width: 90%;
                 }
               }
             }

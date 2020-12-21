@@ -232,7 +232,7 @@
         </div>
       </div>
     </div>
-    <!--    /*更新页显示*/-->
+    <!-- 更新页显示-->
     <div  class="update"  v-show="showViewid==='update'">
       <div class="center">
         <div class="heard">

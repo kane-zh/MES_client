@@ -43,7 +43,7 @@
         <button type="button" @click="showChangePasswordView">密码更改</button>
       </div>
     </div>
-    <!--    /*更新页显示*/-->
+    <!-- 更新页显示-->
     <div class="update" v-show="showViewIndex==='update'">
       <form>
           <div>名字:

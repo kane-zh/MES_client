@@ -224,7 +224,7 @@
         <button type="button" @click="showViewid='list'">返回列表页</button>
       </div>
     </div>
-    <!--    /*更新页显示*/-->
+    <!-- 更新页显示-->
     <div  class="update"  v-show="showViewid==='update'">
       <form >
         <div>名称:

@@ -326,7 +326,7 @@
         </div>
       </div>
     </div>
-    <!--    /*更新页显示*/-->
+    <!-- 更新页显示-->
     <div  class="update"  v-show ="showViewid==='update'">
       <div class="center">
         <div class="heard">
@@ -1259,6 +1259,10 @@ export default {
         self.fileData = []
         self.formItem.image = []
         self.imageData = []
+        self.formItem.material = []
+        self.list_material = []
+        self.formItem.semifinished = []
+        self.list_semifinished = []
         alert('数据保存成功')
       }).catch(function (err) {
         // 错误提示
@@ -1319,6 +1323,10 @@ export default {
         self.fileData = []
         self.formItem.image = []
         self.imageData = []
+        self.formItem.material = []
+        self.list_material = []
+        self.formItem.semifinished = []
+        self.list_semifinished = []
         self.$axios.patch(`process/stationInfor/` + response.data.id + '/', {
           state: '审核中'
         }).then(function (response

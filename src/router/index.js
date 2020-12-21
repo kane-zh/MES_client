@@ -557,7 +557,15 @@ export default new Router({
               path: 'planBoard',
               name: 'planBoard',
               component: () => import('@/views/home/content/plan/PlanBoard')
-            },
+            }
+          ]
+        },
+        {
+          // 精益管理模块
+          path: 'lean',
+          name: 'lean',
+          component: Content,
+          children: [
             {
               // 事件类型
               path: 'eventType',
@@ -569,6 +577,12 @@ export default new Router({
               path: 'eventInfor',
               name: 'eventInfor',
               component: () => import('@/views/home/content/lean/EventInfor')
+            },
+            {
+              // 精益看板信息
+              path: 'leanBoard',
+              name: 'leanBoard',
+              component: () => import('@/views/home/content/lean/LeanBoard')
             }
 
           ]

@@ -437,11 +437,15 @@
             <ul>
               <li :class="childMenuSelect==='eventType'? 'isActive':'isInActive'"  @click="childMenuSelect='eventType'"
                   v-show ="function_select['精益管理'].事件分类===true">
-                <router-link to="/home/plan/eventType">事件分类</router-link>
+                <router-link to="/home/lean/eventType">事件分类</router-link>
               </li>
               <li :class="childMenuSelect==='eventInfor'? 'isActive':'isInActive'"  @click="childMenuSelect='eventInfor'"
                   v-show ="function_select['精益管理'].事件信息===true">
-                <router-link to="/home/plan/eventInfor">事件信息</router-link>
+                <router-link to="/home/lean/eventInfor">事件信息</router-link>
+              </li>
+              <li :class="childMenuSelect==='leanBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='leanBoard'"
+                  v-show ="function_select['精益管理'].精益看板===true">
+                <router-link to="/home/lean/leanBoard">精益看板</router-link>
               </li>
             </ul>
           </div>
