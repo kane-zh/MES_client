@@ -542,10 +542,10 @@ export default {
         name: '',
         code: '',
         state: '',
-        type: null,
+        type: '',
         child: [],
-        equipmentType: null,
-        equipment: null,
+        equipmentType: '',
+        equipment: '',
         parts_use: [],
         image: [],
         file: [],
@@ -561,7 +561,7 @@ export default {
       formItem_child: {
         id: '',
         compoment: '',
-        method: null,
+        method: '',
         attribute1: '',
         attribute2: '',
         attribute3: '',
@@ -571,7 +571,7 @@ export default {
       },
       /* 图片项表单 */
       imageItem: {
-        image: null,
+        image: '',
         imageName: '',
         desc: '',
         uri: 'maintainRecord'
@@ -579,7 +579,7 @@ export default {
       imageData: [],
       /* 创建页文件项表单 */
       fileItem: {
-        file: null,
+        file: '',
         fileName: '',
         desc: '',
         uri: 'maintainRecord'
@@ -923,7 +923,7 @@ export default {
           'imageUrl': response.data.image,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.imageItem.image = null
+        self.imageItem.image = ''
         self.imageItem.desc = ''
         self.formItem.image.push(response.data.id)
         self.imageData.push(obj)
@@ -975,7 +975,7 @@ export default {
           'fileUrl': response.data.file,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.fileItem.file = null
+        self.fileItem.file = ''
         self.fileItem.desc = ''
         self.formItem.file.push(response.data.id)
         self.fileData.push(obj)
@@ -1312,7 +1312,7 @@ export default {
       for (let key in self.attribute_title) {
         self.attribute_title[key] = ''
       }
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get(`equipment/maintainRecordType/` + newval).then(function (response) {
@@ -1336,7 +1336,7 @@ export default {
     'formItem.equipmentType': function (newval, oldval) {
       var self = this
       this.equipmentInfor = []
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get('equipment/equipmentAccount/?page_size=99999&ordering=-id&state=使用中' +

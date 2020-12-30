@@ -360,8 +360,8 @@ export default {
         name: '',
         code: '',
         state: '',
-        type: null,
-        vendor: null,
+        type: '',
+        vendor: '',
         image: [],
         file: [],
         alter: [],
@@ -375,7 +375,7 @@ export default {
       },
       /* 图片项表单 */
       imageItem: {
-        image: null,
+        image: '',
         imageName: '',
         desc: '',
         uri: 'partsInfor'
@@ -383,7 +383,7 @@ export default {
       imageData: [],
       /* 创建页文件项表单 */
       fileItem: {
-        file: null,
+        file: '',
         fileName: '',
         desc: '',
         uri: 'partsInfor'
@@ -652,7 +652,7 @@ export default {
           'imageUrl': response.data.image,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.imageItem.image = null
+        self.imageItem.image = ''
         self.imageItem.desc = ''
         self.formItem.image.push(response.data.id)
         self.imageData.push(obj)
@@ -704,7 +704,7 @@ export default {
           'fileUrl': response.data.file,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.fileItem.file = null
+        self.fileItem.file = ''
         self.fileItem.desc = ''
         self.formItem.file.push(response.data.id)
         self.fileData.push(obj)
@@ -948,7 +948,7 @@ export default {
       for (let key in self.attribute_title) {
         self.attribute_title[key] = ''
       }
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get(`equipment/partsType/` + newval).then(function (response) {

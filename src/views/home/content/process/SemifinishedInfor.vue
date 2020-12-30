@@ -435,11 +435,11 @@ export default {
         name: '',
         code: '',
         state: '',
-        type: null,
-        unitType: null,
-        unit: null,
-        productRouteType: null,
-        productRoute: null,
+        type: '',
+        unitType: '',
+        unit: '',
+        productRouteType: '',
+        productRoute: '',
         image: [],
         file: [],
         alter: [],
@@ -458,7 +458,7 @@ export default {
       },
       /* 图片项表单 */
       imageItem: {
-        image: null,
+        image: '',
         imageName: '',
         desc: '',
         uri: 'semifinishedInfor'
@@ -466,7 +466,7 @@ export default {
       imageData: [],
       /* 创建页文件项表单 */
       fileItem: {
-        file: null,
+        file: '',
         fileName: '',
         desc: '',
         uri: 'semifinishedInfor'
@@ -764,7 +764,7 @@ export default {
           'imageUrl': response.data.image,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.imageItem.image = null
+        self.imageItem.image = ''
         self.imageItem.desc = ''
         self.formItem.image.push(response.data.id)
         self.imageData.push(obj)
@@ -816,7 +816,7 @@ export default {
           'fileUrl': response.data.file,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.fileItem.file = null
+        self.fileItem.file = ''
         self.fileItem.desc = ''
         self.formItem.file.push(response.data.id)
         self.fileData.push(obj)
@@ -1095,7 +1095,7 @@ export default {
       for (let key in self.attribute_title) {
         self.attribute_title[key] = ''
       }
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get(`process/semifinishedType/` + newval).then(function (response) {
@@ -1119,7 +1119,7 @@ export default {
     'formItem.unitType': function (newval, oldval) {
       var self = this
       this.unitInfor = []
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get('process/unitInfor/?page_size=99999&ordering=-id&state=使用中' +
@@ -1134,7 +1134,7 @@ export default {
     'formItem.productRouteType': function (newval, oldval) {
       var self = this
       this.productRouteInfor = []
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get('process/productRoute/?page_size=99999&ordering=-id&state=使用中' +

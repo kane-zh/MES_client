@@ -1,27 +1,37 @@
 <template>
   <div class="productData">
     <!-- 列表页显示-->
-    <div  class="list"  v-show ="showViewid==='list'">
-      <div class="listHead">
+    <div  class="list">
+      <div class="heard">
         <form class="select">
           <div>创建账号:
             <select v-model="selectItem.create_user" placeholder="请选择创建账号" >
               <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
             </select>
           </div>
-          <div>分类:
-            <select v-model="selectItem.type" placeholder="请选择分类"      >
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
-            </select>
-          </div>
           <div>任务分类:
             <select v-model="selectItem.taskType" placeholder="请选择任务分类"      >
-              <option v-for="item in taskType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in taskType" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
+          <div>任务:
+            <select v-model="selectItem.task" placeholder="请选择任务"      >
+              <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
           <div>产品分类:
             <select v-model="selectItem.productType" placeholder="请选择产品分类"      >
-              <option v-for="item in productType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in productType" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
+          <div>产品:
+            <select v-model="selectItem.product" placeholder="请选择产品"      >
+              <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
+          <div>分类:
+            <select v-model="selectItem.type" placeholder="请选择分类"      >
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
             </select>
           </div>
           <div>开始时间:
@@ -34,246 +44,282 @@
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
           <div>
-               <button type="button" @click="select" >搜索</button>
-            </div>
-            <div>
-              <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
-            </div>
+          </div>
+          <div>
+            <button type="button" @click="select" style="background: #FCC400;border: none;left: 0">搜索</button>
+            <button type="button" @click="showListView" style="border: none;right: 0">重置</button>
+          </div>
         </form>
         <div class="button" >
-          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加过程数据</button>
+          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加产品数据</button>
         </div>
-
       </div>
-      <div class="listTable">
-          <div class="table">
-            <table >
-              <tr align="center"  type="height:2em">
-                <th>序号</th>
-                <th>分类</th>
-                <th>产品分类</th>
-                <th>产品</th>
-                <th>任务分类</th>
-                <th>任务</th>
-                <th>批次号</th>
-                <th>序列号</th>
-                <th>时间</th>
-                <th>创建账号</th>
-                <th>操作</th>
-              </tr>
-              <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
-                <td>{{index}}</td>
-                <td>{{item.type.name+"("+item.type.code+")"}}</td>
-                <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
-                <td>{{item.product_name+"("+item.product_code+")"}}</td>
-                <td>{{item.taskType_name+"("+item.taskType_code+")"}}</td>
-                <td>{{item.task_name+"("+item.task_code+")"}}</td>
-                <td>{{item.batch}}</td>
-                <td>{{item.sn}}</td>
-                <td>{{item.dataTime}}</td>
-                <td>{{item.create_user}}</td>
-                <td>
-                  <button type="button" @click="showDetailView(item.id)" v-show ="item.create_user===username ||
-                  canRead===true">详情</button>
-                </td>
-              </tr>
-              <tr>
+      <div class="content">
+        <div class="table">
+          <table >
+            <tr align="center"  type="height:2em">
+              <th>序号</th>
+              <th>分类</th>
+              <th>产品分类</th>
+              <th>产品</th>
+              <th>任务分类</th>
+              <th>任务</th>
+              <th>批次号</th>
+              <th>序列号</th>
+              <th>时间</th>
+              <th>创建账号</th>
+              <th>操作</th>
+            </tr>
+            <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
+              <td>{{index}}</td>
+              <td>{{item.type.name+"("+item.type.code+")"}}</td>
+              <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
+              <td>{{item.product_name+"("+item.product_code+")"}}</td>
+              <td>{{item.taskType_name+"("+item.taskType_code+")"}}</td>
+              <td>{{item.task_name+"("+item.task_code+")"}}</td>
+              <td>{{item.batch}}</td>
+              <td>{{item.sn}}</td>
+              <td>{{item.dataTime}}</td>
+              <td>{{item.create_user}}</td>
+              <td>
+                  <span @click="showDetailView(item.id)" v-show ="item.create_user===username ||
+                  canRead===true" style="color: #FF1A5EC4">详情</span>
+                <span @click="removeData(item.id)" style="color: #52c41a">删除</span>
+              </td>
+            </tr>
+            <tr>
 
-              </tr>
-            </table>
-          </div><div class="page">
+            </tr>
+          </table>
+        </div>
+        <div class="page">
           <div>总共：{{listCount}}</div>
           <button type="button" @click="listPre" v-show ="listPreUrl!==''">上一页</button>
           <button type="button" @click="listNext" v-show ="listNextUrl!==''">下一页</button>
         </div>
       </div>
     </div>
-    <!--   /*详情页显示*/-->
+    <!-- 详情页显示-->
     <div  class="detail"  v-show="showViewid==='detail'">
-      <div class="content">
-        <ul>
-          <li>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
-          <li>{{"产品分类:"+"&#12288;"+detail.productType_name+"("+detail.productType_code+")"}}</li>
-          <li>{{"产品:"+"&#12288;"+detail.product_name+"("+detail.product_code+")"}}</li>
-          <li>{{"任务分类:"+"&#12288;"+detail.taskType_name+"("+detail.taskType_code+")"}}</li>
-          <li>{{"任务:"+"&#12288;"+detail.task_name+"("+detail.task_code+")"}}</li>
-          <li>{{"批次号:"+"&#12288;"+detail.batch}}</li>
-          <li>{{"序列号:"+"&#12288;"+detail.sn}}</li>
-          <li>{{"人员信息:"+"&#12288;"+detail.personnel}}</li>
-          <li>{{"设备信息:"+"&#12288;"+detail.equipment}}</li>
-          <li>{{"物料信息:"+"&#12288;"+detail.material}}</li>
-          <li>{{"工序信息:"+"&#12288;"+detail.station}}</li>
-          <li>{{"质检信息:"+"&#12288;"+detail.quality}}</li>
-          <li v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
-          <li v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
-          <li v-show ="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</li>
-          <li v-show ="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</li>
-          <li v-show ="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</li>
-          <li v-show ="attribute_title.attribute6!==''">{{attribute_title.attribute6 +":"+"&#12288;"+detail.attribute6}}</li>
-          <li v-show ="attribute_title.attribute7!==''">{{attribute_title.attribute7 +":"+"&#12288;"+detail.attribute7}}</li>
-          <li v-show ="attribute_title.attribute8!==''">{{attribute_title.attribute8 +":"+"&#12288;"+detail.attribute8}}</li>
-          <li v-show ="attribute_title.attribute9!==''">{{attribute_title.attribute9 +":"+"&#12288;"+detail.attribute9}}</li>
-          <li v-show ="attribute_title.attribute10!==''">{{attribute_title.attribute10 +":"+"&#12288;"+detail.attribute10}}</li>
-          <li v-show ="attribute_title.attribute11!==''">{{attribute_title.attribute11 +":"+"&#12288;"+detail.attribute11}}</li>
-          <li v-show ="attribute_title.attribute12!==''">{{attribute_title.attribute12 +":"+"&#12288;"+detail.attribute12}}</li>
-          <li v-show ="attribute_title.attribute13!==''">{{attribute_title.attribute13 +":"+"&#12288;"+detail.attribute13}}</li>
-          <li v-show ="attribute_title.attribute14!==''">{{attribute_title.attribute14 +":"+"&#12288;"+detail.attribute14}}</li>
-          <li v-show ="attribute_title.attribute15!==''">{{attribute_title.attribute15 +":"+"&#12288;"+detail.attribute15}}</li>
-          <li v-show ="attribute_title.attribute16!==''">{{attribute_title.attribute16 +":"+"&#12288;"+detail.attribute16}}</li>
-          <li v-show ="attribute_title.attribute17!==''">{{attribute_title.attribute17 +":"+"&#12288;"+detail.attribute17}}</li>
-          <li v-show ="attribute_title.attribute18!==''">{{attribute_title.attribute18 +":"+"&#12288;"+detail.attribute18}}</li>
-          <li v-show ="attribute_title.attribute19!==''">{{attribute_title.attribute19 +":"+"&#12288;"+detail.attribute19}}</li>
-          <li v-show ="attribute_title.attribute20!==''">{{attribute_title.attribute20 +":"+"&#12288;"+detail.attribute20}}</li>
-          <li>{{"创建账号:"+"&#12288;"+detail.create_user}}</li>
-          <li>{{"记录时间:"+"&#12288;"+detail.dataTime}}</li>
-          <li>{{"创建时间:"+"&#12288;"+detail.create_time}}</li>
-          <li>{{"备注信息:"+"&#12288;"+detail.desc}}</li>
-        </ul>
-        <dl>
-          <dt>文件附件:</dt>
-          <template v-for="(value,id) in detail.file">
-            <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
-          </template>
-        </dl>
-      </div>
-       <div class="button">
-         <button type="button" @click="removeData(detail.id)" v-show ="is_superuser===true||canRead===true" >删除</button>
-        <button type="button" @click="showViewid='list'">返回列表页</button>
+      <div class="center">
+        <div class="heard">
+          <span>详情信息</span>
+          <button type="button" @click="showListView"></button>
+        </div>
+        <div class="content">
+          <div class="basic">
+            <dt>基础信息</dt>
+            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
+            <dd>{{"任务分类:"+"&#12288;"+detail.taskType_name+"("+detail.taskType_code+")"}}</dd>
+            <dd>{{"任务:"+"&#12288;"+detail.task_name+"("+detail.task_code+")"}}</dd>
+            <dd>{{"产品分类:"+"&#12288;"+detail.productType_name+"("+detail.productType_code+")"}}</dd>
+            <dd>{{"产品:"+"&#12288;"+detail.product_name+"("+detail.product_code+")"}}</dd>
+            <dd>{{"批次号:"+"&#12288;"+detail.batch}}</dd>
+            <dd>{{"序列号:"+"&#12288;"+detail.sn}}</dd>
+            <dd>{{"人员信息:"+"&#12288;"+detail.personnel}}</dd>
+            <dd>{{"设备信息:"+"&#12288;"+detail.equipment}}</dd>
+            <dd>{{"物料信息:"+"&#12288;"+detail.material}}</dd>
+            <dd>{{"工序信息:"+"&#12288;"+detail.station}}</dd>
+            <dd>{{"质检信息:"+"&#12288;"+detail.quality}}</dd>
+            <dd v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</dd>
+            <dd v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</dd>
+            <dd v-show ="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</dd>
+            <dd v-show ="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</dd>
+            <dd v-show ="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</dd>
+            <dd v-show ="attribute_title.attribute6!==''">{{attribute_title.attribute6 +":"+"&#12288;"+detail.attribute6}}</dd>
+            <dd v-show ="attribute_title.attribute7!==''">{{attribute_title.attribute7 +":"+"&#12288;"+detail.attribute7}}</dd>
+            <dd v-show ="attribute_title.attribute8!==''">{{attribute_title.attribute8 +":"+"&#12288;"+detail.attribute8}}</dd>
+            <dd v-show ="attribute_title.attribute9!==''">{{attribute_title.attribute9 +":"+"&#12288;"+detail.attribute9}}</dd>
+            <dd v-show ="attribute_title.attribute10!==''">{{attribute_title.attribute10 +":"+"&#12288;"+detail.attribute10}}</dd>
+            <dd v-show ="attribute_title.attribute11!==''">{{attribute_title.attribute11 +":"+"&#12288;"+detail.attribute11}}</dd>
+            <dd v-show ="attribute_title.attribute12!==''">{{attribute_title.attribute12 +":"+"&#12288;"+detail.attribute12}}</dd>
+            <dd v-show ="attribute_title.attribute13!==''">{{attribute_title.attribute13 +":"+"&#12288;"+detail.attribute13}}</dd>
+            <dd v-show ="attribute_title.attribute14!==''">{{attribute_title.attribute14 +":"+"&#12288;"+detail.attribute14}}</dd>
+            <dd v-show ="attribute_title.attribute15!==''">{{attribute_title.attribute15 +":"+"&#12288;"+detail.attribute15}}</dd>
+            <dd v-show ="attribute_title.attribute16!==''">{{attribute_title.attribute16 +":"+"&#12288;"+detail.attribute16}}</dd>
+            <dd v-show ="attribute_title.attribute17!==''">{{attribute_title.attribute17 +":"+"&#12288;"+detail.attribute17}}</dd>
+            <dd v-show ="attribute_title.attribute18!==''">{{attribute_title.attribute18 +":"+"&#12288;"+detail.attribute18}}</dd>
+            <dd v-show ="attribute_title.attribute19!==''">{{attribute_title.attribute19 +":"+"&#12288;"+detail.attribute19}}</dd>
+            <dd v-show ="attribute_title.attribute20!==''">{{attribute_title.attribute20 +":"+"&#12288;"+detail.attribute20}}</dd>
+          </div>
+          <div class="desc" v-show="detail.desc!=''">
+            <dt>备注信息</dt>
+            <dd>{{detail.desc}}</dd>
+          </div>
+          <div class="other">
+            <dt>其他信息</dt>
+            <dd>{{"创建账号:"+"&#12288;"+detail.create_user}}</dd>
+            <dd>{{"创建时间:"+"&#12288;"+detail.create_time}}</dd>
+          </div>
+          <div class="file">
+            <dt>文件附件</dt>
+            <dd v-for="(value,id) in detail.file" :key="id">
+              <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
+            </dd>
+          </div>
+          <div class="image">
+            <dt>图片附件</dt>
+            <dd v-for="(value,id) in detail.image" :key="id">
+              <a target='_black' v-bind:key="id" :href="value.image"> <img :src="value.image" width="50px"></a>
+            </dd>
+          </div>
+        </div>
+        <div class="button">
+          <button type="button" @click="removeData(detail.id)">删除</button>
+        </div>
       </div>
     </div>
-    <!--    /*创建页显示*/-->
-    <div  class="create"  v-show="showViewid==='create'">
-      <form >
-        <div>分类:
-          <select v-model="formItem.type"   placeholder="请选择分类">
-            <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
-          </select>
-          <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
+    <!-- 创建页显示-->
+    <div  class="create"  v-show ="showViewid==='create'">
+      <div class="center">
+        <div class="heard">
+          <span>信息创建页</span>
+          <button type="button" @click="showListView"></button>
         </div>
-        <div>任务分类:
-          <select v-model="formItem.taskType" >
-            <option v-for="item in taskType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
-          </select>
+        <div class="content">
+          <form >
+            <div>分类:
+              <select v-model="formItem.type"   placeholder="请选择分类">
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              </select>
+              <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
+            </div>
+            <div>
+
+            </div>
+            <div>任务分类:
+              <select v-model="formItem.taskType" >
+                <option v-for="item in taskType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+              </select>
+            </div>
+            <div>任务信息:
+              <select v-model="formItem.task" >
+                <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+              </select>
+            </div>
+            <div>产品分类:
+              <select v-model="formItem.productType" >
+                <option v-for="item in taskItem_productType" :value="item.productType_code" :key="item.productType_code">{{item.productType_name +"("+ item.productType_code+")"}}</option>
+              </select>
+            </div>
+            <div>产品信息:
+              <select v-model="formItem.product" >
+                <option v-for="(item,index) in taskItem_product" :value="item.product_id" :key="index">{{item.product_name +"("+ item.product_code+")"}}</option>
+              </select>
+            </div>
+            <div>批次号:
+              <input v-model="formItem.batch"  placeholder="请输入批次号...">
+            </div>
+            <div>序列号:
+              <input v-model="formItem.sn"  placeholder="请输入序列号...">
+            </div>
+            <div >人员信息:
+              <textarea v-model="formItem.personnel" placeholder="请输入当前的人员信息..."></textarea>
+            </div>
+            <div >设备信息:
+              <textarea v-model="formItem.equipment" placeholder="请输入当前的设备信息..."></textarea>
+            </div>
+            <div >物料信息:
+              <textarea v-model="formItem.material" placeholder="请输入当前的物料信息..."></textarea>
+            </div>
+            <div >工序信息:
+              <textarea v-model="formItem.station" placeholder="请输入当前的工序信息..."></textarea>
+            </div>
+            <div >质检信息:
+              <textarea v-model="formItem.quality" placeholder="请输入当前的质检信息..."></textarea>
+            </div>
+            <div>记录时间:
+              <input v-model="formItem.dataTime"  type="datetime-local" placeholder="选择日期和时间">
+              <span class="message" v-show ="!$v.formItem.dataTime.required">请选择日期</span>
+            </div>
+            <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
+              <input v-model="formItem.attribute1"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
+              <input v-model="formItem.attribute2"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
+              <input v-model="formItem.attribute3"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
+              <input v-model="formItem.attribute4"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
+              <input v-model="formItem.attribute5"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute6!==''">{{attribute_title.attribute6}}
+              <input v-model="formItem.attribute6"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute7!==''">{{attribute_title.attribute7}}
+              <input v-model="formItem.attribute7"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute8!==''">{{attribute_title.attribute8}}
+              <input v-model="formItem.attribute8"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute9!==''">{{attribute_title.attribute9}}
+              <input v-model="formItem.attribute9"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute10!==''">{{attribute_title.attribute10}}
+              <input v-model="formItem.attribute10"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute11!==''">{{attribute_title.attribute11}}
+              <input v-model="formItem.attribute11"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute12!==''">{{attribute_title.attribute12}}
+              <input v-model="formItem.attribute12"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute13!==''">{{attribute_title.attribute13}}
+              <input v-model="formItem.attribute13"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute14!==''">{{attribute_title.attribute14}}
+              <input v-model="formItem.attribute14"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute15!==''">{{attribute_title.attribute15}}
+              <input v-model="formItem.attribute15"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute16!==''">{{attribute_title.attribute16}}
+              <input v-model="formItem.attribute16"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute17!==''">{{attribute_title.attribute17}}
+              <input v-model="formItem.attribute17"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute18!==''">{{attribute_title.attribute18}}
+              <input v-model="formItem.attribute18"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute19!==''">{{attribute_title.attribute19}}
+              <input v-model="formItem.attribute19"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute20!==''">{{attribute_title.attribute20}}
+              <input v-model="formItem.attribute20"  placeholder="...">
+            </div>
+            <div >备注信息:
+              <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
+            </div>
+            <div class="file">文件:
+              <span>
+                选择文件
+                <input type="file"  @change="fileBeforeUpload"/>
+              </span>
+              <ul>
+                <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
+              </ul>
+            </div>
+            <div class="image">图片:
+              <span>
+                  选择图片
+                  <input type="file"  @change="imageBeforeUpload"/>
+               </span>
+              <ul>
+                <li v-for="value in imageData" v-bind:key="value.id"  @click="removeImage(value.id)">
+                  <img :src="value.imageUrl">
+                </li>
+              </ul>
+            </div>
+          </form>
         </div>
-        <div>任务信息:
-          <select v-model="formItem.task" >
-            <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
-          </select>
+        <div class="button">
+          <button type="button" @click="save">保存数据</button>
         </div>
-<!--        <div>产品分类:-->
-<!--          <select v-model="formItem.productType" >-->
-<!--            <option v-for="item in productType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>-->
-<!--          </select>-->
-<!--        </div>-->
-<!--        <div>产品信息:-->
-<!--          <select v-model="formItem.product" >-->
-<!--            <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>-->
-<!--          </select>-->
-        <div>产品信息:
-          <select v-model="formItem.product" >
-            <option v-for="(item,index) in productInfor1" :value="item.product_id" :key="index">{{item.product_name +"("+ item.product_code+")"}}</option>
-          </select>
-        </div>
-        <div>批次号:
-          <input v-model="formItem.batch"  placeholder="请输入批次号...">
-        </div>
-        <div>序列号:
-          <input v-model="formItem.sn"  placeholder="请输入序列号...">
-        </div>
-        <div >人员信息:
-          <textarea v-model="formItem.personnel" placeholder="请输入当前的人员信息..."></textarea>
-        </div>
-        <div >设备信息:
-          <textarea v-model="formItem.equipment" placeholder="请输入当前的设备信息..."></textarea>
-        </div>
-        <div >物料信息:
-          <textarea v-model="formItem.material" placeholder="请输入当前的物料信息..."></textarea>
-        </div>
-        <div >工序信息:
-          <textarea v-model="formItem.station" placeholder="请输入当前的工序信息..."></textarea>
-        </div>
-        <div >质检信息:
-          <textarea v-model="formItem.quality" placeholder="请输入当前的质检信息..."></textarea>
-        </div>
-        <div>记录时间:
-          <input v-model="formItem.dataTime"  type="datetime-local" placeholder="选择日期和时间">
-          <span class="message" v-show ="!$v.formItem.dataTime.required">请选择日期</span>
-        </div>
-        <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
-          <input v-model="formItem.attribute1"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
-          <input v-model="formItem.attribute2"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
-          <input v-model="formItem.attribute3"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
-          <input v-model="formItem.attribute4"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
-          <input v-model="formItem.attribute5"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute6!==''">{{attribute_title.attribute6}}
-          <input v-model="formItem.attribute6"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute7!==''">{{attribute_title.attribute7}}
-          <input v-model="formItem.attribute7"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute8!==''">{{attribute_title.attribute8}}
-          <input v-model="formItem.attribute8"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute9!==''">{{attribute_title.attribute9}}
-          <input v-model="formItem.attribute9"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute10!==''">{{attribute_title.attribute10}}
-          <input v-model="formItem.attribute10"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute11!==''">{{attribute_title.attribute11}}
-          <input v-model="formItem.attribute11"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute12!==''">{{attribute_title.attribute12}}
-          <input v-model="formItem.attribute12"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute13!==''">{{attribute_title.attribute13}}
-          <input v-model="formItem.attribute13"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute14!==''">{{attribute_title.attribute14}}
-          <input v-model="formItem.attribute14"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute15!==''">{{attribute_title.attribute15}}
-          <input v-model="formItem.attribute15"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute16!==''">{{attribute_title.attribute16}}
-          <input v-model="formItem.attribute16"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute17!==''">{{attribute_title.attribute17}}
-          <input v-model="formItem.attribute17"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute18!==''">{{attribute_title.attribute18}}
-          <input v-model="formItem.attribute18"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute19!==''">{{attribute_title.attribute19}}
-          <input v-model="formItem.attribute19"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute20!==''">{{attribute_title.attribute20}}
-          <input v-model="formItem.attribute20"  placeholder="...">
-        </div>
-        <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
-        </div>
-          <div class="file">文件附件:
-          <ul>
-            <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
-          </ul>
-          <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
-          <button type="button" @click="uploadFile">上传</button>
-        </div>
-      </form>
-      <div class="button">
-        <button type="button" @click="save">保存数据</button>
-        <button type="button" @click="showViewid='list'">返回列表页</button>
       </div>
     </div>
   </div>
@@ -307,32 +353,17 @@ export default {
         start_time: '',
         stop_time: ''
       },
-
       /* 详情页数据 */
       detail: [],
       type: {},
-      personnel: {},
-      level: {},
-      /* 详情页审核记录项表单 */
-      alterItem: {
-        desc: '',
-        uri: 'productData'
-      },
-      alterList: [],
-      alterData: [],
-      /* 详情页按钮显示控制 */
-      showSubmitBt: false,
-      showReturnBt: false,
-      showApprovedBt: false,
-      showDeleteBt: false,
       /* 创建页表单项数据 */
       formItem: {
         id: '',
-        type: null,
-        productType: null,
-        product: null,
-        taskType: null,
-        task: null,
+        type: '',
+        productType: '',
+        product: '',
+        taskType: '',
+        task: '',
         batch: '',
         sn: '',
         personnel: '',
@@ -341,6 +372,7 @@ export default {
         station: '',
         quality: '',
         dataTime: '',
+        image: [],
         file: [],
         alter: [],
         attribute1: '',
@@ -366,9 +398,17 @@ export default {
         desc: '',
         auditor: ''
       },
+      /* 图片项表单 */
+      imageItem: {
+        image: '',
+        imageName: '',
+        desc: '',
+        uri: 'skillInfor'
+      },
+      imageData: [],
       /* 创建页文件项表单 */
       fileItem: {
-        file: null,
+        file: '',
         fileName: '',
         desc: '',
         uri: 'productData'
@@ -376,13 +416,14 @@ export default {
       fileData: [],
       /* 产品分类信息 */
       productType: [],
-      /* 产品信息 */
       productInfor: [],
-      productInfor1: [],
       /* 任务分类信息 */
       taskType: [],
       /* 任务信息 */
       taskInfor: [],
+      taskItem: [],
+      taskItem_productType: [],
+      taskItem_product: [],
       /* 过程数据分类信息 */
       typeInfor: [],
       /* 具有审核权限的账号信息 */
@@ -551,7 +592,59 @@ export default {
         }
       }
       this.fileData = []
+      this.imageData = []
       this.showViewid = 'create'
+    },
+    /* 提交图片项 */
+    uploadImage () {
+      if (!confirm('确认提交??')) {
+        return
+      }
+      let formData = new FormData()
+      // 下面是表单绑定的data 数据
+      formData.append('uri', this.imageItem.uri)
+      formData.append('desc', this.imageItem.desc)
+      formData.append('image', this.imageItem.image)
+      var self = this
+      this.$axios.post(`production/image/`, formData,
+        {headers: {'Content-Type': 'multipart/form-data'}}
+      ).then(function (response) {
+        var obj = {'id': response.data.id,
+          'imageName': self.imageItem.imageName,
+          'imageUrl': response.data.image,
+          'desc': response.data.desc,
+          'uri': response.data.uri}
+        self.imageItem.image = ''
+        self.imageItem.desc = ''
+        self.formItem.image.push(response.data.id)
+        self.imageData.push(obj)
+        alert(self.imageItem.imageName + '图片提交成功')
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
+      })
+    },
+    imageBeforeUpload (event) {
+      this.imageItem.image = event.target.files[0]
+      this.imageItem.imageName = event.target.files[0].name
+      this.uploadImage()
+    },
+    removeImage: function (id) {
+      var self = this
+      if (!confirm('是否要删除当前数据' + id)) {
+        // 当用户点击的取消按钮的时候，应该阻断这个方法中的后面代码的继续执行
+        return
+      }
+      for (var i = 0; i < self.formItem.image.length; i++) {
+        if (self.formItem.image[i] === id) {
+          self.formItem.image.splice(i, 1)
+        }
+      }
+      for (var j = 0; j < self.imageData.length; j++) {
+        if (self.imageData[j].id === id) {
+          self.imageData.splice(j, 1)
+        }
+      }
     },
     /* 提交文件项 */
     uploadFile () {
@@ -572,7 +665,7 @@ export default {
           'fileUrl': response.data.file,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.fileItem.file = null
+        self.fileItem.file = ''
         self.fileItem.desc = ''
         self.formItem.file.push(response.data.id)
         self.fileData.push(obj)
@@ -582,7 +675,6 @@ export default {
         console.log(err)
       })
     },
-
     fileBeforeUpload (event) {
       this.fileItem.file = event.target.files[0]
       this.fileItem.fileName = event.target.files[0].name
@@ -624,6 +716,7 @@ export default {
         quality: self.formItem.quality,
         dataTime: self.formItem.dataTime,
         file: self.formItem.file,
+        image: self.formItem.image,
         attribute1: self.formItem.attribute1,
         attribute2: self.formItem.attribute2,
         attribute3: self.formItem.attribute3,
@@ -648,6 +741,8 @@ export default {
       }).then(function (response) {
         self.formItem.file = []
         self.fileData = []
+        self.formItem.image = []
+        self.imageData = []
         alert('数据保存成功')
       }).catch(function (err) {
         // 错误提示
@@ -678,10 +773,10 @@ export default {
       self.userinfor = response.data.results
       self.$axios.get('production/productDataType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
         self.typeInfor = response.data.results
-        self.$axios.get('process/productType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
-          self.productType = response.data.results
-          self.$axios.get('plan/productTaskType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
-            self.taskType = response.data.results
+        self.$axios.get('plan/productTaskType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
+          self.taskType = response.data.results
+          self.$axios.get('process/productType/?page_size=99999&ordering=-id').then(function (response) {
+            self.productType = response.data.results
             self.showListView()
           }).catch(function (err) {
             // 错误提示
@@ -725,13 +820,16 @@ export default {
     formItem: {
       deep: true
     },
+    selectItem: {
+      deep: true
+    },
     /* 监控用户选择的类别变化时,更新附加属性标题 */
     'formItem.type': function (newval, oldval) {
       var self = this
       for (let key in self.attribute_title) {
         self.attribute_title[key] = ''
       }
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get(`production/productDataType/` + newval).then(function (response) {
@@ -751,25 +849,10 @@ export default {
         console.log(err)
       })
     },
-    /**/
-    'formItem.productType': function (newval, oldval) {
-      var self = this
-      this.productInfor = []
-      if (newval === undefined) {
-        return
-      }
-      this.$axios.get('process/productInfor/?page_size=99999&ordering=-id&state=使用中' +
-        '&type=' + newval).then(function (response) {
-        self.productInfor = response.data.results
-      }).catch(function (err) {
-        // 错误提示
-        console.log(err)
-      })
-    },
     'formItem.taskType': function (newval, oldval) {
       var self = this
       this.taskInfor = []
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get('plan/productTaskCreate/?page_size=99999&ordering=-id&state=使用中' +
@@ -782,460 +865,764 @@ export default {
     },
     'formItem.task': function (newval, oldval) {
       var self = this
-      this.productInfor1 = []
-      if (newval === undefined) {
+      this.taskItem = []
+      this.taskItem_productType = []
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get(`plan/productTaskCreate/` + newval).then(function (response) {
         response.data.child.forEach(function (value, i) {
+          self.taskItem.push(value.salesOrderItem)
+        })
+        var productType = []
+        self.taskItem.forEach(function (value, i) {
           var obj
           obj = {
-            batch: value.salesOrderItem.batch,
-            id: value.salesOrderItem.id,
-            productType_code: value.salesOrderItem.productType_code,
-            productType_name: value.salesOrderItem.productType_name,
-            product_code: value.salesOrderItem.product_code,
-            product_id: value.salesOrderItem.product_id,
-            product_name: value.salesOrderItem.product_name
+            productType_code: value.productType_code,
+            productType_name: value.productType_name
           }
-          self.productInfor1.push(obj)
+          productType.push(obj)
         })
+        let hash = {}
+        self.taskItem_productType = productType.reduce((item, next) => {
+          // eslint-disable-next-line no-unused-expressions
+          hash[next.productType_code] ? '' : hash[next.productType_code] = true && item.push(next)
+          return item
+        }, [])
       }).catch(function (err) {
         // 错误提示
         console.log(err)
       })
     },
-    'formItem.product': function (newval, oldval) {
-      var self = this
-      if (newval === undefined) {
+    'formItem.productType': function (newval, oldval) {
+      this.taskItem_product = []
+      if (newval === undefined || newval === '') {
         return
       }
-      this.productInfor1.forEach(function (value, i) {
-        if (newval === value.product_id) {
-          self.formItem.batch = value.batch
+      var self = this
+      var productInfor = []
+      this.taskItem.forEach(function (value, i) {
+        if (newval === value.productType_code) {
+          var obj
+          obj = {
+            product_id: value.product_id,
+            product_code: value.product_code,
+            product_name: value.product_name
+          }
+          productInfor.push(obj)
         }
+      })
+      let hash = {}
+      self.taskItem_product = productInfor.reduce((item, next) => {
+        // eslint-disable-next-line no-unused-expressions
+        hash[next.product_id] ? '' : hash[next.product_id] = true && item.push(next)
+        return item
+      }, [])
+    },
+    'selectItem.taskType': function (newval, oldval) {
+      var self = this
+      this.taskInfor = []
+      if (newval === undefined || newval === '') {
+        return
+      }
+      // eslint-disable-next-line camelcase
+      var taskType_id = ''
+      this.taskType.forEach(function (value, i) {
+        if (newval === value.code) {
+          // eslint-disable-next-line camelcase
+          taskType_id = value.id
+        }
+      })
+      this.$axios.get('plan/productTaskCreate/?page_size=99999&ordering=-id&state=使用中' +
+        // eslint-disable-next-line camelcase
+        '&type=' + taskType_id).then(function (response) {
+        self.taskInfor = response.data.results
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
+      })
+    },
+    'selectItem.productType': function (newval, oldval) {
+      var self = this
+      this.productInfor = []
+      if (newval === undefined || newval === '') {
+        return
+      }
+      // eslint-disable-next-line camelcase
+      var productType_id = ''
+      this.productType.forEach(function (value, i) {
+        if (newval === value.code) {
+          // eslint-disable-next-line camelcase
+          productType_id = value.id
+        }
+      })
+      this.$axios.get('process/productInfor/?page_size=99999&ordering=-id&state=使用中' +
+        // eslint-disable-next-line camelcase
+        '&type=' + productType_id).then(function (response) {
+        self.productInfor = response.data.results
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
       })
     }
   }
 }
 </script>
-<style scoped>
-  .productData{
-    position: relative;
+<style scoped lang="scss" >
+  .productData {
+    position: absolute;
     top: 0;
-    width: 100%;
+    width: 98%;
     height: 100%;
-  }
-  .list{
-    position: relative;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .list .listHead{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 25%;
-    background: rgba(255, 255, 255, 0.57);
-  }
-  .list .listHead .select{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 33%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #151515;
+    margin-right: 1%;
+    margin-left: 1%;
+    .list {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      .heard {
+        position: absolute;
+        top: 1%;
+        width: 100%;
+        height: 24%;
+        background: rgba(255, 255, 255, 0.57);
+        .select {
+          position: absolute;
+          top: 0;
+          width: 100%;
+          height: 70%;
+          div {
+            position: relative;
+            top: 0;
+            width: 20%;
+            height: 33%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.4em;
+            color: #151515;
+            padding-top: 0.6em;
+            float: left;
+            select {
+              position: absolute;
+              width: 10em;
+              font-size: 0.8em;
+              border: 1px solid #D8D8D8;
+              background: #ffffff;
+              border-radius: 1em;
+              margin-left: 1em;
+              padding-left: 1em;
+            }
+            input {
+              position: absolute;
+              width: 15em;
+              font-size: 0.8em;
+              border: 1px solid #D8D8D8;
+              background: #ffffff;
+              border-radius: 1em;
+              margin-left: 1em;
+              padding-left: 1em;
+            }
+            button {
+              position: absolute;
+              width: 6em;
+              border: 1px solid #D8D8D8;
+              background: #D8D8D8;
+              border-radius: 1em;
+            }
+          }
+          div:nth-child(7) {
+            width: 25%;
+          }
+          div:nth-child(8) {
+            width: 25%;
+          }
+          div:nth-child(9) {
+            width: 25%;
+          }
+        }
+        .button{
+          position: absolute;
+          top: 70%;
+          width: 100%;
+          height: 30%;
+          font-family: PingFangSC-Regular;
+          color: #151515;
+          button{
+            position: absolute;
+            right: 40%;
+            width: 15em;
+            font-size: 0.35em;
+            line-height: 2em;
+            border: 1px solid #D8D8D8;
+            background: #D8D8D8;
+            border-radius: 1em;
+          }
+        }
+      }
+      .content{
+        position: absolute;
+        top: 25%;
+        bottom: 0;
+        width: 100%;
+        .table{
+          height: 90%;
+          width: 100%;
+          overflow: auto;
+          table{
+            height: 100%;
+            width: 100%;
+            table-layout: auto;
+            empty-cells:hide;
+            word-break : normal;
+            th{
+              position: sticky;
+              top:0;
+              height: 1em;
+              font-family: PingFangSC-Regular;
+              font-size: 0.4em;
+              line-height: 2.5em;
+              color: #000000;
+              text-align: center;
+              background: #ffffff;
+              border:1px solid rgba(177, 176, 171, 0.89);
+              &:nth-child(1){
+                width: 3em;
+              }
+              &:nth-child(2){
+                width: 8em;
+              }
+              &:nth-child(3){
+                width: 8em;
+              }
+              &:nth-child(4){
+                width: 8em;
+              }
+              &:nth-child(5){
+                width: 8em;
+              }
+              &:nth-child(6){
+                width: 8em;
+              }
+              &:nth-child(7){
+                width: 5em;
+              }
+              &:nth-child(8){
+                width: 5em;
+              }
+              &:nth-child(9){
+                width: 8em;
+              }
+              &:nth-child(10){
+                width: 5em;
+              }
+              &:nth-child(11){
+                width: 5em;
+              }
+            }
+            td{
+              height: 1em;
+              font-family: PingFangSC-Regular;
+              font-size: 0.4em;
+              color: #191A1E;
 
-  }
-  .list .listHead .select div{
-    position: relative;
-    top: 0;
-    width: 20%;
-    height: 100%;
-    margin-right: 2%;
-    font-family: AppleSystemUIFont;
-    float: left;
-  }
-  .list .listHead .select select{
-    position: absolute;
-    width: 60%;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .list .listHead .select input{
-    position: absolute;
-    width: 90%;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .list .listHead .select button{
-    position: absolute;
-    right: 0;
-    width: 40%;
-    border-radius: 1em;
-    border: none;
-    border: 1px solid #D8D8D8;
-    background: #D8D8D8;
-    border-radius: 1em;
-  }
-  .list .listHead  .button{
-    position: absolute;
-    top: 66%;
-    width: 100%;
-    height: 20%;
-    margin-left: 30%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #151515;
+              text-align: center;
+              background: #ffffff;
+              border:1px solid rgba(177, 176, 171, 0.61);
+            }
+          }
+        }
+        .page{
+          position: absolute;
+          right: 5%;
+          bottom: 0;
+          height: 10%;
+          font-size: 0.3em;
+          line-height: 2em;
+          button{
+            position: relative;
+            width: 20em;
+            font-size: 0.3em;
+            line-height: 2em;
+            border: 1px solid #363E42;
+            border-radius: 1em;
+          }
+        }
+      }
+    }
+    .detail {
+      position: absolute;
+      top:0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(200, 200, 200,0.8);
+      .center {
+        position: absolute;
+        top:10%;
+        left: 20%;
+        width: 60%;
+        height: 80%;
+        background: #ffffff;
+        border-radius:0.5em;
+        .heard {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 100%;
+          height: 8%;
+          background: #123658;
+          border-top-right-radius: 0.5em;
+          border-top-left-radius: 0.5em;
+          span {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.6em;
+            line-height: 1.5em;
+            text-align: center;
+            color: #ffffff;
+            display: inline-block;
+          }
+          button {
+            position: absolute;
+            right: 0.25em;
+            top: 0.25em;
+            height: 0.5em;
+            width: 0.5em;
+            border: none;
+            background-image: url("../../../../../static/icons/close.png");
+            background-size: cover;
+          }
+        }
+        .content {
+          position: absolute;
+          top: 10%;
+          left: 10%;
+          width: 80%;
+          height: 80%;
+          overflow: auto;
+          .basic{
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            dd{
+              width: 100%;
+              display: block;
+              float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #0c0c0c;
+            }
+          }
+          .desc{
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            dd{
+              width: 100%;
+              display: block;
+              float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #0c0c0c;
+            }
+          }
+          .other{
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            dd{
+              width: 50%;
+              display: block;
+              float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #0c0c0c;
+            }
+            dd:nth-child(3){
+              width: 100%;
+              display: block;
+              float: left;
+            }
+            dd:nth-child(4){
+              width: 100%;
+              display: block;
+              float: left;
+            }
+          }
+          .file{
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            dd{
+              width: 100%;
+              display: block;
+              float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #0c0c0c;
+              a{
+                color: #0c0c0c;
+              }
+            }
+          }
+          .image{
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            dd{
+              position: relative;
+              width: 50%;
+              height: 5em;
+              float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #0c0c0c;
+              a{
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                img{
+                  position: absolute;
+                  height: 90%;
+                  width: 90%;
+                }
+              }
+            }
+          }
+          .child{
+            position: relative;
+            top: 0;
+            width: 100%;
+            overflow: auto;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            table{
+              height: 100%;
+              width: 100%;
+              table-layout: auto;
+              empty-cells:hide;
+              word-break : normal;
+              font-size: 0.6em;
+              th{
+                position: sticky;
+                top:0;
+                height: 1em;
+                font-family: PingFangSC-Regular;
+                font-size: 0.6em;
+                line-height: 1.6em;
+                color: #000000;
+                text-align: center;
+                background: #999494;
+                border:1px solid rgba(177, 176, 171, 0.89);
+                &:nth-child(1){
+                  width: 3em;
+                }
+                &:nth-child(2){
+                  width: 10em;
+                }
+                &:nth-child(3){
+                  width: 10em;
+                }
+                &:nth-child(4){
+                  width: 10em;
+                }
+                &:nth-child(5){
+                  width: 5em;
+                }
+                &:nth-child(6){
+                  width: 10em;
+                }
+              }
+              td{
+                height: 1em;
+                font-family: PingFangSC-Regular;
+                font-size: 0.5em;
+                line-height: 2em;
+                color: #191A1E;
+                text-align: center;
+                background: #eeeaea;
+                border:1px solid rgba(177, 176, 171, 0.61);
+              }
+            }
+          }
+        }
+        .button {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 8%;
+          padding-left: 10%;
+          button {
+            position: relative;
+            top: -2em;
+            width: 6em;
+            font-size: 0.3em;
+            line-height: 2em;
+            background: #ffffff;
+            border: 1px solid #363E42;
+            border-radius: 13px;
+          }
+        }
+      }
+    }
+    .create {
+      position: absolute;
+      top:0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(200, 200, 200,0.8);
+      .center {
+        position: absolute;
+        top:10%;
+        left: 15%;
+        width: 70%;
+        height: 80%;
+        background: #ffffff;
+        border-radius:0.5em;
+        .heard {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 100%;
+          height: 8%;
+          background: #123658;
+          border-top-right-radius: 0.5em;
+          border-top-left-radius: 0.5em;
+          span {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.6em;
+            line-height: 1.5em;
+            text-align: center;
+            color: #ffffff;
+            display: inline-block;
+          }
+          button {
+            position: absolute;
+            right: 0.25em;
+            top: 0.25em;
+            height: 0.5em;
+            width: 0.5em;
+            border: none;
+            background-image: url("../../../../../static/icons/close.png");
+            background-size: cover;
+          }
+        }
+        .content {
+          position: absolute;
+          top: 10%;
+          left: 10%;
+          width: 80%;
+          height: 80%;
+          overflow: auto;
+          form {
+            position: absolute;
+            top: 5%;
+            width: 100%;
+            height: 90%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.5em;
+            color: #151515;
 
-  }
-  .list .listHead  .ordering{
-    position: absolute;
-    top: 86%;
-    width: 100%;
-    height: 14%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #ffffff;
-
-    background: #dcdcdc;
-  }
-
-  .list .button button{
-    width: 15em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .list .listTable{
-    position: absolute;
-    top: 25%;
-    width: 100%;
-    height: 75%;
-  }
-  .list .listTable .table{
-    height: 90%;
-    width: 100%;
-    overflow: auto;
-  }
-  .list .listTable .table table{
-    height: 100%;
-    width: 100%;
-        /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .list .listTable .table  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #ffffff;
-    text-align: center;
-
-    background: #191A1E;
-  }
-  .list .listTable .table  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.4em;
-    color: #191A1E;
-
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-
-  .list .listTable .page{
-    position: absolute;
-    right: 5%;
-    bottom: 0;
-    height: 10%;
-    font-size: 0.3em;
-    line-height: 2em;
-  }
-  .list .listTable button{
-    position: relative;
-    width: 20em;
-    font-size: 0.3em;
-    line-height: 2em;
-    border: 1px solid #363E42;
-    border-radius: 1em;
-  }
-  .detail{
-    position: relative;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .detail .content{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 80%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    line-height: 2em;
-    color: #000000;
-
-    overflow: auto;
-    background: rgba(255, 255, 255, 0.57);
-  }
-  .detail table{
-    height: 30%;
-    width: 100%;
-        /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .detail  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #ffffff;
-    text-align: center;
-
-    background: #191A1E;
-  }
-  .detail  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.4em;
-    color: #191A1E;
-
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .detail .alter{
-    position: absolute;
-    top: 80%;
-    width: 100%;
-    height: 10%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    line-height: 2em;
-    color: #000000;
-
-    background: #4d5669;
-  }
-  .detail .alter textarea{
-    position: absolute;
-    width: 60%;
-    height: 100%;
-    left: 5em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .detail .alter button{
-    position: absolute;
-    bottom: 40%;
-    right: 15%;
-    width: 6em;
-    font-size: 0.5em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .detail .button{
-    position: absolute;
-    top: 90%;
-    width: 100%;
-    height: 10%;
-  }
-  .detail .button button{
-    width: 12em;
-    margin: 4em;
-    font-size: 0.3em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .create{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .create form{
-    position: absolute;
-    top: 0;
-    left: 2%;
-    width: 80%;
-    height: 90%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #151515;
-
-    overflow: auto;
-  }
-  .create form div{
-    position: relative;
-    width: 50%;
-    height: 12%;
-    float: left;
-  }
-  .create form div select,.create form div input,.create form div textarea{
-    position: absolute;
-    width: 15em;
-    right: 4em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.8em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .create form div span{
-    position: absolute;
-    width: 15em;
-    right: 6em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.6em;
-    color: #f5222d;
-    display: block;
-  }
- .create .child {
-    position: relative;
-    width: 100%;
-    height: 20%;
-    float: left;
-    background: #4d5669;
-  }
-  .create .child form{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    padding-top: 1%;
-    overflow: auto;
-  }
-  .create .child div{
-    position: relative;
-    width: 50%;
-    height: 30%;
-    font-size: 1.5em;
-    float: left;
-  }
-  .create .child select,.create .child input,.create .child textarea{
-    position: absolute;
-    width: 60%;
-    height: 80%;
-    right: 4em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .create .file{
-    position: relative;
-    width: 45%;
-    height: 30%;
-    margin-right: 5%;
-    background: #4d5669;
-    float: left;
-  }
-  .create .file ul{
-    position: absolute;
-    top: 5%;
-    left: 2.5em;
-    right: 10%;
-    height: 35%;
-    margin-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .create .file ul li{
-    position: relative;
-    width: 80%;
-    height: 2em;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 1em;
-  }
-  .create .file input{
-    position: absolute;
-    top: 45%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .create .file textarea {
-    position: absolute;
-    top: 65%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    padding-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .create .file button{
-    position: absolute;
-    bottom: 0.2em;
-    width: 6em;
-    margin: 0.2em;
-    font-size: 0.8em;
-    line-height: 2em;
-    background: #2d59ff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .create table{
-    width: 100%;
-        /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .create  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 1em;
-    color: #ffffff;
-    text-align: center;
-
-    background: #191A1E;
-  }
-  .create  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.8em;
-    color: #191A1E;
-
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .create .button{
-    position: absolute;
-    top: 90%;
-    width: 100%;
-    height: 10%;
-    float: left;
-  }
-  .create .button button{
-    width: 12em;
-    margin: 0.2em;
-    font-size: 0.4em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
+            div {
+              position: relative;
+              width: 50%;
+              height: 20%;
+              float: left;
+              select, input, textarea {
+                position: absolute;
+                right: 1em;
+                width: 10em;
+                padding-left: 1em;
+                font-family: AppleSystemUIFont;
+                font-size: 0.8em;
+                border: 1px solid #D8D8D8;
+                background: #ffffff;
+                border-radius: 1em;
+              }
+              span {
+                position: absolute;
+                width: 100%;
+                font-family: AppleSystemUIFont;
+                font-size: 0.6em;
+                color: #f5222d;
+                display: block;
+                text-align: center;
+              }
+            }
+            .file {
+              position: relative;
+              width: 50%;
+              height: 30%;
+              span{
+                position: absolute;
+                width: 40%;
+                height: 20%;
+                right: 30%;
+                top: 0;
+                font-family: AppleSystemUIFont;
+                color: black;
+                font-size: 0.3em;
+                line-height: 3.3em;
+                background: #ffffff;
+                border: 1px solid #363E42;
+                border-radius: 13px;
+                input {
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  left: 0;
+                  top: 0;
+                  opacity: 0%;
+                }
+              }
+              ul {
+                position: absolute;
+                bottom: 5%;
+                left: 0;
+                width: 100%;
+                height: 65%;
+                background: #ffffff;
+                overflow: auto;
+                li {
+                  position: relative;
+                  width: 100%;
+                  height: 1.4em;
+                  color: #2b85e4;
+                  overflow:hidden;
+                  font-family: AppleSystemUIFont;
+                  font-size: 0.8em;
+                  line-height: 1.25em;
+                }
+              }
+            }
+            .image {
+              position: relative;
+              width: 50%;
+              height: 30%;
+              span{
+                position: absolute;
+                width: 40%;
+                height: 20%;
+                right: 30%;
+                top: 0;
+                font-family: AppleSystemUIFont;
+                color: black;
+                font-size: 0.3em;
+                line-height: 3.3em;
+                background: #ffffff;
+                border: 1px solid #363E42;
+                border-radius: 13px;
+                input {
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  left: 0;
+                  top: 0;
+                  opacity: 0%;
+                }
+              }
+              ul {
+                position: absolute;
+                bottom: 5%;
+                left: 0;
+                width: 100%;
+                height: 65%;
+                background: #ffffff;
+                overflow: auto;
+                li {
+                  position: relative;
+                  width: 50%;
+                  height: 10em;
+                  color: #2b85e4;
+                  overflow:hidden;
+                  font-family: AppleSystemUIFont;
+                  font-size: 0.8em;
+                  line-height: 1.25em;
+                  float: left;
+                  img{
+                    position: absolute;
+                    height: 90%;
+                    width: 90%;
+                  }
+                }
+              }
+            }
+          }
+        }
+        .button {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 8%;
+          padding-left: 10%;
+          button {
+            position: relative;
+            top: -2em;
+            width: 6em;
+            font-size: 0.3em;
+            line-height: 2em;
+            background: #ffffff;
+            border: 1px solid #363E42;
+            border-radius: 13px;
+          }
+        }
+      }
+    }
   }
 </style>

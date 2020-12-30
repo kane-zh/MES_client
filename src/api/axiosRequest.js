@@ -36,10 +36,12 @@ axios.interceptors.response.use(
     if (error.message.includes('Network Error')) { // 判断请求异常信息中是否含有超时Network Error字符串
       alert('网络超时,请检查网络是否连接')
     }
-    if (error.data.detail === 'Signature has expired.') {
-      alert('登录信息过期')
-      localStorage.removeItem('loginInfor')
-      self.$router.push({name: 'login'})
+    if (error.data !== undefined) {
+      if (error.data.detail === 'Signature has expired.') {
+        alert('登录信息过期')
+        localStorage.removeItem('loginInfor')
+        self.$router.push({name: 'login'})
+      }
     }
     if (error.request) {
       alert(error.request.response)

@@ -110,8 +110,8 @@
                 <option value="物料库">物料库</option>
                 <option value="半成品库">半成品库</option>
                 <option value="产品库">产品库</option>
-                <option value="产品库">设备库</option>
-                <option value="产品库">备品库</option>
+                <option value="设备库">设备库</option>
+                <option value="备品库">备品库</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -210,8 +210,8 @@
                 <option value="物料库">物料库</option>
                 <option value="半成品库">半成品库</option>
                 <option value="产品库">产品库</option>
-                <option value="产品库">设备库</option>
-                <option value="产品库">备品库</option>
+                <option value="设备库">设备库</option>
+                <option value="备品库">备品库</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -300,8 +300,8 @@ export default {
         code: '',
         state: '',
         type: '',
-        classes: null,
-        parent: null,
+        classes: '',
+        parent: '',
         position_sum: '',
         affiliation: '',
         location: '',
@@ -315,7 +315,7 @@ export default {
       },
       /* 创建页文件项表单 */
       fileItem: {
-        file: null,
+        file: '',
         fileName: '',
         desc: '',
         uri: 'warehouse'
@@ -327,7 +327,7 @@ export default {
       },
       /* 图片项表单 */
       imageItem: {
-        image: null,
+        image: '',
         imageName: '',
         desc: '',
         uri: 'warehouseInfor'
@@ -590,7 +590,7 @@ export default {
           'uri': response.data.uri
         }
         self.fileItem.fileName = ''
-        self.fileItem.file = null
+        self.fileItem.file = ''
         self.fileItem.desc = ''
         self.formItem.file.push(response.data.id)
         self.fileData.push(obj)
@@ -641,7 +641,7 @@ export default {
           'imageUrl': response.data.image,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.imageItem.image = null
+        self.imageItem.image = ''
         self.imageItem.desc = ''
         self.formItem.image.push(response.data.id)
         self.imageData.push(obj)

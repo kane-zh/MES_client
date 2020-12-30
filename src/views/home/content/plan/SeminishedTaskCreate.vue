@@ -1,8 +1,8 @@
 <template>
   <div class="semifinishedTaskCreate">
     <!-- 列表页显示-->
-    <div  class="list"  v-show ="showViewid==='list'">
-      <div class="listHead">
+    <div  class="list">
+      <div class="heard">
         <form class="select">
           <div>创建账号:
             <select v-model="selectItem.create_user" placeholder="请选择创建账号" >
@@ -17,6 +17,14 @@
           <div>分类:
             <select v-model="selectItem.type" placeholder="请选择分类"      >
               <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+            </select>
+          </div>
+          <div>排序:
+            <select v-model="selectItem.ordering">
+              <option value="id">添加时间-正排序</option>
+              <option value="-id">添加时间-倒排序</option>
+              <option value="update_time">更新时间-正排序</option>
+              <option value="-update_time">更新时间-倒排序</option>
             </select>
           </div>
           <div>状态:
@@ -45,394 +53,381 @@
           <div>关键字:
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
-           <div>
-               <button type="button" @click="select" >搜索</button>
-            </div>
-            <div>
-              <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
-            </div>
+          <div>
+            <button type="button" @click="select" style="background: #FCC400;border: none;left: 0">搜索</button>
+            <button type="button" @click="showListView" style="border: none;right: 0">重置</button>
+          </div>
         </form>
         <div class="button" >
-          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加生产任务</button>
-        </div>
-
-      </div>
-      <div class="listTable">
-          <div class="table">
-            <table >
-              <tr align="center"  type="height:2em">
-                <th>序号</th>
-                <th>名称</th>
-                <th>编码</th>
-                <th>分类</th>
-                <th>状态</th>
-                <th>优先级</th>
-                <th>交期</th>
-                <th>更新日期</th>
-                <th>创建账号</th>
-                <th>审核账号</th>
-                <th>操作</th>
-              </tr>
-              <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
-                <td>{{index}}</td>
-                <td>{{item.name}}</td>
-                <td>{{item.code}}</td>
-                <td>{{item.type.name+"("+item.type.code+")"}}</td>
-                <td>{{item.state}}</td>
-                <td>{{item.priority}}</td>
-                <td>{{item.delivery_time}}</td>
-                <td>{{item.update_time}}</td>
-                <td>{{item.create_user}}</td>
-                <td>{{item.auditor}}</td>
-                <td>
-                  <button type="button" @click="showDetailView(item.id)" v-show ="item.create_user===username ||
-                  item.auditor===username||canRead===true">详情</button>
-                  <button type="button" @click="showUpdateView(item.id)" v-show ="item.state==='新建'">更改</button>
-                </td>
-              </tr>
-              <tr>
-
-              </tr>
-            </table>
-          </div><div class="page">
-          <div>总共：{{listCount}}</div>
-          <button type="button" @click="listPre" v-show ="listPreUrl!==''">上一页</button>
-          <button type="button" @click="listNext" v-show ="listNextUrl!==''">下一页</button>
+          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加半成品生产任务</button>
         </div>
       </div>
-    </div>
-    <!--   /*详情页显示*/-->
-    <div  class="detail"  v-show="showViewid==='detail'">
       <div class="content">
-        <ul>
-          <li>{{"名称:"+"&#12288;"+detail.name}}</li>
-          <li>{{"编码:"+"&#12288;"+detail.code}}</li>
-          <li>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</li>
-          <li>{{"状态:"+"&#12288;"+detail.state}}</li>
-          <li>{{"优先级:"+"&#12288;"+detail.priority}}</li>
-          <li>{{"交付日期:"+"&#12288;"+detail.delivery_time}}</li>
-          <li v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</li>
-          <li v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</li>
-          <li v-show ="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</li>
-          <li v-show ="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</li>
-          <li v-show ="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</li>
-          <li>{{"创建账号:"+"&#12288;"+detail.create_user}}</li>
-          <li>{{"审核账号:"+"&#12288;"+detail.auditor}}</li>
-          <li>{{"创建时间:"+"&#12288;"+detail.create_time}}</li>
-          <li>{{"更新时间:"+"&#12288;"+detail.update_time}}</li>
-          <li>{{"备注信息:"+"&#12288;"+detail.desc}}</li>
-        </ul>
-        <Collapse active-key="3" accordion v-show ="list_child!==undefined && list_child.length > 0">
-          半成品生产任务单子项:
-          <Panel >
-            <div  slot="content">
-              <table >
-                <tr align="center"  type="height:2em">
-                  <th>序号</th>
-                  <th>半成品分类</th>
-                  <th>半成品</th>
-                  <th>生产线路分类</th>
-                  <th>生产线路</th>
-                  <th>状态</th>
-                  <th>数量</th>
-                  <th>说明</th>
-                  <th>操作</th>
-                </tr>
-                <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
-                  <td>{{index}}</td>
-                  <td>{{item.semifinishedType_name+"("+item.semifinishedType_code+")"}}</td>
-                  <td>{{item.semifinished_name+"("+item.semifinished_code+")"}}</td>
-                  <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
-                  <td>{{item.route_name+"("+item.route_code+")"}}</td>
-                  <td>{{item.state}}</td>
-                  <td>{{item.sum}}</td>
-                  <td>{{item.desc}}</td>
-                  <td>
-                    <button type="button" @click="endChild(item.id)" v-show="item.state!=='完成'">终止</button>
-                    <button type="button" @click="pendingChild(item.id)" v-show="item.state==='等待'">挂起</button>
-                    <button type="button" @click="pendingFreedChild(item.id)" v-show="item.state==='挂起'">解挂</button>
-                  </td>
-                </tr>
-                <tr>
-
-                </tr>
-              </table>
-            </div>
-          </Panel>
-        </Collapse>
-        <dl>
-          <dt>文件附件:</dt>
-          <template v-for="(value,id) in detail.file">
-            <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
-          </template>
-        </dl>
-        <dl>
-          <dt>历史审核记录:</dt>
-          <template v-for="(value,id) in detail.alter">
-            <dd v-bind:key="id">
-              {{"&#12288;&#12288;&#12288;"+value.desc+"&#12288;" +value.create_user+"&#12288;"+value.create_time}}
-            </dd>
-          </template>
-        </dl>
-        <dl>
-          <dt>新添加记录:</dt>
-          <template v-for="(value,id) in alterData">
-            <dd v-bind:key="id">
-              {{"&#12288;&#12288;&#12288;"+value.desc}}
-            </dd>
-          </template>
-        </dl>
-      </div>
-      <div class="alter" v-show ="detail.state!=='使用中'&&detail.state!=='完成'">
-        审核信息:
-        <textarea v-model="alterItem.desc"  placeholder="请输入当前信息的审核记录..."></textarea>
-        <button type="button" @click="uploadAlter">提交记录</button>
-      </div>
-      <div class="button">
-        <button type="button" @click="changeState('审核中')" v-show="showSubmitBt===true">提交数据</button>
-        <button type="button" @click="changeState('使用中')" v-show="showApprovedBt===true" >通过审核</button>
-        <button type="button" @click="changeState('新建')" v-show="showReturnBt===true">驳回信息</button>
-        <button type="button" @click="changeState('作废')" v-show="showDeleteBt===true">删除数据</button>
-        <button type="button" @click="changeState('挂起')" v-show="showPendingBt===true" >挂起</button>
-        <button type="button" @click="changeState('使用中')" v-show="showPendingFreedBt===true" >解除挂起</button>
-        <button type="button" @click="showViewid='list'">返回列表页</button>
-      </div>
-    </div>
-    <!--    /*创建页显示*/-->
-    <div  class="create"  v-show="showViewid==='create'">
-      <form >
-        <div>名称:
-          <input v-model="formItem.name"  placeholder="请输入名称">
-        </div>
-        <div>编码:
-          <input v-model="formItem.code"  placeholder="请输入编码">
-          <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
-          <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
-          <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
-        </div>
-        <div>分类:
-          <select v-model="formItem.type"   placeholder="请选择分类">
-            <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
-          </select>
-          <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
-        </div>
-        <div>优先级:
-          <select  v-model="formItem.priority" placeholder="请选择优先级"     >
-            <option value="正常">正常</option>
-            <option value="优先">优先</option>
-            <option value="紧急">紧急</option>
-          </select>
-          <span class="message" v-show ="!$v.formItem.priority.required">请选择优先级</span>
-        </div>
-        <div>交付日期:
-          <input v-model="formItem.delivery_time"  type="datetime-local" placeholder="选择日期和时间" >
-          <span class="message" v-show ="!$v.formItem.delivery_time.required">请选择日期</span>
-        </div>
-        <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
-          <input v-model="formItem.attribute1"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
-          <input v-model="formItem.attribute2"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
-          <input v-model="formItem.attribute3"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
-          <input v-model="formItem.attribute4"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
-          <input v-model="formItem.attribute5"  placeholder="...">
-        </div>
-        <div>审核账号:
-          <select v-model="formItem.auditor"  placeholder="请选择审核账号">
-            <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
-          </select>
-          <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
-        </div>
-        <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
-        </div>
-        <div class="file">文件附件:
-          <ul>
-            <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
-          </ul>
-          <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
-          <button type="button" @click="uploadFile">上传</button>
-        </div>
-        <div>
-
-        </div>
-        <div>
-
-        </div>
-        <div>
-          <button type="button" @click="showChildForm='true'" >添加子项</button>
-        </div>
-        <div  v-show="showChildForm==='true'" class="child">
-          <form>
-            <div>半成品分类:
-              <select v-model="formItem_child.semifinishedType" >
-                <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
-              </select>
-            </div>
-            <div>半成品信息:
-              <select v-model="formItem_child.semifinished" >
-                <option v-for="item in semifinishedInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
-              </select>
-            </div>
-            <div>生产线路分类:
-              <select v-model="formItem_child.productRouteType" >
-                <option v-for="item in productRouteType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
-              </select>
-            </div>
-            <div>生产线路:
-              <select v-model="formItem_child.productRoute" >
-                <option v-for="item in productRoute" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
-              </select>
-            </div>
-            <div>总数量:
-              <input type="number" v-model="formItem_child.sum" >
-            </div>
-            <div v-show="attribute_title_child.attribute1!==''">{{attribute_title_child.attribute1}}
-              <input v-model="formItem.attribute1"  type="datetime-local" placeholder="选择日期和时间">
-            </div>
-            <div v-show="attribute_title_child.attribute2!==''">{{attribute_title_child.attribute2}}
-              <input v-model="formItem_child.attribute2"  placeholder="...">
-            </div>
-            <div v-show="attribute_title_child.attribute3!==''">{{attribute_title_child.attribute3}}
-              <input v-model="formItem_child.attribute3"  placeholder="...">
-            </div>
-            <div v-show="attribute_title_child.attribute4!==''">{{attribute_title_child.attribute4}}
-              <input v-model="formItem_child.attribute4"  placeholder="...">
-            </div>
-            <div v-show="attribute_title_child.attribute5!==''">{{attribute_title_child.attribute5}}
-              <input v-model="formItem_child.attribute5"  placeholder="...">
-            </div>
-            <div>备注信息:
-              <textarea v-model="formItem_child.desc" placeholder="请输入当前半成品说明信息..."></textarea>
-            </div>
-            <div>
-              <button type="button" @click="uploadChild">添加</button>
-              <button type="button" @click="showChildForm='false'">取消</button>
-            </div>
-          </form>
-        </div>
-        <table v-show="list_child.length>0">
-            <caption align="top">已添加子项:</caption>
+        <div class="table">
+          <table >
             <tr align="center"  type="height:2em">
               <th>序号</th>
-              <th>半成品分类名称</th>
-              <th>半成品分类编码</th>
-              <th>半成品名称</th>
-              <th>半成品编码</th>
-              <th>生产线路分类名称</th>
-              <th>生产线路分类编码</th>
-              <th>生产线路名称</th>
-              <th>生产线路编码</th>
-              <th>数量</th>
-              <th>说明</th>
+              <th>名称</th>
+              <th>编码</th>
+              <th>分类</th>
+              <th>状态</th>
+              <th>优先级</th>
+              <th>交期</th>
+              <th>更新日期</th>
+              <th>创建账号</th>
+              <th>审核账号</th>
               <th>操作</th>
             </tr>
-            <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
+            <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
               <td>{{index}}</td>
-              <td>{{item.semifinishedType_name}}</td>
-              <td>{{item.semifinishedType_code}}</td>
-              <td>{{item.semifinished_name}}</td>
-              <td>{{item.semifinished_code}}</td>
-              <td>{{item.routeType_name}}</td>
-              <td>{{item.routeType_code}}</td>
-              <td>{{item.route_name}}</td>
-              <td>{{item.route_code}}</td>
-              <td>{{item.sum}}</td>
-              <td>{{item.desc}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.code}}</td>
+              <td>{{item.type.name+"("+item.type.code+")"}}</td>
+              <td>{{item.state}}</td>
+              <td>{{item.priority}}</td>
+              <td>{{item.delivery_time}}</td>
+              <td>{{item.update_time}}</td>
+              <td>{{item.create_user}}</td>
+              <td>{{item.auditor}}</td>
               <td>
-                <button type="button" @click="removeChild(item.id)">移除</button>
+                  <span @click="showDetailView(item.id)" v-show ="item.create_user===username ||
+                  item.auditor===username||canRead===true" style="color: #FF1A5EC4">详情</span>
+                <span @click="showUpdateView(item.id)" v-show ="item.state==='新建'" style="color: #52c41a">更改</span>
               </td>
             </tr>
             <tr>
 
             </tr>
           </table>
-      </form>
-      <div class="button">
-        <button type="button" @click="save">保存数据</button>
-        <button type="button" @click="saveAndSubmit">保存并提交</button>
-        <button type="button" @click="showViewid='list'">返回列表页</button>
+        </div>
+        <div class="page">
+          <div>总共：{{listCount}}</div>
+          <button type="button" @click="listPre" v-show ="listPreUrl!==''">上一页</button>
+          <button type="button" @click="listNext" v-show ="listNextUrl!==''">下一页</button>
+        </div>
+      </div>
+    </div>
+    <!-- 详情页显示-->
+    <div  class="detail"  v-show="showViewid==='detail'">
+      <div class="center">
+        <div class="heard">
+          <span>详情信息</span>
+          <button type="button" @click="showListView"></button>
+        </div>
+        <div class="content">
+          <div class="basic">
+            <dt>基础信息</dt>
+            <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
+            <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
+            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
+            <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
+            <dd>{{"优先级:"+"&#12288;"+detail.priority}}</dd>
+            <dd>{{"交付日期:"+"&#12288;"+detail.delivery_time}}</dd>
+            <dd v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</dd>
+            <dd v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</dd>
+            <dd v-show ="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</dd>
+            <dd v-show ="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</dd>
+            <dd v-show ="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</dd>
+          </div>
+          <div class="desc" v-show="detail.desc!=''">
+            <dt>备注信息</dt>
+            <dd>{{detail.desc}}</dd>
+          </div>
+          <div class="other">
+            <dt>其他信息</dt>
+            <dd>{{"创建账号:"+"&#12288;"+detail.create_user}}</dd>
+            <dd>{{"审核账号:"+"&#12288;"+detail.auditor}}</dd>
+            <dd>{{"创建时间:"+"&#12288;"+detail.create_time}}</dd>
+            <dd>{{"更新时间:"+"&#12288;"+detail.update_time}}</dd>
+          </div>
+          <div class="file">
+            <dt>文件附件</dt>
+            <dd v-for="(value,id) in detail.file" :key="id">
+              <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
+            </dd>
+          </div>
+          <div class="child">
+            <dt>子项</dt>
+            <table v-show="list_child.length>0">
+              <tr align="center">
+                <th>序号</th>
+                <th>半成品分类</th>
+                <th>半成品</th>
+                <th>生产线路分类</th>
+                <th>生产线路</th>
+                <th>状态</th>
+                <th>数量</th>
+                <th>批次</th>
+                <th>说明</th>
+                <th>操作</th>
+              </tr>
+              <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
+                <td>{{index}}</td>
+                <td>{{item.semifinishedType_name+"("+item.semifinishedType_code+")"}}</td>
+                <td>{{item.semifinished_name+"("+item.semifinished_code+")"}}</td>
+                <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
+                <td>{{item.route_name+"("+item.route_code+")"}}</td>
+                <td>{{item.state}}</td>
+                <td>{{item.sum}}</td>
+                <td>{{item.batch}}</td>
+                <td>{{item.desc}}</td>
+                <td>
+                  <span  @click="endChild(item.id)" v-show="item.state!=='完成'">终止</span>
+                  <span  @click="pendingChild(item.id)" v-show="item.state==='等待'">挂起</span>
+                  <span  @click="pendingFreedChild(item.id)" v-show="item.state==='挂起'">解挂</span>
+                </td>
+              </tr>
+              <tr>
+
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="button">
+          <button type="button" @click="changeState('审核中')" v-show="showSubmitBt===true">提交数据</button>
+          <button type="button" @click="changeState('使用中')" v-show="showApprovedBt===true" >通过审核</button>
+          <button type="button" @click="changeState('新建')" v-show="showReturnBt===true">驳回信息</button>
+          <button type="button" @click="changeState('作废')" v-show="showDeleteBt===true">删除数据</button>
+          <button type="button" @click="changeState('挂起')" v-show="showPendingBt===true" >挂起</button>
+          <button type="button" @click="changeState('使用中')" v-show="showPendingFreedBt===true" >解除挂起</button>
+          <button type="button" @click="showUpdateView(detail.id)" v-show ="detail.state==='新建'">更改</button>
+        </div>
+      </div>
+    </div>
+    <!-- 创建页显示-->
+    <div  class="create"  v-show ="showViewid==='create'">
+      <div class="center">
+        <div class="heard">
+          <span>信息创建页</span>
+          <button type="button" @click="showListView"></button>
+        </div>
+        <div class="content">
+          <form >
+            <div>名称:
+              <input v-model="formItem.name"  placeholder="请输入名称">
+            </div>
+            <div>编码:
+              <input v-model="formItem.code"  placeholder="请输入编码">
+              <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
+              <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
+              <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
+            </div>
+            <div>分类:
+              <select v-model="formItem.type"   placeholder="请选择分类">
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              </select>
+              <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
+            </div>
+            <div>优先级:
+              <select  v-model="formItem.priority" placeholder="请选择优先级"     >
+                <option value="正常">正常</option>
+                <option value="优先">优先</option>
+                <option value="紧急">紧急</option>
+              </select>
+              <span class="message" v-show ="!$v.formItem.priority.required">请选择优先级</span>
+            </div>
+            <div>交付日期:
+              <input v-model="formItem.delivery_time"  type="datetime-local" placeholder="选择日期和时间" >
+              <span class="message" v-show ="!$v.formItem.delivery_time.required">请选择日期</span>
+            </div>
+            <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
+              <input v-model="formItem.attribute1"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
+              <input v-model="formItem.attribute2"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
+              <input v-model="formItem.attribute3"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
+              <input v-model="formItem.attribute4"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
+              <input v-model="formItem.attribute5"  placeholder="...">
+            </div>
+            <div>审核账号:
+              <select v-model="formItem.auditor"  placeholder="请选择审核账号">
+                <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
+              </select>
+              <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
+            </div>
+            <div >备注信息:
+              <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
+            </div>
+            <div class="file">文件:
+              <span>
+                选择文件
+                <input type="file"  @change="fileBeforeUpload"/>
+              </span>
+              <ul>
+                <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
+              </ul>
+            </div>
+            <div class="child">子项:
+              <span @click="showChildForm='true'">
+                  添加
+              </span>
+              <div>
+                <table v-show="list_child.length>0">
+                  <tr align="center">
+                    <th>序号</th>
+                    <th>半成品分类</th>
+                    <th>半成品</th>
+                    <th>生产线路分类</th>
+                    <th>生产线路</th>
+                    <th>批次</th>
+                    <th>数量</th>
+                    <th>说明</th>
+                    <th>操作</th>
+                  </tr>
+                  <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
+                    <td>{{index}}</td>
+                    <td>{{item.semifinishedType_name+"("+item.semifinishedType_code+")"}}</td>
+                    <td>{{item.semifinished_name+"("+item.semifinished_code+")"}}</td>
+                    <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
+                    <td>{{item.route_name+"("+item.route_code+")"}}</td>
+                    <td>{{item.batch}}</td>
+                    <td>{{item.sum}}</td>
+                    <td>{{item.desc}}</td>
+                    <td>
+                      <button type="button" @click="removeChild(item.id)">移除</button>
+                    </td>
+                  </tr>
+                  <tr>
+
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="button">
+          <button type="button" @click="save">保存数据</button>
+          <button type="button" @click="saveAndSubmit">保存并提交</button>
+        </div>
       </div>
     </div>
     <!-- 更新页显示-->
-    <div  class="update"  v-show="showViewid==='update'">
-      <form >
-        <div>名称:
-          <input v-model="formItem.name"  placeholder="请输入名称">
+    <div  class="update"  v-show ="showViewid==='update'">
+      <div class="center">
+        <div class="heard">
+          <span>信息更新页</span>
+          <button type="button" @click="showListView"></button>
         </div>
-        <div>编码:
-          <input v-model="formItem.code"  placeholder="请输入编码">
-          <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
-          <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
-          <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
-        </div>
-        <div>分类:
-          <select v-model="formItem.type"   placeholder="请选择分类">
-            <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
-          </select>
-          <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
-        </div>
-        <div>优先级:
-          <select  v-model="formItem.priority" placeholder="请选择优先级"     >
-            <option value="正常">正常</option>
-            <option value="优先">优先</option>
-            <option value="紧急">紧急</option>
-          </select>
-          <span class="message" v-show ="!$v.formItem.priority.required">请选择优先级</span>
-        </div>
-        <div>交付日期:
-          <input v-model="formItem.delivery_time"  type="datetime-local" placeholder="选择日期和时间" >
-          <span class="message" v-show ="!$v.formItem.delivery_time.required">请选择日期</span>
-        </div>
-        <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
-          <input v-model="formItem.attribute1"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
-          <input v-model="formItem.attribute2"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
-          <input v-model="formItem.attribute3"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
-          <input v-model="formItem.attribute4"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
-          <input v-model="formItem.attribute5"  placeholder="...">
-        </div>
-        <div>审核账号:
-          <select v-model="formItem.auditor"  placeholder="请选择审核账号">
-            <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
-          </select>
-          <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
-        </div>
-        <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
-        </div>
-        <div class="file">文件附件:
-          <ul>
-            <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
-          </ul>
-          <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
-          <button type="button" @click="uploadFile">上传</button>
-        </div>
-        <div>
+        <div class="content">
+          <form >
+            <div>名称:
+              <input v-model="formItem.name"  placeholder="请输入名称">
+            </div>
+            <div>编码:
+              <input v-model="formItem.code"  placeholder="请输入编码">
+              <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
+              <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
+              <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
+            </div>
+            <div>分类:
+              <select v-model="formItem.type"   placeholder="请选择分类">
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              </select>
+              <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
+            </div>
+            <div>优先级:
+              <select  v-model="formItem.priority" placeholder="请选择优先级"     >
+                <option value="正常">正常</option>
+                <option value="优先">优先</option>
+                <option value="紧急">紧急</option>
+              </select>
+              <span class="message" v-show ="!$v.formItem.priority.required">请选择优先级</span>
+            </div>
+            <div>交付日期:
+              <input v-model="formItem.delivery_time"  type="datetime-local" placeholder="选择日期和时间" >
+              <span class="message" v-show ="!$v.formItem.delivery_time.required">请选择日期</span>
+            </div>
+            <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
+              <input v-model="formItem.attribute1"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
+              <input v-model="formItem.attribute2"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
+              <input v-model="formItem.attribute3"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
+              <input v-model="formItem.attribute4"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
+              <input v-model="formItem.attribute5"  placeholder="...">
+            </div>
+            <div>审核账号:
+              <select v-model="formItem.auditor"  placeholder="请选择审核账号">
+                <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
+              </select>
+              <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
+            </div>
+            <div >备注信息:
+              <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
+            </div>
+            <div class="file">文件:
+              <span>
+                选择文件
+                <input type="file"  @change="fileBeforeUpload"/>
+              </span>
+              <ul>
+                <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
+              </ul>
+            </div>
+            <div class="child">子项:
+              <span @click="showChildForm='true'">
+                  添加
+              </span>
+              <div>
+                <table v-show="list_child.length>0">
+                  <tr align="center">
+                    <th>序号</th>
+                    <th>半成品分类</th>
+                    <th>半成品</th>
+                    <th>生产线路分类</th>
+                    <th>生产线路</th>
+                    <th>批次</th>
+                    <th>数量</th>
+                    <th>说明</th>
+                    <th>操作</th>
+                  </tr>
+                  <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
+                    <td>{{index}}</td>
+                    <td>{{item.semifinishedType_name+"("+item.semifinishedType_code+")"}}</td>
+                    <td>{{item.semifinished_name+"("+item.semifinished_code+")"}}</td>
+                    <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
+                    <td>{{item.route_name+"("+item.route_code+")"}}</td>
+                    <td>{{item.batch}}</td>
+                    <td>{{item.sum}}</td>
+                    <td>{{item.desc}}</td>
+                    <td>
+                      <button type="button" @click="removeChild(item.id)">移除</button>
+                    </td>
+                  </tr>
+                  <tr>
 
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </form>
         </div>
-        <div>
-
+        <div class="button">
+          <button type="button" @click="update">保存数据</button>
+          <button type="button" @click="updateAndSubmit">保存并提交</button>
         </div>
-        <div>
-          <button type="button" @click="showChildForm='true'" >添加子项</button>
+      </div>
+    </div>
+    <!--    /*子项添加对话框*/-->
+    <div class="dialog" v-show ="showChildForm==='true'">
+      <div class="center">
+        <div class="heard">
+          <span>子项添加</span>
+          <button type="button" @click="showChildForm='false'"></button>
         </div>
-        <div  v-show="showChildForm==='true'" class="child">
+        <div class="content">
           <form>
             <div>半成品分类:
               <select v-model="formItem_child.semifinishedType" >
@@ -453,6 +448,9 @@
               <select v-model="formItem_child.productRoute" >
                 <option v-for="item in productRoute" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
               </select>
+            </div>
+            <div>批次:
+              <input  v-model="formItem_child.batch" >
             </div>
             <div>总数量:
               <input type="number" v-model="formItem_child.sum" >
@@ -477,58 +475,9 @@
             </div>
             <div>
               <button type="button" @click="uploadChild">添加</button>
-              <button type="button" @click="showChildForm='false'">取消</button>
             </div>
           </form>
         </div>
-        <table v-show="list_child.length>0">
-          <caption align="top">已添加子项:</caption>
-          <tr align="center"  type="height:2em">
-            <th>序号</th>
-            <th>半成品分类名称</th>
-            <th>半成品分类编码</th>
-            <th>半成品名称</th>
-            <th>半成品编码</th>
-            <th>生产线路分类名称</th>
-            <th>生产线路分类编码</th>
-            <th>生产线路名称</th>
-            <th>生产线路编码</th>
-            <th>数量</th>
-            <th>说明</th>
-            <th>操作</th>
-          </tr>
-          <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
-            <td>{{index}}</td>
-            <td>{{item.semifinishedType_name}}</td>
-            <td>{{item.semifinishedType_code}}</td>
-            <td>{{item.semifinished_name}}</td>
-            <td>{{item.semifinished_code}}</td>
-            <td>{{item.routeType_name}}</td>
-            <td>{{item.routeType_code}}</td>
-            <td>{{item.route_name}}</td>
-            <td>{{item.route_code}}</td>
-            <td>{{item.sum}}</td>
-            <td>{{item.desc}}</td>
-            <td>
-              <button type="button" @click="removeChild(item.id)">移除</button>
-            </td>
-          </tr>
-          <tr>
-
-          </tr>
-        </table>
-        <div>历史审核记录:
-          <ul>
-            <li v-for="value in alterList" v-bind:key="value.id" >
-              {{value.desc+value.create_time+value.create_user}}
-            </li>
-          </ul>
-        </div>
-      </form>
-      <div class="button">
-        <button type="button" @click="update">保存数据</button>
-        <button type="button" @click="updateAndSubmit">保存并提交</button>
-        <button type="button" @click="showViewid='list'">返回列表页</button>
       </div>
     </div>
   </div>
@@ -587,7 +536,7 @@ export default {
         id: '',
         name: '',
         code: '',
-        type: null,
+        type: '',
         state: '',
         priority: '',
         delivery_time: '',
@@ -604,11 +553,12 @@ export default {
       },
       formItem_child: {
         id: '',
-        semifinishedType: null,
-        semifinished: null,
-        productRouteType: null,
-        productRoute: null,
+        semifinishedType: '',
+        semifinished: '',
+        productRouteType: '',
+        productRoute: '',
         sum: 0,
+        batch: '',
         attribute1: '',
         attribute2: '',
         attribute3: '',
@@ -618,7 +568,7 @@ export default {
       },
       /* 创建页文件项表单 */
       fileItem: {
-        file: null,
+        file: '',
         fileName: '',
         desc: '',
         uri: 'semifinishedTaskcreate'
@@ -627,6 +577,8 @@ export default {
       typeInfor: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
+      semifinishedType: [],
+      semifinishedInfor: [],
       /* 工艺路线分类 */
       productRouteType: [],
       productRoute: [],
@@ -772,7 +724,8 @@ export default {
         self.type = self.detail.type
         self.formItem.type = self.detail.type.id
         response.data.child.forEach(function (value, i) {
-          var obj1 = {'id': value.id,
+          var obj = {
+            'id': value.id,
             'state': value.state,
             'semifinishedType_code': value.semifinishedType_code,
             'semifinishedType_name': value.semifinishedType_name,
@@ -783,6 +736,7 @@ export default {
             'route_code': value.route_code,
             'route_name': value.route_name,
             'sum': value.sum,
+            'batch': value.batch,
             'assigned': value.assigned,
             'attribute1': value.attribute1,
             'attribute2': value.attribute2,
@@ -792,7 +746,7 @@ export default {
             'desc': value.desc
           }
           self.formItem.child.push(value.id)
-          self.list_child.push(obj1)
+          self.list_child.push(obj)
         })
         self.showViewid = 'detail'
       }).catch(function (err) {
@@ -952,14 +906,19 @@ export default {
           self.formItem.type = response.data.type.id
         } else { self.formItem.type = response.data.type }
         response.data.child.forEach(function (value, i) {
-          var obj1 = {'id': value.id,
+          var obj = {
+            'id': value.id,
             'state': value.state,
-            'semifinished_id': value.semifinished,
+            'semifinishedType_code': value.semifinishedType_code,
+            'semifinishedType_name': value.semifinishedType_name,
+            'semifinished_name': value.semifinished_name,
+            'semifinished_code': value.semifinished_code,
             'routeType_code': value.routeType_code,
             'routeType_name': value.routeType_name,
             'route_code': value.route_code,
             'route_name': value.route_name,
             'sum': value.sum,
+            'batch': value.batch,
             'attribute1': value.attribute1,
             'attribute2': value.attribute2,
             'attribute3': value.attribute3,
@@ -968,7 +927,7 @@ export default {
             'desc': value.desc
           }
           self.formItem.child.push(value.id)
-          self.list_child.push(obj1)
+          self.list_child.push(obj)
         })
         response.data.file.forEach(function (value, i) {
           var obj = {'id': value.id, 'fileName': value.file_name, 'fileUrl': value.file, 'desc': value.desc, 'uri': value.uri}
@@ -1000,7 +959,7 @@ export default {
           'fileUrl': response.data.file,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.fileItem.file = null
+        self.fileItem.file = ''
         self.fileItem.desc = ''
         self.formItem.file.push(response.data.id)
         self.fileData.push(obj)
@@ -1059,8 +1018,9 @@ export default {
     uploadChild () {
       var self = this
       this.$axios.post(`plan/semifinishedTaskItemCreate/`, {
-        state: self.formItem_child.state,
+        semifinished_id: self.formItem_child.semifinished,
         route_id: self.formItem_child.productRoute,
+        batch: self.formItem_child.batch,
         sum: self.formItem_child.sum,
         attribute1: self.formItem_child.attribute1,
         attribute2: self.formItem_child.attribute2,
@@ -1070,10 +1030,46 @@ export default {
         desc: self.formItem_child.desc
       }).then(function (response) {
         self.showChildForm = ''
+        var index = 0
+        for (var i = 0; i < self.semifinishedInfor.length; i++) {
+          if (self.semifinishedInfor[i].id === parseInt(response.data.semifinished_id)) {
+            index = i
+            break
+          }
+        }
+        var index1 = 0
+        for (var j = 0; j < self.semifinishedType.length; j++) {
+          if (self.semifinishedType[j].id === self.formItem_child.semifinishedType) {
+            index1 = j
+            break
+          }
+        }
+        // var index2 = 0
+        // for (var k = 0; k < self.productRoute.length; k++) {
+        //   if (self.productRoute[k].id === parseInt(response.data.route_id)) {
+        //     index2 = k
+        //     break
+        //   }
+        // }
+        // var index3 = 0
+        // for (var l = 0; l < self.productRouteType.length; l++) {
+        //   if (self.productRouteType[l].id === self.formItem_child.productRouteType) {
+        //     index3 = l
+        //     break
+        //   }
+        // }
         var obj = {
           'id': response.data.id,
-          'semifinished_id': self.semifinished,
+          'semifinishedType_code': self.semifinishedType[index1].code,
+          'semifinishedType_name': self.semifinishedType[index1].name,
+          'semifinished_code': self.semifinishedInfor[index].code,
+          'semifinished_name': self.semifinishedInfor[index].name,
+          // 'routeType_code': self.productRouteType[index3].code,
+          // 'routeType_name': self.productRouteType[index3].name,
+          // 'route_code': self.productRoute[index2].code,
+          // 'route_name': self.productRoute[index2].name,
           'sum': response.data.sum,
+          'batch': response.data.batch,
           'attribute1': response.data.attribute1,
           'attribute2': response.data.attribute2,
           'attribute3': response.data.attribute3,
@@ -1083,6 +1079,8 @@ export default {
         }
         self.list_child.push(obj)
         self.formItem.child.push(response.data.id)
+        self.formItem_child.semifinishedType = ''
+        self.formItem_child.semifinished = ''
         self.formItem_child.productRouteType = ''
         self.formItem_child.productRoute = ''
         self.formItem_child.sum = ''
@@ -1258,8 +1256,8 @@ export default {
       self.userinfor = response.data.results
       self.$axios.get('process/productRouteType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
         self.productRouteType = response.data.results
-        self.$axios.get('plan/salesOrderCreate/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
-          self.salesOrder = response.data.results
+        self.$axios.get('process/semifinishedType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
+          self.semifinishedType = response.data.results
           self.$axios.get('plan/semifinishedTaskType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
             self.typeInfor = response.data.results
             self.showListView()
@@ -1312,7 +1310,7 @@ export default {
       for (let key in self.attribute_title) {
         self.attribute_title[key] = ''
       }
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get(`plan/semifinishedTaskType/` + newval).then(function (response) {
@@ -1365,14 +1363,15 @@ export default {
     formItem_child: {
       deep: true
     },
-    'formItem_child.salesOrder': function (newval, oldval) {
+    'formItem_child.semifinishedType': function (newval, oldval) {
       var self = this
-      this.salesOrderItem = []
-      if (newval === undefined) {
+      this.semifinishedInfor = []
+      if (newval === undefined || newval === '') {
         return
       }
-      this.$axios.get(`plan/salesOrderCreate/` + newval).then(function (response) {
-        self.salesOrderItem = response.data.child
+      this.$axios.get('process/semifinishedInfor/?page_size=99999&ordering=-id&state=使用中' +
+        '&type=' + newval).then(function (response) {
+        self.semifinishedInfor = response.data.results
       }).catch(function (err) {
         // 错误提示
         console.log(err)
@@ -1381,7 +1380,7 @@ export default {
     'formItem_child.productRouteType': function (newval, oldval) {
       var self = this
       this.productRoute = []
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get('process/productRoute/?page_size=99999&ordering=-id&state=使用中' +
@@ -1395,599 +1394,1091 @@ export default {
   }
 }
 </script>
-<style scoped>
-  .semifinishedTaskCreate{
-    position: relative;
+<style scoped lang="scss" >
+  .semifinishedTaskCreate {
+    position: absolute;
     top: 0;
-    width: 100%;
+    width: 98%;
     height: 100%;
-  }
-  .list{
-    position: relative;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .list .listHead{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 25%;
-    background: rgba(255, 255, 255, 0.57);
-  }
-  .list .listHead .select{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 33%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #151515;
+    margin-right: 1%;
+    margin-left: 1%;
+    .list {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      .heard {
+        position: absolute;
+        top: 1%;
+        width: 100%;
+        height: 19%;
+        background: rgba(255, 255, 255, 0.57);
+        .select {
+          position: absolute;
+          top: 0;
+          width: 100%;
+          height: 70%;
+          div {
+            position: relative;
+            top: 0;
+            width: 20%;
+            height: 33%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.4em;
+            color: #151515;
+            padding-top: 0.6em;
+            float: left;
+            select {
+              position: absolute;
+              width: 10em;
+              font-size: 0.8em;
+              border: 1px solid #D8D8D8;
+              background: #ffffff;
+              border-radius: 1em;
+              margin-left: 1em;
+              padding-left: 1em;
+            }
+            input {
+              position: absolute;
+              width: 15em;
+              font-size: 0.8em;
+              border: 1px solid #D8D8D8;
+              background: #ffffff;
+              border-radius: 1em;
+              margin-left: 1em;
+              padding-left: 1em;
+            }
+            button {
+              position: absolute;
+              width: 6em;
+              border: 1px solid #D8D8D8;
+              background: #D8D8D8;
+              border-radius: 1em;
+            }
+          }
+          div:nth-child(7) {
+            width: 25%;
+          }
+          div:nth-child(8) {
+            width: 25%;
+          }
+          div:nth-child(9) {
+            width: 25%;
+          }
+        }
+        .button{
+          position: absolute;
+          top: 70%;
+          width: 100%;
+          height: 30%;
+          font-family: PingFangSC-Regular;
+          color: #151515;
+          button{
+            position: absolute;
+            right: 40%;
+            width: 15em;
+            font-size: 0.35em;
+            line-height: 2em;
+            border: 1px solid #D8D8D8;
+            background: #D8D8D8;
+            border-radius: 1em;
+          }
+        }
+      }
+      .content{
+        position: absolute;
+        top: 22%;
+        bottom: 0;
+        width: 100%;
+        .table{
+          height: 90%;
+          width: 100%;
+          overflow: auto;
+          table{
+            height: 100%;
+            width: 100%;
+            table-layout: auto;
+            empty-cells:hide;
+            word-break : normal;
+            th{
+              position: sticky;
+              top:0;
+              height: 1em;
+              font-family: PingFangSC-Regular;
+              font-size: 0.4em;
+              line-height: 2.5em;
+              color: #000000;
+              text-align: center;
+              background: #ffffff;
+              border:1px solid rgba(177, 176, 171, 0.89);
+              &:nth-child(1){
+                width: 3em;
+              }
+              &:nth-child(2){
+                width: 10em;
+              }
+              &:nth-child(3){
+                width: 10em;
+              }
+              &:nth-child(4){
+                width: 10em;
+              }
+              &:nth-child(5){
+                width: 5em;
+              }
+              &:nth-child(6){
+                width: 5em;
+              }
+              &:nth-child(7){
+                width: 10em;
+              }
+              &:nth-child(8){
+                width: 10em;
+              }
+              &:nth-child(9){
+                width: 5em;
+              }
+              &:nth-child(10){
+                width: 5em;
+              }
+              &:nth-child(11){
+                width: 5em;
+              }
+            }
+            td{
+              height: 1em;
+              font-family: PingFangSC-Regular;
+              font-size: 0.4em;
+              color: #191A1E;
 
-  }
-  .list .listHead .select div{
-    position: relative;
-    top: 0;
-    width: 18%;
-    height: 100%;
-    margin-right: 2%;
-    font-family: AppleSystemUIFont;
-    float: left;
-  }
-  .list .listHead .select select{
-    position: absolute;
-    width: 60%;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .list .listHead .select input{
-    position: absolute;
-    width: 90%;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .list .listHead .select button{
-    position: absolute;
-    right: 0;
-    width: 40%;
-    border-radius: 1em;
-    border: none;
-    border: 1px solid #D8D8D8;
-    background: #D8D8D8;
-    border-radius: 1em;
-  }
-  .list .listHead  .button{
-    position: absolute;
-    top: 66%;
-    width: 100%;
-    height: 20%;
-    margin-left: 30%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #151515;
+              text-align: center;
+              background: #ffffff;
+              border:1px solid rgba(177, 176, 171, 0.61);
+            }
+          }
+        }
+        .page{
+          position: absolute;
+          right: 5%;
+          bottom: 0;
+          height: 10%;
+          font-size: 0.3em;
+          line-height: 2em;
+          button{
+            position: relative;
+            width: 20em;
+            font-size: 0.3em;
+            line-height: 2em;
+            border: 1px solid #363E42;
+            border-radius: 1em;
+          }
+        }
+      }
+    }
+    .detail {
+      position: absolute;
+      top:0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(200, 200, 200,0.8);
+      .center {
+        position: absolute;
+        top:10%;
+        left: 20%;
+        width: 60%;
+        height: 80%;
+        background: #ffffff;
+        border-radius:0.5em;
+        .heard {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 100%;
+          height: 8%;
+          background: #123658;
+          border-top-right-radius: 0.5em;
+          border-top-left-radius: 0.5em;
+          span {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.6em;
+            line-height: 1.5em;
+            text-align: center;
+            color: #ffffff;
+            display: inline-block;
+          }
+          button {
+            position: absolute;
+            right: 0.25em;
+            top: 0.25em;
+            height: 0.5em;
+            width: 0.5em;
+            border: none;
+            background-image: url("../../../../../static/icons/close.png");
+            background-size: cover;
+          }
+        }
+        .content {
+          position: absolute;
+          top: 10%;
+          left: 10%;
+          width: 80%;
+          height: 80%;
+          overflow: auto;
+          .basic{
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            dd{
+              width: 50%;
+              display: block;
+              float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #0c0c0c;
+            }
+          }
+          .desc{
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            dd{
+              width: 100%;
+              display: block;
+              float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #0c0c0c;
+            }
+          }
+          .other{
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            dd{
+              width: 50%;
+              display: block;
+              float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #0c0c0c;
+            }
+            dd:nth-child(4){
+              width: 100%;
+              display: block;
+              float: left;
+            }
+            dd:nth-child(5){
+              width: 100%;
+              display: block;
+              float: left;
+            }
+          }
+          .file{
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            dd{
+              width: 100%;
+              display: block;
+              float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #0c0c0c;
+              a{
+                color: #0c0c0c;
+              }
+            }
+          }
+          .child{
+            position: relative;
+            top: 0;
+            width: 100%;
+            overflow: auto;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            table{
+              height: 100%;
+              width: 100%;
+              table-layout: auto;
+              empty-cells:hide;
+              word-break : normal;
+              font-size: 0.6em;
+              th{
+                position: sticky;
+                top:0;
+                height: 1em;
+                font-family: PingFangSC-Regular;
+                font-size: 0.6em;
+                line-height: 1.6em;
+                color: #000000;
+                text-align: center;
+                background: #999494;
+                border:1px solid rgba(177, 176, 171, 0.89);
+                &:nth-child(1){
+                  width: 3em;
+                }
+                &:nth-child(2){
+                  width: 10em;
+                }
+                &:nth-child(3){
+                  width: 10em;
+                }
+                &:nth-child(4){
+                  width: 5em;
+                }
+                &:nth-child(5){
+                  width: 5em;
+                }
+                &:nth-child(6){
+                  width: 5em;
+                }
+                &:nth-child(7){
+                  width: 5em;
+                }
+                &:nth-child(8){
+                  width: 5em;
+                }
+                &:nth-child(9){
+                  width: 10em;
+                }
+                &:nth-child(10){
+                  width: 5em;
+                }
+                &:nth-child(11){
+                  width: 5em;
+                }
+              }
+              td{
+                height: 1em;
+                font-family: PingFangSC-Regular;
+                font-size: 0.5em;
+                line-height: 2em;
+                color: #191A1E;
+                text-align: center;
+                background: #eeeaea;
+                border:1px solid rgba(177, 176, 171, 0.61);
+              }
+            }
+          }
+        }
+        .button {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 8%;
+          padding-left: 10%;
+          button {
+            position: relative;
+            top: -2em;
+            width: 6em;
+            font-size: 0.3em;
+            line-height: 2em;
+            background: #ffffff;
+            border: 1px solid #363E42;
+            border-radius: 13px;
+          }
+        }
+      }
+    }
+    .create {
+      position: absolute;
+      top:0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(200, 200, 200,0.8);
+      .center {
+        position: absolute;
+        top:10%;
+        left: 15%;
+        width: 70%;
+        height: 80%;
+        background: #ffffff;
+        border-radius:0.5em;
+        .heard {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 100%;
+          height: 8%;
+          background: #123658;
+          border-top-right-radius: 0.5em;
+          border-top-left-radius: 0.5em;
+          span {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.6em;
+            line-height: 1.5em;
+            text-align: center;
+            color: #ffffff;
+            display: inline-block;
+          }
+          button {
+            position: absolute;
+            right: 0.25em;
+            top: 0.25em;
+            height: 0.5em;
+            width: 0.5em;
+            border: none;
+            background-image: url("../../../../../static/icons/close.png");
+            background-size: cover;
+          }
+        }
+        .content {
+          position: absolute;
+          top: 10%;
+          left: 10%;
+          width: 80%;
+          height: 80%;
+          overflow: auto;
+          form {
+            position: absolute;
+            top: 5%;
+            width: 100%;
+            height: 90%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.5em;
+            color: #151515;
 
-  }
-  .list .listHead  .ordering{
-    position: absolute;
-    top: 86%;
-    width: 100%;
-    height: 14%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #ffffff;
+            div {
+              position: relative;
+              width: 50%;
+              height: 20%;
+              float: left;
+              select, input, textarea {
+                position: absolute;
+                right: 1em;
+                width: 10em;
+                padding-left: 1em;
+                font-family: AppleSystemUIFont;
+                font-size: 0.8em;
+                border: 1px solid #D8D8D8;
+                background: #ffffff;
+                border-radius: 1em;
+              }
+              span {
+                position: absolute;
+                width: 100%;
+                font-family: AppleSystemUIFont;
+                font-size: 0.6em;
+                color: #f5222d;
+                display: block;
+                text-align: center;
+              }
+            }
+            .file {
+              position: relative;
+              width: 50%;
+              height: 30%;
+              span{
+                position: absolute;
+                width: 40%;
+                height: 20%;
+                right: 30%;
+                top: 0;
+                font-family: AppleSystemUIFont;
+                color: black;
+                font-size: 0.3em;
+                line-height: 3.3em;
+                background: #ffffff;
+                border: 1px solid #363E42;
+                border-radius: 13px;
+                input {
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  left: 0;
+                  top: 0;
+                  opacity: 0%;
+                }
+              }
+              ul {
+                position: absolute;
+                bottom: 5%;
+                left: 0;
+                width: 100%;
+                height: 65%;
+                background: #ffffff;
+                overflow: auto;
+                li {
+                  position: relative;
+                  width: 100%;
+                  height: 1.4em;
+                  color: #2b85e4;
+                  overflow:hidden;
+                  font-family: AppleSystemUIFont;
+                  font-size: 0.8em;
+                  line-height: 1.25em;
+                }
+              }
+            }
+            .child {
+              position: relative;
+              width: 100%;
+              height: 40%;
+              span{
+                position: absolute;
+                width: 20%;
+                height: 15%;
+                left: 15%;
+                top: 0;
+                font-family: AppleSystemUIFont;
+                color: black;
+                font-size: 0.3em;
+                line-height: 3.3em;
+                background: #ffffff;
+                border: 1px solid #363E42;
+                border-radius: 13px;
+              }
+              div{
+                position: absolute;
+                top: 20%;
+                width: 100%;
+                height: 75%;
+                overflow: auto;
+                table{
+                  height: 100%;
+                  width: 100%;
+                  table-layout: auto;
+                  empty-cells:hide;
+                  word-break : normal;
+                  th{
+                    position: sticky;
+                    top:0;
+                    height: 1em;
+                    font-family: PingFangSC-Regular;
+                    font-size: 0.6em;
+                    line-height: 1.6em;
+                    color: #000000;
+                    text-align: center;
+                    background: #999494;
+                    border:1px solid rgba(177, 176, 171, 0.89);
+                    &:nth-child(1){
+                      width: 3em;
+                    }
+                    &:nth-child(2){
+                      width: 10em;
+                    }
+                    &:nth-child(3){
+                      width: 10em;
+                    }
+                    &:nth-child(4){
+                      width: 5em;
+                    }
+                    &:nth-child(5){
+                      width: 5em;
+                    }
+                    &:nth-child(6){
+                      width: 10em;
+                    }
+                    &:nth-child(7){
+                      width: 5em;
+                    }
+                  }
+                  td{
+                    height: 1em;
+                    font-family: PingFangSC-Regular;
+                    font-size: 0.5em;
+                    line-height: 2em;
+                    color: #191A1E;
+                    text-align: center;
+                    background: #eeeaea;
+                    border:1px solid rgba(177, 176, 171, 0.61);
+                  }
+                }
+              }
+            }
+          }
+        }
+        .button {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 8%;
+          padding-left: 10%;
+          button {
+            position: relative;
+            top: -2em;
+            width: 6em;
+            font-size: 0.3em;
+            line-height: 2em;
+            background: #ffffff;
+            border: 1px solid #363E42;
+            border-radius: 13px;
+          }
+        }
+      }
+    }
+    .update {
+      position: absolute;
+      top:0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(200, 200, 200,0.8);
+      .center {
+        position: absolute;
+        top:10%;
+        left: 15%;
+        width: 70%;
+        height: 80%;
+        background: #ffffff;
+        border-radius:0.5em;
+        .heard {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 100%;
+          height: 8%;
+          background: #123658;
+          border-top-right-radius: 0.5em;
+          border-top-left-radius: 0.5em;
+          span {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.6em;
+            line-height: 1.5em;
+            text-align: center;
+            color: #ffffff;
+            display: inline-block;
+          }
+          button {
+            position: absolute;
+            right: 0.25em;
+            top: 0.25em;
+            height: 0.5em;
+            width: 0.5em;
+            border: none;
+            background-image: url("../../../../../static/icons/close.png");
+            background-size: cover;
+          }
+        }
+        .content {
+          position: absolute;
+          top: 10%;
+          left: 10%;
+          width: 80%;
+          height: 80%;
+          overflow: auto;
+          form {
+            position: absolute;
+            top: 5%;
+            width: 100%;
+            height: 90%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.5em;
+            color: #151515;
 
-    background: #dcdcdc;
-  }
+            div {
+              position: relative;
+              width: 50%;
+              height: 20%;
+              float: left;
+              select, input, textarea {
+                position: absolute;
+                right: 1em;
+                width: 10em;
+                padding-left: 1em;
+                font-family: AppleSystemUIFont;
+                font-size: 0.8em;
+                border: 1px solid #D8D8D8;
+                background: #ffffff;
+                border-radius: 1em;
+              }
+              span {
+                position: absolute;
+                width: 100%;
+                font-family: AppleSystemUIFont;
+                font-size: 0.6em;
+                color: #f5222d;
+                display: block;
+                text-align: center;
+              }
+            }
+            .file {
+              position: relative;
+              width: 50%;
+              height: 30%;
+              span{
+                position: absolute;
+                width: 40%;
+                height: 20%;
+                right: 30%;
+                top: 0;
+                font-family: AppleSystemUIFont;
+                color: black;
+                font-size: 0.3em;
+                line-height: 3.3em;
+                background: #ffffff;
+                border: 1px solid #363E42;
+                border-radius: 13px;
+                input {
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  left: 0;
+                  top: 0;
+                  opacity: 0%;
+                }
+              }
+              ul {
+                position: absolute;
+                bottom: 5%;
+                left: 0;
+                width: 100%;
+                height: 65%;
+                background: #ffffff;
+                overflow: auto;
+                li {
+                  position: relative;
+                  width: 100%;
+                  height: 1.4em;
+                  color: #2b85e4;
+                  overflow:hidden;
+                  font-family: AppleSystemUIFont;
+                  font-size: 0.8em;
+                  line-height: 1.25em;
+                }
+              }
+            }
+            .child {
+              position: relative;
+              width: 100%;
+              height: 40%;
+              span{
+                position: absolute;
+                width: 20%;
+                height: 15%;
+                left: 15%;
+                top: 0;
+                font-family: AppleSystemUIFont;
+                color: black;
+                font-size: 0.3em;
+                line-height: 3.3em;
+                background: #ffffff;
+                border: 1px solid #363E42;
+                border-radius: 13px;
+              }
+              div{
+                position: absolute;
+                top: 20%;
+                width: 100%;
+                height: 75%;
+                overflow: auto;
+                table{
+                  height: 100%;
+                  width: 100%;
+                  table-layout: auto;
+                  empty-cells:hide;
+                  word-break : normal;
+                  th{
+                    position: sticky;
+                    top:0;
+                    height: 1em;
+                    font-family: PingFangSC-Regular;
+                    font-size: 0.6em;
+                    line-height: 1.6em;
+                    color: #000000;
+                    text-align: center;
+                    background: #999494;
+                    border:1px solid rgba(177, 176, 171, 0.89);
+                    &:nth-child(1){
+                      width: 3em;
+                    }
+                    &:nth-child(2){
+                      width: 10em;
+                    }
+                    &:nth-child(3){
+                      width: 10em;
+                    }
+                    &:nth-child(4){
+                      width: 5em;
+                    }
+                    &:nth-child(5){
+                      width: 5em;
+                    }
+                    &:nth-child(6){
+                      width: 10em;
+                    }
+                    &:nth-child(7){
+                      width: 5em;
+                    }
+                  }
+                  td{
+                    height: 1em;
+                    font-family: PingFangSC-Regular;
+                    font-size: 0.5em;
+                    line-height: 2em;
+                    color: #191A1E;
+                    text-align: center;
+                    background: #eeeaea;
+                    border:1px solid rgba(177, 176, 171, 0.61);
+                  }
+                }
+              }
 
-  .list .button button{
-    width: 15em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .list .listTable{
-    position: absolute;
-    top: 25%;
-    width: 100%;
-    height: 75%;
-  }
-  .list .listTable .table{
-    height: 90%;
-    width: 100%;
-    overflow: auto;
-  }
-  .list .listTable .table table{
-    height: 100%;
-    width: 100%;
-        /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .list .listTable .table  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #ffffff;
-    text-align: center;
-
-    background: #191A1E;
-  }
-  .list .listTable .table  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.4em;
-    color: #191A1E;
-
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-
-  .list .listTable .page{
-    position: absolute;
-    right: 5%;
-    bottom: 0;
-    height: 10%;
-    font-size: 0.3em;
-    line-height: 2em;
-  }
-  .list .listTable button{
-    position: relative;
-    width: 20em;
-    font-size: 0.3em;
-    line-height: 2em;
-    border: 1px solid #363E42;
-    border-radius: 1em;
-  }
-  .detail{
-    position: relative;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .detail .content{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 80%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    line-height: 2em;
-    color: #000000;
-
-    overflow: auto;
-    background: rgba(255, 255, 255, 0.57);
-  }
-  .detail table{
-    height: 30%;
-    width: 100%;
-        /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .detail  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #ffffff;
-    text-align: center;
-
-    background: #191A1E;
-  }
-  .detail  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.4em;
-    color: #191A1E;
-
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .detail .alter{
-    position: absolute;
-    top: 80%;
-    width: 100%;
-    height: 10%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    line-height: 2em;
-    color: #000000;
-
-    background: #4d5669;
-  }
-  .detail .alter textarea{
-    position: absolute;
-    width: 60%;
-    height: 100%;
-    left: 5em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .detail .alter button{
-    position: absolute;
-    bottom: 40%;
-    right: 15%;
-    width: 6em;
-    font-size: 0.5em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .detail .button{
-    position: absolute;
-    top: 90%;
-    width: 100%;
-    height: 10%;
-  }
-  .detail .button button{
-    width: 12em;
-    margin: 4em;
-    font-size: 0.3em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .create{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .create form{
-    position: absolute;
-    top: 0;
-    left: 2%;
-    width: 80%;
-    height: 90%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #151515;
-
-    overflow: auto;
-  }
-  .create form div{
-    position: relative;
-    width: 50%;
-    height: 12%;
-    float: left;
-  }
-  .create form div select,.create form div input,.create form div textarea{
-    position: absolute;
-    width: 15em;
-    right: 4em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.8em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .create form div span{
-    position: absolute;
-    width: 15em;
-    right: 6em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.6em;
-    color: #f5222d;
-    display: block;
-  }
- .create .child {
-    position: relative;
-    width: 100%;
-    height: 20%;
-    float: left;
-    background: #4d5669;
-  }
-  .create .child form{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    padding-top: 1%;
-    overflow: auto;
-  }
-  .create .child div{
-    position: relative;
-    width: 50%;
-    height: 30%;
-    font-size: 1.5em;
-    float: left;
-  }
-  .create .child select,.create .child input,.create .child textarea{
-    position: absolute;
-    width: 60%;
-    height: 80%;
-    right: 4em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .create .file{
-    position: relative;
-    width: 45%;
-    height: 30%;
-    margin-right: 5%;
-    background: #4d5669;
-    float: left;
-  }
-  .create .file ul{
-    position: absolute;
-    top: 5%;
-    left: 2.5em;
-    right: 10%;
-    height: 35%;
-    margin-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .create .file ul li{
-    position: relative;
-    width: 80%;
-    height: 2em;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 1em;
-  }
-  .create .file input{
-    position: absolute;
-    top: 45%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .create .file textarea {
-    position: absolute;
-    top: 65%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    padding-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .create .file button{
-    position: absolute;
-    bottom: 0.2em;
-    width: 6em;
-    margin: 0.2em;
-    font-size: 0.8em;
-    line-height: 2em;
-    background: #2d59ff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .create table{
-    width: 100%;
-        /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .create  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 1em;
-    color: #ffffff;
-    text-align: center;
-
-    background: #191A1E;
-  }
-  .create  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.8em;
-    color: #191A1E;
-
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .create .button{
-    position: absolute;
-    top: 90%;
-    width: 100%;
-    height: 10%;
-    float: left;
-  }
-  .create .button button{
-    width: 12em;
-    margin: 0.2em;
-    font-size: 0.4em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .update{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .update form{
-    position: absolute;
-    top: 0;
-    left: 2%;
-    width: 80%;
-    height: 90%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #151515;
-
-    overflow: auto;
-  }
-  .update form div{
-    position: relative;
-    width: 50%;
-    height: 12%;
-    float: left;
-  }
-    .update form div select,.update form div input,.update form div textarea{
-    position: absolute;
-    width: 15em;
-    right: 4em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.8em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .update form div span{
-    position: absolute;
-    width: 15em;
-    right: 6em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.6em;
-    color: #f5222d;
-    display: block;
-  }
- .update .child {
-    position: relative;
-    width: 100%;
-    height: 20%;
-    float: left;
-    background: #4d5669;
-  }
-  .update .child form{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    padding-top: 1%;
-    overflow: auto;
-  }
-  .update .child div{
-    position: relative;
-    width: 50%;
-    height: 30%;
-    font-size: 1.5em;
-    float: left;
-  }
-  .update .child select,.update .child input,.update .child textarea{
-    position: absolute;
-    width: 60%;
-    height: 80%;
-    right: 4em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .update .file{
-    position: relative;
-    width: 45%;
-    height: 30%;
-    margin-right: 5%;
-    background: #4d5669;
-    float: left;
-  }
-  .update .file ul{
-    position: absolute;
-    top: 5%;
-    left: 2.5em;
-    right: 10%;
-    height: 35%;
-    margin-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .update .file ul li{
-    position: relative;
-    width: 80%;
-    height: 2em;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 1em;
-  }
-  .update .file input{
-    position: absolute;
-    top: 45%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .update .file textarea {
-    position: absolute;
-    top: 65%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    padding-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .update .file button{
-    position: absolute;
-    bottom: 0.2em;
-    width: 6em;
-    margin: 0.2em;
-    font-size: 0.8em;
-    line-height: 2em;
-    background: #2d59ff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .update table{
-    width: 100%;
-        /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .update  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 1em;
-    color: #ffffff;
-    text-align: center;
-
-    background: #191A1E;
-  }
-  .update  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.8em;
-    color: #191A1E;
-
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .update .button{
-    position: absolute;
-    top: 90%;
-    width: 100%;
-    height: 10%;
-    float: left;
-  }
-  .update .button button{
-    width: 12em;
-    margin: 0.2em;
-    font-size: 0.4em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
+            }
+          }
+        }
+        .button {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 8%;
+          padding-left: 10%;
+          button {
+            position: relative;
+            top: -2em;
+            width: 6em;
+            font-size: 0.3em;
+            line-height: 2em;
+            background: #ffffff;
+            border: 1px solid #363E42;
+            border-radius: 13px;
+          }
+        }
+      }
+    }
+    .dialog {
+      position: absolute;
+      top:0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(200, 200, 200,0.8);
+      .center {
+        position: absolute;
+        top:20%;
+        left: 15%;
+        width: 70%;
+        height: 70%;
+        background: #ffffff;
+        border-radius:0.5em;
+        .heard {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 100%;
+          height: 8%;
+          background: #123658;
+          border-top-right-radius: 0.5em;
+          border-top-left-radius: 0.5em;
+          span {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.6em;
+            line-height: 1.5em;
+            text-align: center;
+            color: #ffffff;
+            display: inline-block;
+          }
+          button {
+            position: absolute;
+            right: 0.25em;
+            top: 0.25em;
+            height: 0.5em;
+            width: 0.5em;
+            border: none;
+            background-image: url("../../../../../static/icons/close.png");
+            background-size: cover;
+          }
+        }
+        .content {
+          position: absolute;
+          top: 10%;
+          left: 10%;
+          width: 80%;
+          height: 80%;
+          overflow: auto;
+          form {
+            position: absolute;
+            top: 5%;
+            width: 100%;
+            height: 90%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.5em;
+            color: #151515;
+            div {
+              position: relative;
+              width: 50%;
+              height: 25%;
+              float: left;
+              select, input, textarea {
+                position: absolute;
+                right: 1em;
+                width: 10em;
+                padding-left: 1em;
+                font-family: AppleSystemUIFont;
+                font-size: 0.8em;
+                border: 1px solid #D8D8D8;
+                background: #ffffff;
+                border-radius: 1em;
+              }
+              span {
+                position: absolute;
+                width: 100%;
+                font-family: AppleSystemUIFont;
+                font-size: 0.6em;
+                color: #f5222d;
+                display: block;
+                text-align: center;
+              }
+            }
+            .file {
+              position: relative;
+              width: 50%;
+              height: 30%;
+              span{
+                position: absolute;
+                width: 40%;
+                height: 20%;
+                right: 30%;
+                top: 0;
+                font-family: AppleSystemUIFont;
+                color: black;
+                font-size: 0.3em;
+                line-height: 3.3em;
+                background: #ffffff;
+                border: 1px solid #363E42;
+                border-radius: 13px;
+                input {
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  left: 0;
+                  top: 0;
+                  opacity: 0%;
+                }
+              }
+              ul {
+                position: absolute;
+                bottom: 5%;
+                left: 0;
+                width: 100%;
+                height: 65%;
+                background: #ffffff;
+                overflow: auto;
+                li {
+                  position: relative;
+                  width: 100%;
+                  height: 1.4em;
+                  color: #2b85e4;
+                  overflow:hidden;
+                  font-family: AppleSystemUIFont;
+                  font-size: 0.8em;
+                  line-height: 1.25em;
+                }
+              }
+            }
+            .child {
+              position: relative;
+              width: 100%;
+              height: 30%;
+              span{
+                position: absolute;
+                width: 20%;
+                height: 20%;
+                left: 15%;
+                top: 0;
+                font-family: AppleSystemUIFont;
+                color: black;
+                font-size: 0.3em;
+                line-height: 3.3em;
+                background: #ffffff;
+                border: 1px solid #363E42;
+                border-radius: 13px;
+              }
+              ul {
+                position: absolute;
+                bottom: 5%;
+                left: 0;
+                width: 100%;
+                height: 65%;
+                background: #ffffff;
+                overflow: auto;
+                li {
+                  position: relative;
+                  width: 100%;
+                  height: 1.4em;
+                  color: #2b85e4;
+                  overflow:hidden;
+                  font-family: AppleSystemUIFont;
+                  font-size: 0.8em;
+                  line-height: 1.25em;
+                }
+              }
+            }
+          }
+        }
+        .button {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 8%;
+          padding-left: 10%;
+          button {
+            position: relative;
+            top: -2em;
+            width: 6em;
+            font-size: 0.3em;
+            line-height: 2em;
+            background: #ffffff;
+            border: 1px solid #363E42;
+            border-radius: 13px;
+          }
+        }
+      }
+    }
   }
 </style>

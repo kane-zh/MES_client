@@ -339,13 +339,13 @@
                   v-show ="function_select['生产管理'].考核记录===true">
                 <router-link to="/home/production/assessmentRecord">考核记录</router-link>
               </li>
-              <li :class="childMenuSelect==='semifinishedDailyReport'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedDailyReport'"
-                  v-show ="function_select['生产管理'].半成品生产汇报===true">
-                <router-link to="/home/production/semifinishedDailyReport">半成品生产汇报</router-link>
-              </li>
               <li :class="childMenuSelect==='productDailyReport'? 'isActive':'isInActive'"  @click="childMenuSelect='productDailyReport'"
                   v-show ="function_select['生产管理'].产品生产汇报===true">
                 <router-link to="/home/production/productDailyReport">产品生产汇报</router-link>
+              </li>
+              <li :class="childMenuSelect==='semifinishedDailyReport'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedDailyReport'"
+                  v-show ="function_select['生产管理'].半成品生产汇报===true">
+                <router-link to="/home/production/semifinishedDailyReport">半成品生产汇报</router-link>
               </li>
               <li :class="childMenuSelect==='productDataType'? 'isActive':'isInActive'"  @click="childMenuSelect='productDataType'"
                   v-show ="function_select['生产管理'].产品记录分类===true">
@@ -388,8 +388,8 @@
                 <router-link to="/home/plan/vendorInfor">供应商信息</router-link>
               </li>
               <li :class="childMenuSelect==='salesOrderCreate'? 'isActive':'isInActive'"  @click="childMenuSelect='salesOrderCreate'"
-                  v-show ="function_select['计划管理'].销售订单===true">
-                <router-link to="/home/plan/salesOrderCreate">销售订单</router-link>
+                  v-show ="function_select['计划管理'].生产订单===true">
+                <router-link to="/home/plan/salesOrderCreate">生产订单</router-link>
               </li>
               <li :class="childMenuSelect==='productTaskType'? 'isActive':'isInActive'"  @click="childMenuSelect='productTaskType'"
                   v-show ="function_select['计划管理'].产品生产任务分类===true">

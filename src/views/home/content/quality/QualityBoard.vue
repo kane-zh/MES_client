@@ -272,7 +272,7 @@ export default {
       },
       /* 图片项表单 */
       imageItem: {
-        image: null,
+        image: '',
         imageName: '',
         desc: '',
         uri: 'board'
@@ -280,7 +280,7 @@ export default {
       imageInfor: {},
       /* 创建页文件项表单 */
       fileItem: {
-        file: null,
+        file: '',
         fileName: '',
         desc: '',
         uri: 'board'
@@ -524,7 +524,7 @@ export default {
       this.$axios.post(`quality/image/`, formData,
         {headers: {'Content-Type': 'multipart/form-data'}}
       ).then(function (response) {
-        self.imageItem.image = null
+        self.imageItem.image = ''
         self.imageItem.desc = ''
         self.formItem.image = response.data.id
         self.imageInfor = response.data
@@ -559,7 +559,7 @@ export default {
           'fileUrl': response.data.file,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.fileItem.file = null
+        self.fileItem.file = ''
         self.fileItem.desc = ''
         self.formItem.file.push(response.data.id)
         self.fileData.push(obj)

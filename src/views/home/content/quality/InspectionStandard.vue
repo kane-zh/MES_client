@@ -415,7 +415,7 @@ export default {
         ok_ration: 0,
         ng_ration: 0,
         concession_ration: 0,
-        type: null,
+        type: '',
         file: [],
         alter: [],
         attribute1: '',
@@ -428,7 +428,7 @@ export default {
       },
       /* 创建页文件项表单 */
       fileItem: {
-        file: null,
+        file: '',
         fileName: '',
         desc: '',
         uri: 'inspectionStandardInfor'
@@ -693,7 +693,7 @@ export default {
           'fileUrl': response.data.file,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.fileItem.file = null
+        self.fileItem.file = ''
         self.fileItem.desc = ''
         self.formItem.file.push(response.data.id)
         self.fileData.push(obj)
@@ -956,7 +956,7 @@ export default {
       for (let key in self.attribute_title) {
         self.attribute_title[key] = ''
       }
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get(`quality/inspectionStandardType/` + newval).then(function (response) {

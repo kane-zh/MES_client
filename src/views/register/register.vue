@@ -47,11 +47,7 @@ export default {
         self.$router.push('/home')
         alert(self.formItem.username + '用户注册成功')
       }).catch(function (error) {
-        if (error.request) {
-          alert(error.request.response)
-        } else {
-          console.log('Error', error.message)
-        }
+        console.log(error)
       })
     }
   },

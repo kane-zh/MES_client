@@ -4,65 +4,74 @@
       <button type="button" @click="changeMode">{{btTitle}}</button>
     </div>
     <!-- 列表页显示-->
-    <div  class="list"  v-show ="showViewid==='list'">
-        <div class="listHead">
-          <form class="select">
-            <div>仓库:
-              <select v-model="selectItem.warehouse" placeholder="请选择仓库"      >
-                <option v-for="item in warehouseInfor" :value="item.code" :key="item.code">{{item.name}}</option>
-              </select>
-            </div>
-            <div>设备分类:
-              <select v-model="selectItem.equipmentType" placeholder="请选择设备分类"      >
-                <option v-for="item in equipmentTypeInfor" :value="item.code" :key="item.code">{{item.name}}</option>
-              </select>
-            </div>
-            <div>关键字:
-              <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
-            </div>
-            <div>
-              <button type="button" @click="select_list" >搜索</button>
-            </div>
-            <div>
-              <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
-            </div>
-          </form>
+    <div  class="list" v-show="showViewid==='list'">
+      <div class="heard">
+        <form class="select">
+          <div>仓库:
+            <select v-model="selectItem.warehouse" placeholder="请选择仓库"      >
+              <option v-for="item in warehouseInfor" :value="item.code" :key="item.code">{{item.name}}</option>
+            </select>
+          </div>
+          <div>设备分类:
+            <select v-model="selectItem.equipmentType" placeholder="请选择设备分类"      >
+              <option v-for="item in equipmentTypeInfor" :value="item.code" :key="item.code">{{item.name}}</option>
+            </select>
+          </div>
+          <div>排序:
+            <select v-model="selectItem.ordering">
+              <option value="id">添加时间-正排序</option>
+              <option value="-id">添加时间-倒排序</option>
+              <option value="update_time">更新时间-正排序</option>
+              <option value="-update_time">更新时间-倒排序</option>
+            </select>
+          </div>
+          <div>
 
+          </div>
+          <div>
+
+          </div>
+          <div>关键字:
+            <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
+          </div>
+          <div>
+            <button type="button" @click="select_list" style="background: #FCC400;border: none;left: 0">搜索</button>
+            <button type="button" @click="showListView" style="border: none;right: 0">重置</button>
+          </div>
+        </form>
+      </div>
+      <div class="content">
+        <div class="table">
+          <table >
+            <tr align="center"  type="height:2em">
+              <th>序号</th>
+              <th>仓库</th>
+              <th>设备分类</th>
+              <th>设备</th>
+              <th>数量</th>
+            </tr>
+            <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
+              <td>{{index}}</td>
+              <td>{{item.warehouse_name+"("+item.warehouse_code+")"}}</td>
+              <td>{{item.equipmentType_name+"("+item.equipmentType_code+")"}}</td>
+              <td>{{item.equipment_name+"("+item.equipment_code+")"}}</td>
+              <td>{{item.sum}}</td>
+            </tr>
+            <tr>
+
+            </tr>
+          </table>
         </div>
-        <div class="listTable">
-          <div class="table">
-            <table >
-              <tr align="center"  type="height:2em">
-                <th>序号</th>
-                <th>仓库</th>
-                <th>设备分类</th>
-                <th>设备</th>
-                <th>设备编码</th>
-                <th>数量</th>
-              </tr>
-              <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
-                <td>{{index}}</td>
-                <td>{{item.warehouse_name+"("+item.warehouse_code+")"}}</td>
-                <td>{{item.position_name+"("+item.position_code+")"}}</td>
-                <td>{{item.equipmentType_name+"("+item.equipmentType_code+")"}}</td>
-                <td>{{item.equipment_name+"("+item.equipment_code+")"}}</td>
-                <td>{{item.sum}}</td>
-              </tr>
-              <tr>
-
-              </tr>
-            </table>
-          </div>
-          <div class="page">
-            <div>总共：{{listCount}}</div>
-            <button type="button" @click="listPre" v-show ="listPreUrl!==''">上一页</button>
-            <button type="button" @click="listNext" v-show ="listNextUrl!==''">下一页</button>
-          </div>
+        <div class="page">
+          <div>总共：{{listCount}}</div>
+          <button type="button" @click="listPre" v-show ="listPreUrl!==''">上一页</button>
+          <button type="button" @click="listNext" v-show ="listNextUrl!==''">下一页</button>
         </div>
       </div>
+    </div>
     <!-- 详情页显示-->
-    <div  class="detail"  v-show ="showViewid==='detail'">
-      <div class="listHead">
+    <div  class="detail" v-show="showViewid==='detail'">
+      <div class="heard">
         <form class="select">
           <div>仓库:
             <select v-model="selectItem.warehouse" placeholder="请选择仓库"      >
@@ -80,19 +89,27 @@
               <option value="完成">完成</option>
             </select>
           </div>
+          <div>排序:
+            <select v-model="selectItem.ordering">
+              <option value="id">添加时间-正排序</option>
+              <option value="-id">添加时间-倒排序</option>
+              <option value="update_time">更新时间-正排序</option>
+              <option value="-update_time">更新时间-倒排序</option>
+            </select>
+          </div>
+          <div>
+
+          </div>
           <div>关键字:
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
           <div>
-            <button type="button" @click="select_detail" >搜索</button>
-          </div>
-          <div>
-            <button type="button" @click="showListView" style="background: #FCC400;border: none;left: 0">重置</button>
+            <button type="button" @click="select_detail" style="background: #FCC400;border: none;left: 0">搜索</button>
+            <button type="button" @click="showListView" style="border: none;right: 0">重置</button>
           </div>
         </form>
-
       </div>
-      <div class="listTable">
+      <div class="content">
         <div class="table">
           <table >
             <tr align="center"  type="height:2em">
@@ -130,74 +147,82 @@
       </div>
     </div>
     <!--    /*创建页显示*/-->
-    <div  class="create"  v-show="showViewid==='create'">
-      <form >
-        <div>名称:
-          <input v-model="formItem.name"  placeholder="请输入名称">
+    <div  class="create"  v-show ="showViewid==='create'">
+      <div class="center">
+        <div class="heard">
+          <span>信息创建页</span>
+          <button type="button" @click="showViewid='detail'"></button>
         </div>
-        <div>编码:
-          <input v-model="formItem.code"  placeholder="请输入编码">
-          <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
-          <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
-          <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
+        <div class="content">
+          <form >
+            <div>名称:
+              <input v-model="formItem.name"  placeholder="请输入名称">
+            </div>
+            <div>编码:
+              <input v-model="formItem.code"  placeholder="请输入编码">
+              <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
+              <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
+              <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
+            </div>
+            <div>操作分类:
+              <select v-model="formItem.type"  placeholder="请选择操作分类"   >
+                <option value="增加操作">增加操作</option>
+                <option value="退库操作">退库操作</option>
+                <option value="出库操作">出库操作</option>
+                <option value="盘点操作">盘点管理</option>
+              </select>
+              <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
+            </div>
+            <div>数量:
+              <input v-model="formItem.sum" type="number" placeholder="请输入操作数量..." >
+              <span class="message" v-show ="!$v.formItem.sum.required">请输入数量值</span>
+            </div>
+            <div>操作者:
+              <input v-model="formItem.handler"  placeholder="请输入操作者...">
+            </div>
+            <div>操作时间:
+              <input v-model="formItem.dataTime"  type="datetime-local" placeholder="选择日期和时间">
+              <span class="message" v-show ="!$v.formItem.dataTime.required">请选择日期</span>
+            </div>
+            <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
+              <input v-model="formItem.attribute1"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
+              <input v-model="formItem.attribute2"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
+              <input v-model="formItem.attribute3"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
+              <input v-model="formItem.attribute4"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
+              <input v-model="formItem.attribute5"  placeholder="...">
+            </div>
+            <div>审核账号:
+              <select v-model="formItem.auditor"  placeholder="请选择审核账号">
+                <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
+              </select>
+              <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
+            </div>
+            <div >备注信息:
+              <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
+            </div>
+            <div class="file">文件:
+              <span>
+                选择文件
+                <input type="file"  @change="fileBeforeUpload"/>
+              </span>
+              <ul>
+                <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
+              </ul>
+            </div>
+          </form>
         </div>
-        <div>操作分类:
-          <select v-model="formItem.type"  placeholder="请选择操作分类"   >
-            <option value="增加操作">增加操作</option>
-            <option value="退库操作">退库操作</option>
-            <option value="出库操作">出库操作</option>
-            <option value="盘点操作">盘点管理</option>
-          </select>
-          <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
+        <div class="button">
+          <button type="button" @click="save">保存数据</button>
+          <button type="button" @click="saveAndSubmit">保存并提交</button>
         </div>
-        <div>数量:
-          <input v-model="formItem.sum" type="number" placeholder="请输入操作数量..." >
-          <span class="message" v-show ="!$v.formItem.sum.required">请输入数量值</span>
-        </div>
-        <div>操作者:
-          <input v-model="formItem.handler"  placeholder="请输入操作者...">
-        </div>
-        <div>操作时间:
-          <input v-model="formItem.dataTime"  type="datetime-local" placeholder="选择日期和时间">
-          <span class="message" v-show ="!$v.formItem.dataTime.required">请选择日期</span>
-        </div>
-        <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
-          <input v-model="formItem.attribute1"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
-          <input v-model="formItem.attribute2"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
-          <input v-model="formItem.attribute3"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
-          <input v-model="formItem.attribute4"  placeholder="...">
-        </div>
-        <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
-          <input v-model="formItem.attribute5"  placeholder="...">
-        </div>
-        <div>审核账号:
-          <select v-model="formItem.auditor"  placeholder="请选择审核账号">
-            <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>
-          </select>
-          <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>
-        </div>
-        <div >备注信息:
-          <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
-        </div>
-        <div class="file">文件附件:
-          <ul>
-            <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
-          </ul>
-          <input type="file"  @change="fileBeforeUpload"/>
-          <textarea  v-model="fileItem.desc"  placeholder="请输入当前的备注信息"></textarea>
-          <button type="button" @click="uploadFile">上传</button>
-        </div>
-      </form>
-      <div class="button">
-        <button type="button" @click="save">保存数据</button>
-        <button type="button" @click="saveAndSubmit">保存并提交</button>
-        <button type="button" @click="showViewid='detail'">返回列表页</button>
       </div>
     </div>
   </div>
@@ -223,7 +248,8 @@ export default {
         warehouse: '',
         equipmentType: '',
         state: '',
-        searchValue: ''
+        searchValue: '',
+        ordering: ''
       },
 
       /* 详情页数据 */
@@ -236,8 +262,8 @@ export default {
         name: '',
         code: '',
         type: '',
-        position: null,
-        equipment: null,
+        position: '',
+        equipment: '',
         handler: '',
         sum: '',
         dataTime: '',
@@ -249,7 +275,7 @@ export default {
       },
       /* 创建页文件项表单 */
       fileItem: {
-        file: null,
+        file: '',
         fileName: '',
         desc: '',
         uri: 'equipmentManage'
@@ -299,7 +325,7 @@ export default {
         this.selectItem[key] = ''
       }
       var self = this
-      this.$axios.get('warehouse/equipmentStockInfor/?ordering=' + self.ordering).then(function (response) {
+      this.$axios.get('warehouse/equipmentStockInfor/?ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -348,7 +374,7 @@ export default {
         this.selectItem[key] = ''
       }
       var self = this
-      this.$axios.get('warehouse/equipmentStockDetail/?ordering=' + self.ordering).then(function (response) {
+      this.$axios.get('warehouse/equipmentStockDetail/?ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -479,7 +505,7 @@ export default {
           'desc': response.data.desc,
           'uri': response.data.uri
         }
-        self.fileItem.file = null
+        self.fileItem.file = ''
         self.fileItem.desc = ''
         self.formItem.file.push(response.data.id)
         self.fileData.push(obj)
@@ -619,447 +645,423 @@ export default {
   }
 }
 </script>
-<style scoped>
-  .equipmentStock{
+<style scoped lang="scss" >
+  .equipmentStock {
     position: relative;
     top: 0;
     width: 100%;
     height: 100%;
-  }
-  .modelSelect{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 5%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #151515;
+    .modelSelect {
+      position: absolute;
+      top: 0;
+      width: 100%;
+      height: 5%;
+      font-family: PingFangSC-Regular;
+      font-size: 0.3em;
+      line-height: 2em;
+      color: #151515;
+      button {
+        position: absolute;
+        top: 10%;
+        width: 8%;
+        height: 80%;
+        border: 1px solid #363E42;
+        border-radius: 1em;
+      }
+    }
+    .list {
+      position: absolute;
+      top: 5%;
+      width: 100%;
+      height: 95%;
+      .heard {
+        position: absolute;
+        top: 1%;
+        width: 100%;
+        height: 14%;
+        background: rgba(255, 255, 255, 0.57);
+        .select {
+          position: absolute;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          div {
+            position: relative;
+            top: 0;
+            width: 20%;
+            height: 50%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.4em;
+            color: #151515;
+            padding-top: 0.6em;
+            float: left;
+            select {
+              position: absolute;
+              width: 10em;
+              font-size: 0.8em;
+              border: 1px solid #D8D8D8;
+              background: #ffffff;
+              border-radius: 1em;
+              margin-left: 1em;
+              padding-left: 1em;
+            }
+            input {
+              position: absolute;
+              width: 15em;
+              font-size: 0.8em;
+              border: 1px solid #D8D8D8;
+              background: #ffffff;
+              border-radius: 1em;
+              margin-left: 1em;
+              padding-left: 1em;
+            }
+            button {
+              position: absolute;
+              width: 6em;
+              border: 1px solid #D8D8D8;
+              background: #D8D8D8;
+              border-radius: 1em;
+            }
+          }
+          div:nth-child(6) {
+            width: 25%;
+          }
+        }
+      }
+      .content {
+        position: absolute;
+        top: 20%;
+        bottom: 0;
+        width: 100%;
+        .table {
+          height: 90%;
+          width: 100%;
+          overflow: auto;
+          table {
+            height: 100%;
+            width: 100%;
+            table-layout: auto;
+            empty-cells: hide;
+            word-break: normal;
+            th {
+              position: sticky;
+              top: 0;
+              height: 1em;
+              font-family: PingFangSC-Regular;
+              font-size: 0.4em;
+              line-height: 2.5em;
+              color: #000000;
+              text-align: center;
+              background: #ffffff;
+              border: 1px solid rgba(177, 176, 171, 0.89);
+              &:nth-child(1) {
+                width: 3em;
+              }
+            }
+            td {
+              height: 1em;
+              font-family: PingFangSC-Regular;
+              font-size: 0.4em;
+              color: #191A1E;
+              text-align: center;
+              background: #ffffff;
+              border: 1px solid rgba(177, 176, 171, 0.61);
+            }
+          }
+        }
 
-  }
-  .modelSelect button{
-    position: absolute;
-    top: 10%;
-    width: 8%;
-    height: 80%;
-    border: 1px solid #363E42;
-    border-radius: 1em;
-  }
-  .list{
-    position: absolute;
-    top: 5%;
-    width: 100%;
-    height: 95%;
-  }
-  .list .listHead{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 15%;
-    background: rgba(255, 255, 255, 0.57);
-  }
-  .list .listHead .select{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 60%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #151515;
+        .page {
+          position: absolute;
+          right: 5%;
+          bottom: 0;
+          height: 10%;
+          font-size: 0.3em;
+          line-height: 2em;
 
-  }
-  .list .listHead .select div{
-    position: relative;
-    top: 0;
-    width: 18%;
-    height: 100%;
-    margin-right: 2%;
-    font-family: AppleSystemUIFont;
-    float: left;
-  }
-  .list .listHead .select select{
-    position: absolute;
-    width: 60%;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .list .listHead .select input{
-    position: absolute;
-    width: 90%;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .list .listHead .select button{
-    position: absolute;
-    right: 0;
-    width: 40%;
-    border-radius: 1em;
-    border: none;
-    border: 1px solid #D8D8D8;
-    background: #D8D8D8;
-    border-radius: 1em;
-  }
-  .list .listTable{
-    position: absolute;
-    top: 15%;
-    width: 100%;
-    height: 85%;
-  }
-  .list .listTable .table{
-    height: 90%;
-    width: 100%;
-    overflow: auto;
-  }
-  .list .listTable .table table{
-    height: 100%;
-    width: 100%;
-    /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .list .listTable .table  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #ffffff;
-    text-align: center;
+          button {
+            position: relative;
+            width: 20em;
+            font-size: 0.3em;
+            line-height: 2em;
+            border: 1px solid #363E42;
+            border-radius: 1em;
+          }
+        }
+      }
+    }
+    .detail {
+      position: absolute;
+      top: 5%;
+      width: 100%;
+      height: 95%;
+      .heard {
+        position: absolute;
+        top: 1%;
+        width: 100%;
+        height: 14%;
+        background: rgba(255, 255, 255, 0.57);
+        .select {
+          position: absolute;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          div {
+            position: relative;
+            top: 0;
+            width: 20%;
+            height: 50%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.4em;
+            color: #151515;
+            padding-top: 0.6em;
+            float: left;
+            select {
+              position: absolute;
+              width: 10em;
+              font-size: 0.8em;
+              border: 1px solid #D8D8D8;
+              background: #ffffff;
+              border-radius: 1em;
+              margin-left: 1em;
+              padding-left: 1em;
+            }
+            input {
+              position: absolute;
+              width: 15em;
+              font-size: 0.8em;
+              border: 1px solid #D8D8D8;
+              background: #ffffff;
+              border-radius: 1em;
+              margin-left: 1em;
+              padding-left: 1em;
+            }
+            button {
+              position: absolute;
+              width: 6em;
+              border: 1px solid #D8D8D8;
+              background: #D8D8D8;
+              border-radius: 1em;
+            }
+          }
+          div:nth-child(6) {
+            width: 25%;
+          }
+        }
+      }
+      .content {
+        position: absolute;
+        top: 20%;
+        bottom: 0;
+        width: 100%;
+        .table {
+          height: 90%;
+          width: 100%;
+          overflow: auto;
+          table {
+            height: 100%;
+            width: 100%;
+            table-layout: auto;
+            empty-cells: hide;
+            word-break: normal;
+            th {
+              position: sticky;
+              top: 0;
+              height: 1em;
+              font-family: PingFangSC-Regular;
+              font-size: 0.4em;
+              line-height: 2.5em;
+              color: #000000;
+              text-align: center;
+              background: #ffffff;
+              border: 1px solid rgba(177, 176, 171, 0.89);
+              &:nth-child(1) {
+                width: 3em;
+              }
+            }
+            td {
+              height: 1em;
+              font-family: PingFangSC-Regular;
+              font-size: 0.4em;
+              color: #191A1E;
+              text-align: center;
+              background: #ffffff;
+              border: 1px solid rgba(177, 176, 171, 0.61);
+            }
+          }
+        }
 
-    background: #191A1E;
-  }
-  .list .listTable .table  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.4em;
-    color: #191A1E;
+        .page {
+          position: absolute;
+          right: 5%;
+          bottom: 0;
+          height: 10%;
+          font-size: 0.3em;
+          line-height: 2em;
 
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .list .listTable .page{
-    position: absolute;
-    right: 5%;
-    bottom: 0;
-    height: 10%;
-    font-size: 0.3em;
-    line-height: 2em;
-  }
-  .list .listTable .page button{
-    position: relative;
-    width: 20em;
-    font-size: 0.3em;
-    line-height: 2em;
-    border: 1px solid #363E42;
-    border-radius: 1em;
-  }
-  .detail{
-    position: absolute;
-    top: 5%;
-    width: 100%;
-    height: 95%;
-  }
-  .detail .listHead{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 15%;
-    background: rgba(255, 255, 255, 0.57);
-  }
-  .detail .listHead .select{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 40%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #151515;
-
-  }
-  .detail .listHead .select div{
-    position: relative;
-    top: 0;
-    width: 25%;
-    height: 100%;
-    margin-right: 2%;
-    font-family: AppleSystemUIFont;
-    float: left;
-  }
-  .detail .listHead .select select{
-    position: absolute;
-    width: 60%;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .detail .listHead .select input{
-    position: absolute;
-    width: 90%;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .detail .listHead .select button{
-    position: absolute;
-    right: 0;
-    width: 40%;
-    border-radius: 1em;
-    border: none;
-    border: 1px solid #D8D8D8;
-    background: #D8D8D8;
-    border-radius: 1em;
-  }
-  .detail .ordering{
-    position: absolute;
-    top: 80%;
-    width: 100%;
-    height: 20%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.3em;
-    line-height: 2em;
-    color: #ffffff;
-
-    background: #dcdcdc;
-  }
-  .detail .listHead  .ordering div{
-    position: relative;
-    top: 0;
-    width: 10%;
-    height: 100%;
-    float: left;
-  }
-  .detail .listTable{
-    position: absolute;
-    top: 15%;
-    width: 100%;
-    height: 85%;
-  }
-  .detail .listTable .table{
-    height: 90%;
-    width: 100%;
-    overflow: auto;
-  }
-  .detail .listTable .table table{
-    height: 100%;
-    width: 100%;
-    /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .detail .listTable .table  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #ffffff;
-    text-align: center;
-
-    background: #191A1E;
-  }
-  .detail .listTable .table  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.4em;
-    color: #191A1E;
-
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .detail .listTable .page{
-    position: absolute;
-    right: 5%;
-    bottom: 0;
-    height: 10%;
-    font-size: 0.3em;
-    line-height: 2em;
-  }
-  .detail .listTable .page button{
-    position: relative;
-    width: 20em;
-    font-size: 0.3em;
-    line-height: 2em;
-    border: 1px solid #363E42;
-    border-radius: 1em;
-  }
-  .create{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-  }
-  .create form{
-    position: absolute;
-    top: 0;
-    left: 2%;
-    width: 80%;
-    height: 90%;
-    font-family: PingFangSC-Regular;
-    font-size: 0.5em;
-    color: #151515;
-
-    overflow: auto;
-  }
-  .create form div{
-    position: relative;
-    width: 50%;
-    height: 12%;
-    float: left;
-  }
-  .create form div select,.create form div input,.create form div textarea{
-    position: absolute;
-    width: 15em;
-    right: 4em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.8em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .create form div span{
-    position: absolute;
-    width: 15em;
-    right: 6em;
-    font-family: AppleSystemUIFont;
-    padding-left: 2em;
-    font-size: 0.6em;
-    color: #f5222d;
-    display: block;
-  }
-  .create .child {
-    position: relative;
-    width: 100%;
-    height: 20%;
-    float: left;
-    background: #4d5669;
-  }
-  .create .child form{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    padding-top: 1%;
-    overflow: auto;
-  }
-  .create .child div{
-    position: relative;
-    width: 50%;
-    height: 30%;
-    font-size: 1.5em;
-    float: left;
-  }
-  .create .child select,.create .child input,.create .child textarea{
-    position: absolute;
-    width: 60%;
-    height: 80%;
-    right: 4em;
-    border: 1px solid #D8D8D8;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .create .file{
-    position: relative;
-    width: 45%;
-    height: 30%;
-    margin-right: 5%;
-    background: #4d5669;
-    float: left;
-  }
-  .create .file ul{
-    position: absolute;
-    top: 5%;
-    left: 2.5em;
-    right: 10%;
-    height: 35%;
-    margin-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .create .file ul li{
-    position: relative;
-    width: 80%;
-    height: 2em;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 1em;
-  }
-  .create .file input{
-    position: absolute;
-    top: 45%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: #ffffff;
-    border-radius: 1em;
-  }
-  .create .file textarea {
-    position: absolute;
-    top: 65%;
-    left: 10%;
-    width: 80%;
-    height: 15%;
-    padding-left: 2em;
-    background: #ffffff;
-    overflow: auto;
-  }
-  .create .file button{
-    position: absolute;
-    bottom: 0.2em;
-    width: 6em;
-    margin: 0.2em;
-    font-size: 0.8em;
-    line-height: 2em;
-    background: #2d59ff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
-  }
-  .create table{
-    width: 100%;
-    /*table-layout: fixed;*/
-    empty-cells:hide;
-  }
-  .create  th{
-    position: sticky;
-    top:0;
-    height: 2em;
-    font-family: PingFangSC-Regular;
-    font-size: 1em;
-    color: #ffffff;
-    text-align: center;
-
-    background: #191A1E;
-  }
-  .create  td{
-    height: 1em;
-    font-family: PingFangSC-Regular;
-    font-size: 0.8em;
-    color: #191A1E;
-
-    text-align: center;
-    background: #ffffff;
-    border:1px solid #999;
-  }
-  .create .button{
-    position: absolute;
-    top: 90%;
-    width: 100%;
-    height: 10%;
-    float: left;
-  }
-  .create .button button{
-    width: 12em;
-    margin: 0.2em;
-    font-size: 0.4em;
-    line-height: 2em;
-    background: #ffffff;
-    border: 1px solid #363E42;
-    border-radius: 13px;
+          button {
+            position: relative;
+            width: 20em;
+            font-size: 0.3em;
+            line-height: 2em;
+            border: 1px solid #363E42;
+            border-radius: 1em;
+          }
+        }
+      }
+    }
+    .create {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(200, 200, 200, 0.8);
+      .center {
+        position: absolute;
+        top: 10%;
+        left: 15%;
+        width: 70%;
+        height: 80%;
+        background: #ffffff;
+        border-radius: 0.5em;
+        .heard {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 100%;
+          height: 8%;
+          background: #123658;
+          border-top-right-radius: 0.5em;
+          border-top-left-radius: 0.5em;
+          span {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.6em;
+            line-height: 1.5em;
+            text-align: center;
+            color: #ffffff;
+            display: inline-block;
+          }
+          button {
+            position: absolute;
+            right: 0.25em;
+            top: 0.25em;
+            height: 0.5em;
+            width: 0.5em;
+            border: none;
+            background-image: url("../../../../../static/icons/close.png");
+            background-size: cover;
+          }
+        }
+        .content {
+          position: absolute;
+          top: 10%;
+          left: 10%;
+          width: 80%;
+          height: 80%;
+          overflow: auto;
+          form {
+            position: absolute;
+            top: 5%;
+            width: 100%;
+            height: 90%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.5em;
+            color: #151515;
+            div {
+              position: relative;
+              width: 50%;
+              height: 20%;
+              float: left;
+              select, input, textarea {
+                position: absolute;
+                right: 1em;
+                width: 10em;
+                padding-left: 1em;
+                font-family: AppleSystemUIFont;
+                font-size: 0.8em;
+                border: 1px solid #D8D8D8;
+                background: #ffffff;
+                border-radius: 1em;
+              }
+              span {
+                position: absolute;
+                width: 100%;
+                font-family: AppleSystemUIFont;
+                font-size: 0.6em;
+                color: #f5222d;
+                display: block;
+                text-align: center;
+              }
+            }
+            .file {
+              position: relative;
+              width: 50%;
+              height: 30%;
+              span {
+                position: absolute;
+                width: 40%;
+                height: 20%;
+                right: 30%;
+                top: 0;
+                font-family: AppleSystemUIFont;
+                color: black;
+                font-size: 0.3em;
+                line-height: 3.3em;
+                background: #ffffff;
+                border: 1px solid #363E42;
+                border-radius: 13px;
+                input {
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  left: 0;
+                  top: 0;
+                  opacity: 0%;
+                }
+              }
+              ul {
+                position: absolute;
+                bottom: 5%;
+                left: 0;
+                width: 100%;
+                height: 65%;
+                background: #ffffff;
+                overflow: auto;
+                li {
+                  position: relative;
+                  width: 100%;
+                  height: 1.4em;
+                  color: #2b85e4;
+                  overflow: hidden;
+                  font-family: AppleSystemUIFont;
+                  font-size: 0.8em;
+                  line-height: 1.25em;
+                }
+              }
+            }
+          }
+        }
+        .button {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 8%;
+          padding-left: 10%;
+          button {
+            position: relative;
+            top: -2em;
+            width: 6em;
+            font-size: 0.3em;
+            line-height: 2em;
+            background: #ffffff;
+            border: 1px solid #363E42;
+            border-radius: 13px;
+          }
+        }
+      }
+    }
   }
 </style>

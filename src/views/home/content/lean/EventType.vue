@@ -47,26 +47,6 @@
               <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
             </dd>
           </div>
-<!--          <div class="item" v-show ="detail.eventType_item!==undefined && detail.eventType_item.length > 0">-->
-<!--            <dt>包含内容</dt>-->
-<!--            <table >-->
-<!--              <tr align="center"  type="height:2em">-->
-<!--                <th>序号</th>-->
-<!--                <th>名称</th>-->
-<!--                <th>编码</th>-->
-<!--                <th>状态</th>-->
-<!--              </tr>-->
-<!--              <tr align="center" v-for="(item,index) in detail.eventType_item" :key="item.id" type="height:1em" >-->
-<!--                <td>{{index}}</td>-->
-<!--                <td>{{item.name}}</td>-->
-<!--                <td>{{item.code}}</td>-->
-<!--                <td>{{item.state}}</td>-->
-<!--              </tr>-->
-<!--              <tr>-->
-
-<!--              </tr>-->
-<!--            </table>-->
-<!--          </div>-->
         </div>
         <div class="button">
           <button type="button" @click="changeState('审核中')" v-show="showSubmitBt===true">提交数据</button>
@@ -239,8 +219,8 @@ export default {
         name: '',
         code: '',
         state: '',
-        classes: null,
-        parent: null,
+        classes: '',
+        parent: '',
         attach_attribute: [],
         file: [],
         desc: '',
@@ -248,7 +228,7 @@ export default {
       },
       /* 创建页文件项表单 */
       fileItem: {
-        file: null,
+        file: '',
         fileName: '',
         desc: '',
         uri: 'eventType'
@@ -500,7 +480,7 @@ export default {
           'uri': response.data.uri
         }
         self.fileItem.fileName = ''
-        self.fileItem.file = null
+        self.fileItem.file = ''
         self.fileItem.desc = ''
         self.formItem.file.push(response.data.id)
         self.fileData.push(obj)

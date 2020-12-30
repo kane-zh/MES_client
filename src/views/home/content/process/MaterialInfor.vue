@@ -466,15 +466,15 @@ export default {
         name: '',
         code: '',
         state: '',
-        type: null,
-        unitType: null,
-        unit: null,
+        type: '',
+        unitType: '',
+        unit: '',
         character: '',
-        vendor1: null,
+        vendor1: '',
         purchase_code1: '',
-        vendor2: null,
+        vendor2: '',
         purchase_code2: '',
-        vendor3: null,
+        vendor3: '',
         purchase_code3: '',
         image: [],
         file: [],
@@ -494,7 +494,7 @@ export default {
       },
       /* 图片项表单 */
       imageItem: {
-        image: null,
+        image: '',
         imageName: '',
         desc: '',
         uri: 'materialInfor'
@@ -502,7 +502,7 @@ export default {
       imageData: [],
       /* 创建页文件项表单 */
       fileItem: {
-        file: null,
+        file: '',
         fileName: '',
         desc: '',
         uri: 'materialInfor'
@@ -806,7 +806,7 @@ export default {
           'imageUrl': response.data.image,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.imageItem.image = null
+        self.imageItem.image = ''
         self.imageItem.desc = ''
         self.formItem.image.push(response.data.id)
         self.imageData.push(obj)
@@ -857,7 +857,7 @@ export default {
           'fileUrl': response.data.file,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.fileItem.file = null
+        self.fileItem.file = ''
         self.fileItem.desc = ''
         self.formItem.file.push(response.data.id)
         self.fileData.push(obj)
@@ -1158,7 +1158,7 @@ export default {
       for (let key in self.attribute_title) {
         self.attribute_title[key] = ''
       }
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get(`process/materialType/` + newval).then(function (response) {
@@ -1183,7 +1183,7 @@ export default {
     'formItem.unitType': function (newval, oldval) {
       var self = this
       this.unitInfor = []
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get('process/unitInfor/?page_size=99999&ordering=-id&state=使用中' +

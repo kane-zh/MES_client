@@ -17,12 +17,6 @@
               <option value="-update_time">更新时间-倒排序</option>
             </select>
           </div>
-          <div>开始时间:
-            <input v-model="selectItem.start_time"  type="datetime-local" placeholder="选择日期和时间">
-          </div>
-          <div>结束时间:
-            <input v-model="selectItem.stop_time"  type="datetime-local" placeholder="选择日期和时间">
-          </div>
           <div>关键字:
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
           </div>
@@ -32,7 +26,7 @@
           </div>
         </form>
         <div class="button" >
-          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加维护记录</button>
+          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加设备监控</button>
         </div>
       </div>
       <div class="content">
@@ -82,54 +76,48 @@
         </div>
       </div>
     </div>
-<!--    &lt;!&ndash; 详情页显示&ndash;&gt;-->
-<!--    <div  class="detail"  v-show="showViewid==='detail'">-->
-<!--      <div class="center">-->
-<!--        <div class="heard">-->
-<!--          <span>详情信息</span>-->
-<!--          <button type="button" @click="showListView"></button>-->
-<!--        </div>-->
-<!--        <div class="content">-->
-<!--          <div class="basic">-->
-<!--            <dt>基础信息</dt>-->
-<!--            <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>-->
-<!--            <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>-->
-<!--            <dd>{{"设备状态:"+"&#12288;"+detail.type}}</dd>-->
-<!--            <dd>{{"运行时长:"+"&#12288;"+detail.runTime}}</dd>-->
-<!--            <dd>{{"开机时长:"+"&#12288;"+detail.allTime}}</dd>-->
-<!--            <dd>{{"加工数量:"+"&#12288;"+detail.sum}}</dd>-->
-<!--            <dd>{{"任务编码:"+"&#12288;"+detail.task}}</dd>-->
-<!--            <dd>{{"稼动率:"+"&#12288;"+detail.util_rate}}</dd>-->
-<!--            <dd>{{"完成率:"+"&#12288;"+detail.comp_rate}}</dd>-->
-<!--            <dd>{{"操作者:"+"&#12288;"+detail.handler}}</dd>-->
-<!--            <dd v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</dd>-->
-<!--            <dd v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</dd>-->
-<!--            <dd v-show ="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</dd>-->
-<!--            <dd v-show ="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</dd>-->
-<!--            <dd v-show ="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</dd>-->
-<!--          </div>-->
-<!--          <div class="desc" v-show="detail.desc!=''">-->
-<!--            <dt>备注信息</dt>-->
-<!--            <dd>{{detail.desc}}</dd>-->
-<!--          </div>-->
-<!--          <div class="other">-->
-<!--            <dt>其他信息</dt>-->
-<!--            <dd>{{"创建账号:"+"&#12288;"+detail.create_user}}</dd>-->
-<!--            <dd>{{"创建时间:"+"&#12288;"+detail.create_time}}</dd>-->
-<!--            <dd>{{"更新时间:"+"&#12288;"+detail.update_time}}</dd>-->
-<!--          </div>-->
-<!--          <div class="file">-->
-<!--            <dt>文件附件</dt>-->
-<!--            <dd v-for="(value,id) in detail.file" :key="id">-->
-<!--              <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>-->
-<!--            </dd>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="button">-->
-<!--          <button type="button" @click="showUpdateView(detail.id)">更改</button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!-- 详情页显示-->
+    <div  class="detail"  v-show="showViewid==='detail'">
+      <div class="center">
+        <div class="heard">
+          <span>详情信息</span>
+          <button type="button" @click="showListView"></button>
+        </div>
+        <div class="content">
+          <div class="basic">
+            <dt>基础信息</dt>
+            <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
+            <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
+            <dd>{{"设备状态:"+"&#12288;"+detail.type}}</dd>
+            <dd>{{"运行时长:"+"&#12288;"+detail.runTime}}</dd>
+            <dd>{{"开机时长:"+"&#12288;"+detail.allTime}}</dd>
+            <dd>{{"加工数量:"+"&#12288;"+detail.sum}}</dd>
+            <dd>{{"任务编码:"+"&#12288;"+detail.task}}</dd>
+            <dd>{{"稼动率:"+"&#12288;"+detail.util_rate}}</dd>
+            <dd>{{"完成率:"+"&#12288;"+detail.comp_rate}}</dd>
+            <dd>{{"操作者:"+"&#12288;"+detail.handler}}</dd>
+            <dd v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</dd>
+            <dd v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</dd>
+            <dd v-show ="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</dd>
+            <dd v-show ="attribute_title.attribute4!==''">{{attribute_title.attribute4 +":"+"&#12288;"+detail.attribute4}}</dd>
+            <dd v-show ="attribute_title.attribute5!==''">{{attribute_title.attribute5 +":"+"&#12288;"+detail.attribute5}}</dd>
+          </div>
+          <div class="desc" v-show="detail.desc!=''">
+            <dt>备注信息</dt>
+            <dd>{{detail.desc}}</dd>
+          </div>
+          <div class="other">
+            <dt>其他信息</dt>
+            <dd>{{"创建账号:"+"&#12288;"+detail.create_user}}</dd>
+            <dd>{{"创建时间:"+"&#12288;"+detail.create_time}}</dd>
+            <dd>{{"更新时间:"+"&#12288;"+detail.update_time}}</dd>
+          </div>
+        </div>
+        <div class="button">
+          <button type="button" @click="showUpdateView(detail.id)">更改</button>
+        </div>
+      </div>
+    </div>
     <!-- 创建页显示-->
     <div  class="create"  v-show ="showViewid==='create'">
       <div class="center">
@@ -162,15 +150,6 @@
             <div >备注信息:
               <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
             </div>
-            <div class="file">文件:
-              <span>
-                选择文件
-                <input type="file"  @change="fileBeforeUpload"/>
-              </span>
-              <ul>
-                <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
-              </ul>
-            </div>
           </form>
         </div>
         <div class="button">
@@ -178,136 +157,45 @@
         </div>
       </div>
     </div>
-<!--    &lt;!&ndash; 更新页显示&ndash;&gt;-->
-<!--    <div  class="update"  v-show ="showViewid==='update'">-->
-<!--      <div class="center">-->
-<!--        <div class="heard">-->
-<!--          <span>信息更新页</span>-->
-<!--          <button type="button" @click="showListView"></button>-->
-<!--        </div>-->
-<!--        <div class="content">-->
-<!--          <form >-->
-<!--            <div>名称:-->
-<!--              <input v-model="formItem.name"  placeholder="请输入名称">-->
-<!--            </div>-->
-<!--            <div>编码:-->
-<!--              <input v-model="formItem.code"  placeholder="请输入编码">-->
-<!--            </div>-->
-<!--            <div>分类:-->
-<!--              <select v-model="formItem.type"   placeholder="请选择分类">-->
-<!--                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>-->
-<!--              </select>-->
-<!--              <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>-->
-<!--            </div>-->
-<!--            <div>维护者:-->
-<!--              <input v-model="formItem.handler"  placeholder="请输入维护者...">-->
-<!--            </div>-->
-<!--            <div>设备分类:-->
-<!--              <select v-model="formItem.equipmentType"   placeholder="请选择设备分类">-->
-<!--                <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>-->
-<!--              </select>-->
-<!--            </div>-->
-<!--            <div>设备:-->
-<!--              <select v-model="formItem.equipment"   placeholder="请选择设备">-->
-<!--                <option v-for="item in equipmentInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>-->
-<!--              </select>-->
-<!--              <span class="message" v-show ="!$v.formItem.equipment.required">请选择设备</span>-->
-<!--            </div>-->
-<!--            <div>备品消耗:-->
-<!--              <select v-model="formItem.parts_use"   placeholder="请选择备品消耗"  style="height: 90%"  multiple="true">-->
-<!--                <option v-for="item in partsUse" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>-->
-<!--              </select>-->
-<!--            </div>-->
-<!--            <div>维护结果:-->
-<!--              <input v-model="formItem.result"  placeholder="请输入维护结果...">-->
-<!--            </div>-->
-<!--            <div>维护时间:-->
-<!--              <input v-model="formItem.dataTime"  type="datetime-local" placeholder="选择日期和时间" >-->
-<!--              <span class="message" v-show ="!$v.formItem.dataTime.required">请选择日期</span>-->
-<!--            </div>-->
-<!--            <div>维护耗时:-->
-<!--              <input v-model="formItem.time_consuming"  placeholder="请输入维护耗时...">-->
-<!--            </div>-->
-<!--            <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}-->
-<!--              <input v-model="formItem.attribute1"  placeholder="...">-->
-<!--            </div>-->
-<!--            <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}-->
-<!--              <input v-model="formItem.attribute2"  placeholder="...">-->
-<!--            </div>-->
-<!--            <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}-->
-<!--              <input v-model="formItem.attribute3"  placeholder="...">-->
-<!--            </div>-->
-<!--            <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}-->
-<!--              <input v-model="formItem.attribute4"  placeholder="...">-->
-<!--            </div>-->
-<!--            <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}-->
-<!--              <input v-model="formItem.attribute5"  placeholder="...">-->
-<!--            </div>-->
-<!--            <div>审核账号:-->
-<!--              <select v-model="formItem.auditor"  placeholder="请选择审核账号">-->
-<!--                <option v-for="item in userinfor" :value="item.username" :key="item.username">{{item.username}}</option>-->
-<!--              </select>-->
-<!--              <span class="message" v-show ="!$v.formItem.auditor.required">请选择审核账号</span>-->
-<!--            </div>-->
-<!--            <div >备注信息:-->
-<!--              <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>-->
-<!--            </div>-->
-<!--            <div class="file">文件:-->
-<!--              <span>-->
-<!--                选择文件-->
-<!--                <input type="file"  @change="fileBeforeUpload"/>-->
-<!--              </span>-->
-<!--              <ul>-->
-<!--                <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>-->
-<!--              </ul>-->
-<!--            </div>-->
-<!--            <div class="image">图片:-->
-<!--              <span>-->
-<!--                  选择图片-->
-<!--                  <input type="file"  @change="imageBeforeUpload"/>-->
-<!--               </span>-->
-<!--              <ul>-->
-<!--                <li v-for="value in imageData" v-bind:key="value.id"  @click="removeImage(value.id)">-->
-<!--                  <img :src="value.imageUrl">-->
-<!--                </li>-->
-<!--              </ul>-->
-<!--            </div>-->
-<!--            <div class="child">子项:-->
-<!--              <span @click="showChildForm='true'">-->
-<!--                  添加-->
-<!--              </span>-->
-<!--              <div>-->
-<!--                <table v-show="list_child.length>0">-->
-<!--                  <tr align="center">-->
-<!--                    <th>序号</th>-->
-<!--                    <th>部件</th>-->
-<!--                    <th>方法</th>-->
-<!--                    <th>说明</th>-->
-<!--                    <th>操作</th>-->
-<!--                  </tr>-->
-<!--                  <tr align="center" v-for="(item,index) in list_child" :key="item.id" >-->
-<!--                    <td>{{index}}</td>-->
-<!--                    <td>{{item.compoment}}</td>-->
-<!--                    <td>{{item.method}}</td>-->
-<!--                    <td>{{item.desc}}</td>-->
-<!--                    <td>-->
-<!--                      <button type="button" @click="removeChild(item.id)">移除</button>-->
-<!--                    </td>-->
-<!--                  </tr>-->
-<!--                  <tr>-->
-
-<!--                  </tr>-->
-<!--                </table>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </form>-->
-<!--        </div>-->
-<!--        <div class="button">-->
-<!--          <button type="button" @click="update">保存数据</button>-->
-<!--          <button type="button" @click="updateAndSubmit">保存并提交</button>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <!-- 更新页显示-->
+    <div  class="update"  v-show ="showViewid==='update'">
+      <div class="center">
+        <div class="heard">
+          <span>信息更新页</span>
+          <button type="button" @click="showListView"></button>
+        </div>
+        <div class="content">
+          <form >
+            <div>名称:
+              <input v-model="formItem.name"  placeholder="请输入名称">
+            </div>
+            <div>编码:
+              <input v-model="formItem.code"  placeholder="请输入编码">
+              <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
+              <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
+              <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
+            </div>
+            <div>设备分类:
+              <select v-model="formItem.equipmentType"   placeholder="请选择设备分类">
+                <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              </select>
+            </div>
+            <div>设备:
+              <select v-model="formItem.equipment"   placeholder="请选择设备"     >
+                <option v-for="item in equipmentInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              </select>
+              <span class="message" v-show ="!$v.formItem.equipment.required">请选择设备</span>
+            </div>
+            <div >备注信息:
+              <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="button">
+          <button type="button" @click="update">保存数据</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -329,9 +217,9 @@ export default {
       /* 列表页查询参数 */
       selectItem: {
         create_user: '',
-        searchValue: ''
+        searchValue: '',
+        ordering: ''
       }, /* 列表页数据排序 */
-      ordering: '-id',
       /* 详情页数据 */
       detail: [],
       /* 创建页表单项数据 */
@@ -339,14 +227,16 @@ export default {
         id: '',
         name: '',
         code: '',
-        equipmentType: null,
-        equipment: null,
+        equipmentType: '',
+        equipment: '',
         desc: ''
       },
       /* 设备分类信息 */
       equipmentType: [],
       /* 设备信息 */
       equipmentInfor: [],
+      /* 具有审核权限的账号信息 */
+      userinfor: [],
       /* 附加属性标题 */
       attribute_title: {
         attribute1: '',
@@ -388,7 +278,7 @@ export default {
         this.selectItem[key] = ''
       }
       var self = this
-      this.$axios.get('equipment/equipmentState/?ordering=' + self.ordering).then(function (response) {
+      this.$axios.get('equipment/equipmentState/?ordering=' + self.selectItem.ordering).then(function (response) {
         self.list = response.data.results
         self.listCount = response.data.count
         if (response.data.next !== null) {
@@ -493,6 +383,7 @@ export default {
           this.formItem[key] = ''
         }
       }
+      this.equipmentInfor = []
       this.showViewid = 'create'
     },
     /* 显示更新视图 */
@@ -573,7 +464,13 @@ export default {
     var self = this
     this.$axios.get('equipment/equipmentType/?page_size=99999&ordering=-id&state=使用中').then(function (response) {
       self.equipmentType = response.data.results
-      self.showListView()
+      self.$axios.get('user/userInfor/?page_size=99999&ordering=-id').then(function (response) {
+        self.userinfor = response.data.results
+        self.showListView()
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
+      })
     }).catch(function (err) {
       // 错误提示
       console.log(err)
@@ -608,7 +505,7 @@ export default {
     'formItem.equipmentType': function (newval, oldval) {
       var self = this
       this.equipmentInfor = []
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get('equipment/equipmentAccount/?page_size=99999&ordering=-id&state=使用中' +
@@ -687,12 +584,6 @@ export default {
           div:nth-child(3) {
             width: 25%;
           }
-          div:nth-child(4) {
-            width: 25%;
-          }
-          div:nth-child(5) {
-            width: 25%;
-          }
         }
         .button{
           position: absolute;
@@ -743,10 +634,10 @@ export default {
                 width: 3em;
               }
               &:nth-child(2){
-                width: 12em;
+                width: 8em;
               }
               &:nth-child(3){
-                width: 12em;
+                width: 8em;
               }
               &:nth-child(4){
                 width: 5em;
@@ -755,12 +646,24 @@ export default {
                 width: 5em;
               }
               &:nth-child(6){
-                width: 12em;
+                width: 5em;
               }
               &:nth-child(7){
                 width: 5em;
               }
               &:nth-child(8){
+                width: 5em;
+              }
+              &:nth-child(9){
+                width: 5em;
+              }
+              &:nth-child(10){
+                width: 8em;
+              }
+              &:nth-child(11){
+                width: 5em;
+              }
+              &:nth-child(12){
                 width: 5em;
               }
             }
@@ -868,11 +771,6 @@ export default {
               line-height: 2em;
               color: #0c0c0c;
             }
-            dd:nth-child(8){
-              width: 100%;
-              display: block;
-              float: left;
-            }
           }
           .desc{
             position: relative;
@@ -917,40 +815,15 @@ export default {
               line-height: 2em;
               color: #0c0c0c;
             }
+            dd:nth-child(3){
+              width: 100%;
+              display: block;
+              float: left;
+            }
             dd:nth-child(4){
               width: 100%;
               display: block;
               float: left;
-            }
-            dd:nth-child(5){
-              width: 100%;
-              display: block;
-              float: left;
-            }
-          }
-          .file{
-            position: relative;
-            top: 0;
-            overflow:hidden;
-            width: 100%;
-            dt{
-              font-family: PingFangSC-Regular;
-              font-size: 0.5em;
-              line-height: 2em;
-              color: #9ca022;
-              text-align: center;
-            }
-            dd{
-              width: 100%;
-              display: block;
-              float: left;
-              font-family: PingFangSC-Regular;
-              font-size: 0.5em;
-              line-height: 2em;
-              color: #0c0c0c;
-              a{
-                color: #0c0c0c;
-              }
             }
           }
         }
@@ -983,8 +856,8 @@ export default {
       .center {
         position: absolute;
         top:10%;
-        left: 15%;
-        width: 70%;
+        left: 20%;
+        width: 60%;
         height: 80%;
         background: #ffffff;
         border-radius:0.5em;
@@ -1059,52 +932,6 @@ export default {
                 color: #f5222d;
                 display: block;
                 text-align: center;
-              }
-            }
-            .file {
-              position: relative;
-              width: 50%;
-              height: 30%;
-              span{
-                position: absolute;
-                width: 40%;
-                height: 20%;
-                right: 30%;
-                top: 0;
-                font-family: AppleSystemUIFont;
-                color: black;
-                font-size: 0.3em;
-                line-height: 3.3em;
-                background: #ffffff;
-                border: 1px solid #363E42;
-                border-radius: 13px;
-                input {
-                  position: absolute;
-                  width: 100%;
-                  height: 100%;
-                  left: 0;
-                  top: 0;
-                  opacity: 0%;
-                }
-              }
-              ul {
-                position: absolute;
-                bottom: 5%;
-                left: 0;
-                width: 100%;
-                height: 65%;
-                background: #ffffff;
-                overflow: auto;
-                li {
-                  position: relative;
-                  width: 100%;
-                  height: 1.4em;
-                  color: #2b85e4;
-                  overflow:hidden;
-                  font-family: AppleSystemUIFont;
-                  font-size: 0.8em;
-                  line-height: 1.25em;
-                }
               }
             }
           }
@@ -1138,8 +965,8 @@ export default {
       .center {
         position: absolute;
         top:10%;
-        left: 15%;
-        width: 70%;
+        left: 20%;
+        width: 60%;
         height: 80%;
         background: #ffffff;
         border-radius:0.5em;
@@ -1214,52 +1041,6 @@ export default {
                 color: #f5222d;
                 display: block;
                 text-align: center;
-              }
-            }
-            .file {
-              position: relative;
-              width: 50%;
-              height: 30%;
-              span{
-                position: absolute;
-                width: 40%;
-                height: 20%;
-                right: 30%;
-                top: 0;
-                font-family: AppleSystemUIFont;
-                color: black;
-                font-size: 0.3em;
-                line-height: 3.3em;
-                background: #ffffff;
-                border: 1px solid #363E42;
-                border-radius: 13px;
-                input {
-                  position: absolute;
-                  width: 100%;
-                  height: 100%;
-                  left: 0;
-                  top: 0;
-                  opacity: 0%;
-                }
-              }
-              ul {
-                position: absolute;
-                bottom: 5%;
-                left: 0;
-                width: 100%;
-                height: 65%;
-                background: #ffffff;
-                overflow: auto;
-                li {
-                  position: relative;
-                  width: 100%;
-                  height: 1.4em;
-                  color: #2b85e4;
-                  overflow:hidden;
-                  font-family: AppleSystemUIFont;
-                  font-size: 0.8em;
-                  line-height: 1.25em;
-                }
               }
             }
           }

@@ -580,7 +580,7 @@ export default {
         name: '',
         code: '',
         state: '',
-        type: null,
+        type: '',
         material: [],
         semifinished: [],
         image: [],
@@ -596,21 +596,21 @@ export default {
       },
       formItem_material: {
         id: '',
-        materialType: null,
+        materialType: '',
         material: '',
         sum: '',
         desc: ''
       },
       formItem_semifinished: {
         id: '',
-        semifinishedType: null,
+        semifinishedType: '',
         semifinished: '',
         sum: '',
         desc: ''
       },
       /* 图片项表单 */
       imageItem: {
-        image: null,
+        image: '',
         imageName: '',
         desc: '',
         uri: 'stationInfor'
@@ -618,7 +618,7 @@ export default {
       imageData: [],
       /* 创建页文件项表单 */
       fileItem: {
-        file: null,
+        file: '',
         fileName: '',
         desc: '',
         uri: 'stationInfor'
@@ -1004,7 +1004,7 @@ export default {
           'imageUrl': response.data.image,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.imageItem.image = null
+        self.imageItem.image = ''
         self.imageItem.desc = ''
         self.formItem.image.push(response.data.id)
         self.imageData.push(obj)
@@ -1056,7 +1056,7 @@ export default {
           'fileUrl': response.data.file,
           'desc': response.data.desc,
           'uri': response.data.uri}
-        self.fileItem.file = null
+        self.fileItem.file = ''
         self.fileItem.desc = ''
         self.formItem.file.push(response.data.id)
         self.fileData.push(obj)
@@ -1440,7 +1440,7 @@ export default {
       for (let key in self.attribute_title) {
         self.attribute_title[key] = ''
       }
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get(`process/stationType/` + newval).then(function (response) {
@@ -1483,7 +1483,7 @@ export default {
     'formItem_material.materialType': function (newval, oldval) {
       var self = this
       this.materialInfor = []
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get('process/materialInfor/?page_size=99999&ordering=-id&state=使用中' +
@@ -1501,7 +1501,7 @@ export default {
     'formItem_semifinished.semifinishedType': function (newval, oldval) {
       var self = this
       this.semifinishedInfor = []
-      if (newval === undefined) {
+      if (newval === undefined || newval === '') {
         return
       }
       this.$axios.get('process/semifinishedInfor/?page_size=99999&ordering=-id&state=使用中' +

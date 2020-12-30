@@ -80,19 +80,19 @@ export default {
               localStorage.setItem('loginInfor', JSON.stringify(info))
             }
             self.$router.push({name: 'Home'})
-          }).catch(function (err) {
-            console.log(err)
+          }).catch(function (error) {
+            console.log(error)
           })
-        }).catch(function (err) {
-          console.log(err)
+        }).catch(function (error) {
+          console.log(error)
         })
-      }).catch(function (err) {
-        if (err.status === 502) {
-          alert(err.data)
+      }).catch(function (error) {
+        if (error.status === 502) {
+          console.log(error.data)
         } else {
           alert('请输入正确的用户名跟密码')
         }
-        console.log(err)
+        console.log(error)
       })
     }
   },

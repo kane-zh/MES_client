@@ -124,7 +124,7 @@ export default {
         'post': '',
         'wechat': '',
         'mobile': '',
-        'image': null,
+        'image': '',
         'desc': ''
       },
       password: {
