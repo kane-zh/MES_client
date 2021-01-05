@@ -18,7 +18,7 @@ axios.interceptors.request.use((config) => {
   }
   return config
 }, (error) => {
-  return Promise.reject(error.response)
+  return Promise.reject(error)
 })
 
 // 路由响应拦截
@@ -36,8 +36,8 @@ axios.interceptors.response.use(
     if (error.message.includes('Network Error')) { // 判断请求异常信息中是否含有超时Network Error字符串
       alert('网络超时,请检查网络是否连接')
     }
-    if (error.data !== undefined) {
-      if (error.data.detail === 'Signature has expired.') {
+    if (error && error.response && error.response.data) {
+      if (error.response.data.detail === 'Signature has expired.') {
         alert('登录信息过期')
         localStorage.removeItem('loginInfor')
         self.$router.push({name: 'login'})
@@ -48,7 +48,7 @@ axios.interceptors.response.use(
     } else {
       console.log('Error', error.message)
     }
-    return Promise.reject(error.response)
+    return Promise.reject(error)
   }
 )
 export default axios

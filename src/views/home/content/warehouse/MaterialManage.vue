@@ -182,9 +182,6 @@
             </div>
             <div>编码:
               <input v-model="formItem.code"  placeholder="请输入编码">
-              <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
-              <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
-              <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
             </div>
             <div>操作分类:
               <select v-model="formItem.type"  placeholder="请选择操作分类"   >
@@ -287,9 +284,6 @@
             </div>
             <div>编码:
               <input v-model="formItem.code"  placeholder="请输入编码">
-              <span class="message" v-show ="!$v.formItem.code.required">编码不能为空</span>
-              <span class="message" v-show ="!$v.formItem.code.minLength">最少长度为2</span>
-              <span class="message" v-show ="!$v.formItem.code.maxLength">最大长度位32</span>
             </div>
             <div>操作分类:
               <select v-model="formItem.type"  placeholder="请选择操作分类"   >
@@ -474,11 +468,6 @@ export default {
   },
   validations: {
     formItem: {
-      code: {
-        required,
-        minLength: minLength(2),
-        maxLength: maxLength(32)
-      },
       auditor: {
         required
       },
