@@ -2,6 +2,7 @@
   <div class="userAdmin">
     <!-- 列表页显示-->
     <div  class="list"  v-show ="showViewid==='list'">
+      <button type="button" @click="register">创建新账号</button>
       <table >
             <caption align="top">可授权账号</caption>
             <tr align="center"  type="height:2em">
@@ -283,6 +284,9 @@ export default {
         // 错误提示
         console.log(err)
       })
+    },
+    register () {
+      this.$router.push({name: 'register'})
     }
   },
   created () {

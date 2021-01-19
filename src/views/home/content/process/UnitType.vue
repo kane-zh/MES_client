@@ -18,7 +18,7 @@
     <!-- 详情页显示-->
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="center">
-        <div class="heard">
+       <div class="heard">
           <span>详情信息</span>
           <button type="button" @click="showListView"></button>
         </div>
@@ -531,6 +531,8 @@ export default {
       }).then(function (response) {
         self.formItem.file = []
         self.fileData = []
+        self.formItem.id = response.data.id
+        self.formItem.state = '新建'
         alert('数据保存成功')
       }).catch(function (err) {
         // 错误提示
@@ -614,7 +616,7 @@ export default {
         }).then(function (response
         ) {
           alert('数据提交成功')
-          self.showViewid = 'list'
+          self.showListView()
         }).catch(function (err) {
           // 错误提示
           console.log(err)

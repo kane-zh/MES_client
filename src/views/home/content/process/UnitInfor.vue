@@ -76,7 +76,7 @@
                 <td>{{item.auditor}}</td>
                 <td>
                   <span @click="showDetailView(item.id)" v-show ="item.create_user===username ||
-                  item.auditor===username||canRead===true" style="color: #FF1A5EC4">详情</span>
+                  item.auditor===username||canRead===true" style="color: #FF1A5EC4">查看</span>
                   <span @click="showUpdateView(item.id)" v-show ="item.state==='新建'" style="color: #52c41a">更改</span>
                 </td>
               </tr>
@@ -97,7 +97,7 @@
       <div class="center">
         <div class="heard">
           <span>详情信息</span>
-          <button type="button" @click="showListView"></button>
+          <button type="button" @click="showViewid=list"></button>
         </div>
         <div class="content">
           <div class="basic">
@@ -105,8 +105,8 @@
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
-            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
             <dd>{{"符号:"+"&#12288;"+detail.symbol}}</dd>
+            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
             <dd v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</dd>
             <dd v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</dd>
             <dd v-show ="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</dd>
@@ -235,9 +235,9 @@
     <!-- 更新页显示-->
     <div  class="update"  v-show="showViewid==='update'">
       <div class="center">
-        <div class="heard">
-          <span>信息创建页</span>
-          <button type="button" @click="showListView"></button>
+         <div class="heard">
+          <span>信息更新页</span>
+          <button type="button" @click="showViewid=list"></button>
         </div>
         <div class="content">
           <form >
@@ -694,6 +694,8 @@ export default {
       }).then(function (response) {
         self.formItem.file = []
         self.fileData = []
+        self.formItem.id = response.data.id
+        self.formItem.state = '新建'
         alert('数据保存成功')
       }).catch(function (err) {
         // 错误提示
@@ -1120,6 +1122,9 @@ export default {
               font-size: 0.5em;
               line-height: 2em;
               color: #0c0c0c;
+            }
+            dd:nth-child(6){
+              width: 100%;
             }
           }
           .desc{

@@ -16,7 +16,7 @@
           <button type="button" size="large" @click="register">注册</button>
         </div>
         <div>
-          <router-link to="/">登录页面</router-link>
+          <router-link to="/">退出</router-link>
         </div>
       </form>
   </div>
@@ -49,6 +49,9 @@ export default {
       }).catch(function (error) {
         console.log(error)
       })
+    },
+    goBack () {
+      self.$router.push('/home')
     }
   },
   created () {

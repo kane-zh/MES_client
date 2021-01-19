@@ -559,6 +559,8 @@ export default {
         auditor: self.formItem.auditor
       }).then(function (response) {
         self.showViewid = ''
+        self.formItem.id = response.data.id
+        self.formItem.state = '新建'
         alert('数据保存成功')
       }).catch(function (err) {
         // 错误提示

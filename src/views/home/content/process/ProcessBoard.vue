@@ -69,9 +69,9 @@
     <!-- 详情页显示-->
     <div  class="detail"  v-show="showViewid==='detail'">
       <div class="center">
-        <div class="heard">
+       <div class="heard">
           <span>详情信息</span>
-          <button type="button" @click="showListView"></button>
+          <button type="button" @click="showViewid=list"></button>
         </div>
         <div class="content">
           <div class="basic">
@@ -169,9 +169,9 @@
     <!-- 更新页显示-->
     <div  class="update"  v-show ="showViewid==='update'">
       <div class="center">
-        <div class="heard">
+         <div class="heard">
           <span>信息更新页</span>
-          <button type="button" @click="showListView"></button>
+          <button type="button" @click="showViewid=list"></button>
         </div>
         <div class="content">
           <form >
@@ -647,6 +647,8 @@ export default {
         self.fileData = []
         self.formItem.image = []
         self.imageData = []
+        self.formItem.id = response.data.id
+        self.formItem.state = '新建'
         alert('数据保存成功')
       }).catch(function (err) {
         // 错误提示

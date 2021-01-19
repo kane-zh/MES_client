@@ -530,6 +530,8 @@ export default {
       }).then(function (response) {
         self.formItem.file = []
         self.fileData = []
+        self.formItem.id = response.data.id
+        self.formItem.state = '新建'
         alert('数据保存成功')
       }).catch(function (err) {
         // 错误提示
@@ -613,7 +615,7 @@ export default {
         }).then(function (response
         ) {
           alert('数据提交成功')
-          self.showViewid = 'list'
+          self.showListView()
         }).catch(function (err) {
           // 错误提示
           console.log(err)
