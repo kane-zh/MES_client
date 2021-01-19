@@ -931,7 +931,7 @@ export default {
       })
     },
     showStationView (id) {
-      this.stationDetail = [] // 清空工位详情数据
+      this.stationDetail = [] // 清空工序详情数据
       this.list_material = []
       this.list_semifinished = []
       var self = this

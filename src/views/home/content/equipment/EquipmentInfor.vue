@@ -1060,7 +1060,7 @@ export default {
       })
     },
     showPartsView (id) {
-      this.partsDetail = [] // 清空工位详情数据
+      this.partsDetail = [] // 清空工序详情数据
       var self = this
       this.$axios.get(`equipment/partsInfor/` + id).then(function (response) {
         self.partsDetail = response.data

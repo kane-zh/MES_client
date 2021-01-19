@@ -42,7 +42,7 @@
           </div>
         </form>
         <div class="button" >
-          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加半成品数据</button>
+          <button type="button" @click="showCreatView"  v-show="canCreate===true">添加半成品过程数据</button>
         </div>
       </div>
       <div class="content">
@@ -51,12 +51,13 @@
             <tr align="center"  type="height:2em">
               <th>序号</th>
               <th>分类</th>
-              <th>半成品分类</th>
-              <th>半成品</th>
               <th>任务分类</th>
               <th>任务</th>
+              <th>半成品分类</th>
+              <th>半成品</th>
               <th>批次号</th>
               <th>序列号</th>
+              <th>数量</th>
               <th>时间</th>
               <th>创建账号</th>
               <th>操作</th>
@@ -64,18 +65,19 @@
             <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
               <td>{{index}}</td>
               <td>{{item.type.name+"("+item.type.code+")"}}</td>
-              <td>{{item.semifinishedType_name+"("+item.semifinishedType_code+")"}}</td>
-              <td>{{item.semifinished_name+"("+item.semifinished_code+")"}}</td>
               <td>{{item.taskType_name+"("+item.taskType_code+")"}}</td>
               <td>{{item.task_name+"("+item.task_code+")"}}</td>
+              <td>{{item.semifinishedType_name+"("+item.semifinishedType_code+")"}}</td>
+              <td>{{item.semifinished_name+"("+item.semifinished_code+")"}}</td>
               <td>{{item.batch}}</td>
               <td>{{item.sn}}</td>
+              <td>{{item.sum}}</td>
               <td>{{item.dataTime}}</td>
               <td>{{item.create_user}}</td>
               <td>
                   <span @click="showDetailView(item.id)" v-show ="item.create_user===username ||
                   canRead===true" style="color: #FF1A5EC4">详情</span>
-                <span @click="removeData(item.id)" style="color: #52c41a">删除</span>
+                <span @click="showUpdateView(item.id)" v-show ="item.state==='新建'" style="color: #52c41a">更改</span>
               </td>
             </tr>
             <tr>
@@ -107,6 +109,7 @@
             <dd>{{"任务:"+"&#12288;"+detail.task_name+"("+detail.task_code+")"}}</dd>
             <dd>{{"批次号:"+"&#12288;"+detail.batch}}</dd>
             <dd>{{"序列号:"+"&#12288;"+detail.sn}}</dd>
+            <dd>{{"数量:"+"&#12288;"+detail.sum}}</dd>
             <dd>{{"人员信息:"+"&#12288;"+detail.personnel}}</dd>
             <dd>{{"设备信息:"+"&#12288;"+detail.equipment}}</dd>
             <dd>{{"物料信息:"+"&#12288;"+detail.material}}</dd>
@@ -156,7 +159,6 @@
           </div>
         </div>
         <div class="button">
-          <button type="button" @click="removeData(detail.id)">删除</button>
         </div>
       </div>
     </div>
@@ -195,6 +197,9 @@
             </div>
             <div>序列号:
               <input v-model="formItem.sn"  placeholder="请输入序列号...">
+            </div>
+            <div>数量:
+              <input v-model="formItem.sum"  placeholder="请输入数量...">
             </div>
             <div >人员信息:
               <textarea v-model="formItem.personnel" placeholder="请输入当前的人员信息..."></textarea>
@@ -302,6 +307,156 @@
         </div>
         <div class="button">
           <button type="button" @click="save">保存数据</button>
+          <button type="button" @click="saveAndSubmit">保存并提交</button>
+        </div>
+      </div>
+    </div>
+    <!-- 更新页显示-->
+    <div  class="update"  v-show ="showViewid==='update'">
+      <div class="center">
+        <div class="heard">
+          <span>信息更新页</span>
+          <button type="button" @click="showListView"></button>
+        </div>
+        <div class="content">
+          <form >
+            <div>分类:
+              <select v-model="formItem.type"   placeholder="请选择分类">
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              </select>
+              <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
+            </div>
+            <div>任务分类:
+              <select v-model="formItem.taskType" >
+                <option v-for="item in taskType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+              </select>
+            </div>
+            <div>任务信息:
+              <select v-model="formItem.task" >
+                <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+              </select>
+            </div>
+            <div>半成品信息:
+              <select v-model="formItem.semifinished" >
+                <option v-for="(item,index) in semifinishedInfor1" :value="item.semifinished_id" :key="index">{{item.semifinished_name +"("+ item.semifinished_code+")"}}</option>
+              </select>
+            </div>
+            <div>批次号:
+              <input v-model="formItem.batch"  placeholder="请输入批次号...">
+            </div>
+            <div>序列号:
+              <input v-model="formItem.sn"  placeholder="请输入序列号...">
+            </div>
+            <div>数量:
+              <input v-model="formItem.sum"  placeholder="请输入数量...">
+            </div>
+            <div >人员信息:
+              <textarea v-model="formItem.personnel" placeholder="请输入当前的人员信息..."></textarea>
+            </div>
+            <div >设备信息:
+              <textarea v-model="formItem.equipment" placeholder="请输入当前的设备信息..."></textarea>
+            </div>
+            <div >物料信息:
+              <textarea v-model="formItem.material" placeholder="请输入当前的物料信息..."></textarea>
+            </div>
+            <div >工序信息:
+              <textarea v-model="formItem.station" placeholder="请输入当前的工序信息..."></textarea>
+            </div>
+            <div >质检信息:
+              <textarea v-model="formItem.quality" placeholder="请输入当前的质检信息..."></textarea>
+            </div>
+            <div>记录时间:
+              <input v-model="formItem.dataTime"  type="datetime-local" placeholder="选择日期和时间">
+              <span class="message" v-show ="!$v.formItem.dataTime.required">请选择日期</span>
+            </div>
+            <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
+              <input v-model="formItem.attribute1"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute2!==''">{{attribute_title.attribute2}}
+              <input v-model="formItem.attribute2"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute3!==''">{{attribute_title.attribute3}}
+              <input v-model="formItem.attribute3"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute4!==''">{{attribute_title.attribute4}}
+              <input v-model="formItem.attribute4"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute5!==''">{{attribute_title.attribute5}}
+              <input v-model="formItem.attribute5"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute6!==''">{{attribute_title.attribute6}}
+              <input v-model="formItem.attribute6"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute7!==''">{{attribute_title.attribute7}}
+              <input v-model="formItem.attribute7"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute8!==''">{{attribute_title.attribute8}}
+              <input v-model="formItem.attribute8"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute9!==''">{{attribute_title.attribute9}}
+              <input v-model="formItem.attribute9"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute10!==''">{{attribute_title.attribute10}}
+              <input v-model="formItem.attribute10"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute11!==''">{{attribute_title.attribute11}}
+              <input v-model="formItem.attribute11"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute12!==''">{{attribute_title.attribute12}}
+              <input v-model="formItem.attribute12"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute13!==''">{{attribute_title.attribute13}}
+              <input v-model="formItem.attribute13"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute14!==''">{{attribute_title.attribute14}}
+              <input v-model="formItem.attribute14"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute15!==''">{{attribute_title.attribute15}}
+              <input v-model="formItem.attribute15"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute16!==''">{{attribute_title.attribute16}}
+              <input v-model="formItem.attribute16"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute17!==''">{{attribute_title.attribute17}}
+              <input v-model="formItem.attribute17"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute18!==''">{{attribute_title.attribute18}}
+              <input v-model="formItem.attribute18"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute19!==''">{{attribute_title.attribute19}}
+              <input v-model="formItem.attribute19"  placeholder="...">
+            </div>
+            <div v-show="attribute_title.attribute20!==''">{{attribute_title.attribute20}}
+              <input v-model="formItem.attribute20"  placeholder="...">
+            </div>
+            <div >备注信息:
+              <textarea v-model="formItem.desc" placeholder="请输入当前的备注信息"></textarea>
+            </div>
+            <div class="file">文件:
+              <span>
+                选择文件
+                <input type="file"  @change="fileBeforeUpload"/>
+              </span>
+              <ul>
+                <li v-for="value in fileData" v-bind:key="value.id"  @click="removeFile(value.id)">{{value.fileName}}</li>
+              </ul>
+            </div>
+            <div class="image">图片:
+              <span>
+                  选择图片
+                  <input type="file"  @change="imageBeforeUpload"/>
+               </span>
+              <ul>
+                <li v-for="value in imageData" v-bind:key="value.id"  @click="removeImage(value.id)">
+                  <img :src="value.imageUrl">
+                </li>
+              </ul>
+            </div>
+          </form>
+        </div>
+        <div class="button">
+          <button type="button" @click="update">保存数据</button>
+          <button type="button" @click="updateAndSubmit">保存并提交</button>
         </div>
       </div>
     </div>
@@ -342,13 +497,6 @@ export default {
       type: {},
       personnel: {},
       level: {},
-      /* 详情页审核记录项表单 */
-      alterItem: {
-        desc: '',
-        uri: 'semifinishedData'
-      },
-      alterList: [],
-      alterData: [],
       /* 详情页按钮显示控制 */
       showSubmitBt: false,
       showReturnBt: false,
@@ -364,6 +512,7 @@ export default {
         task: '',
         batch: '',
         sn: '',
+        sum: '',
         personnel: '',
         equipment: '',
         material: '',
@@ -372,7 +521,6 @@ export default {
         dataTime: '',
         image: [],
         file: [],
-        alter: [],
         attribute1: '',
         attribute2: '',
         attribute3: '',
@@ -556,7 +704,6 @@ export default {
     /* 显示详情视图 */
     showDetailView (id) {
       this.detail = [] // 清空详情数据
-      this.alterData = []// 清空审核数据
       this.type = {}
       var self = this
       this.$axios.get(`production/semifinishedData/` + id).then(function (response) {
@@ -591,6 +738,105 @@ export default {
       this.imageData = []
       this.fileData = []
       this.showViewid = 'create'
+    },
+    /* 显示更新视图 */
+    showUpdateView (id) {
+      /* 清空表单数据 */
+      for (let key in this.formItem) {
+        if (Object.prototype.toString.call(this.formItem[key]) === '[object Array]') {
+          this.formItem[key] = []
+        } else if (Object.prototype.toString.call(this.formItem[key]) === '[object Object]') {
+          var obj = this.formItem[key]
+          for (let key1 in obj) {
+            if (Object.prototype.toString.call(obj[key1]) === '[object Array]') {
+              obj[key1] = []
+            } else {
+              obj[key1] = ''
+            }
+          }
+        } else {
+          this.formItem[key] = ''
+        }
+      }
+      this.fileData = []
+      this.imageData = []
+      var self = this
+      this.$axios.get(`production/semifinishedData/` + id).then(function (response) {
+        self.formItem.id = response.data.id
+        self.formItem.state = response.data.state
+        self.formItem.type = response.data.type
+        self.formItem.semifinished = response.data.semifinished_id
+        self.formItem.task = response.data.task_id
+        self.formItem.batch = response.data.batch
+        self.formItem.sn = response.data.sn
+        self.formItem.sum = response.data.sum
+        self.formItem.personnel = response.data.personnel
+        self.formItem.equipment = response.data.equipment
+        self.formItem.material = response.data.material
+        self.formItem.station = response.data.station
+        self.formItem.quality = response.data.quality
+        self.formItem.dataTime = response.data.dataTime
+        self.formItem.attribute1 = response.data.attribute1
+        self.formItem.attribute2 = response.data.attribute2
+        self.formItem.attribute3 = response.data.attribute3
+        self.formItem.attribute4 = response.data.attribute4
+        self.formItem.attribute5 = response.data.attribute5
+        self.formItem.attribute6 = response.data.attribute6
+        self.formItem.attribute7 = response.data.attribute7
+        self.formItem.attribute8 = response.data.attribute8
+        self.formItem.attribute9 = response.data.attribute9
+        self.formItem.attribute10 = response.data.attribute10
+        self.formItem.attribute11 = response.data.attribute11
+        self.formItem.attribute12 = response.data.attribute12
+        self.formItem.attribute13 = response.data.attribute13
+        self.formItem.attribute14 = response.data.attribute14
+        self.formItem.attribute15 = response.data.attribute15
+        self.formItem.attribute16 = response.data.attribute16
+        self.formItem.attribute17 = response.data.attribute17
+        self.formItem.attribute18 = response.data.attribute18
+        self.formItem.attribute19 = response.data.attribute19
+        self.formItem.attribute20 = response.data.attribute20
+        self.formItem.desc = response.data.desc
+        if (response.data.type !== null) {
+          self.formItem.type = response.data.type.id
+        } else { self.formItem.type = response.data.type }
+        response.data.file.forEach(function (value, i) {
+          var obj = {'id': value.id, 'fileName': value.file_name, 'fileUrl': value.file, 'desc': value.desc, 'uri': value.uri}
+          self.formItem.file.push(value.id)
+          self.fileData.push(obj)
+        })
+        response.data.image.forEach(function (value, i) {
+          var obj1 = {'id': value.id, 'imageName': value.image_name, 'imageUrl': value.image, 'desc': value.desc, 'uri': value.uri}
+          self.formItem.image.push(value.id)
+          self.imageData.push(obj1)
+        })
+        self.showViewid = 'update'
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
+      })
+    },
+    /* 改变数据项状态 */
+    changeState (state) {
+      var self = this
+      if (!confirm('确认提交??')) {
+        return
+      }
+      this.formItem.state = state
+      this.$axios.patch(`production/semifinishedData/` + self.detail.id + '/', {
+        state: self.formItem.state
+      }).then(function (response
+      ) {
+        self.detail.state = self.formItem.state
+        self.formItem.state = ''
+        if (self.detail.state === '作废') {
+          self.showListView()
+        }
+        alert('数据提交成功')
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
+      })
     },
     /* 提交图片项 */
     uploadImage () {
@@ -707,6 +953,7 @@ export default {
         task_id: self.formItem.task,
         batch: self.formItem.batch,
         sn: self.formItem.sn,
+        sum: self.formItem.sum,
         personnel: self.formItem.personnel,
         equipment: self.formItem.equipment,
         material: self.formItem.material,
@@ -747,16 +994,173 @@ export default {
         console.log(err)
       })
     },
-    /* 保存表单数据 */
-    removeData (id) {
-      if (!confirm('确认删除??')) {
+    /* 保存并提交表单数据 */
+    saveAndSubmit () {
+      var self = this
+      if (!confirm('确认保存??')) {
         return
       }
-      var self = this
-      this.$axios.delete((`production/semifinishedData/` + id), {
+      this.$axios.post(`production/semifinishedData/`, {
+        type: self.formItem.type,
+        semifinished_id: self.formItem.semifinished,
+        task_id: self.formItem.task,
+        batch: self.formItem.batch,
+        sn: self.formItem.sn,
+        sum: self.formItem.sum,
+        personnel: self.formItem.personnel,
+        equipment: self.formItem.equipment,
+        material: self.formItem.material,
+        station: self.formItem.station,
+        quality: self.formItem.quality,
+        dataTime: self.formItem.dataTime,
+        image: self.formItem.image,
+        file: self.formItem.file,
+        attribute1: self.formItem.attribute1,
+        attribute2: self.formItem.attribute2,
+        attribute3: self.formItem.attribute3,
+        attribute4: self.formItem.attribute4,
+        attribute5: self.formItem.attribute5,
+        attribute6: self.formItem.attribute6,
+        attribute7: self.formItem.attribute7,
+        attribute8: self.formItem.attribute8,
+        attribute9: self.formItem.attribute9,
+        attribute10: self.formItem.attribute10,
+        attribute11: self.formItem.attribute11,
+        attribute12: self.formItem.attribute12,
+        attribute13: self.formItem.attribute13,
+        attribute14: self.formItem.attribute14,
+        attribute15: self.formItem.attribute15,
+        attribute16: self.formItem.attribute16,
+        attribute17: self.formItem.attribute17,
+        attribute18: self.formItem.attribute18,
+        attribute19: self.formItem.attribute19,
+        attribute20: self.formItem.attribute20,
+        desc: self.formItem.desc
       }).then(function (response) {
-        self.showListView()
-        alert('数据删除成功')
+        self.formItem.file = []
+        self.fileData = []
+        self.formItem.image = []
+        self.imageData = []
+        self.$axios.patch(`production/semifinishedData/` + response.data.id + '/', {
+          state: '完成'
+        }).then(function (response
+        ) {
+          alert('数据提交成功')
+        }).catch(function (err) {
+          // 错误提示
+          console.log(err)
+        })
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
+      })
+    },
+    /* 更新表单数据 */
+    update () {
+      var self = this
+      if (!confirm('确认保存??')) {
+        return
+      }
+      this.$axios.put(`production/semifinishedData/` + self.formItem.id + '/', {
+        type: self.formItem.type,
+        semifinished_id: self.formItem.semifinished,
+        task_id: self.formItem.task,
+        batch: self.formItem.batch,
+        sn: self.formItem.sn,
+        sum: self.formItem.sum,
+        personnel: self.formItem.personnel,
+        equipment: self.formItem.equipment,
+        material: self.formItem.material,
+        station: self.formItem.station,
+        quality: self.formItem.quality,
+        dataTime: self.formItem.dataTime,
+        file: self.formItem.file,
+        image: self.formItem.image,
+        attribute1: self.formItem.attribute1,
+        attribute2: self.formItem.attribute2,
+        attribute3: self.formItem.attribute3,
+        attribute4: self.formItem.attribute4,
+        attribute5: self.formItem.attribute5,
+        attribute6: self.formItem.attribute6,
+        attribute7: self.formItem.attribute7,
+        attribute8: self.formItem.attribute8,
+        attribute9: self.formItem.attribute9,
+        attribute10: self.formItem.attribute10,
+        attribute11: self.formItem.attribute11,
+        attribute12: self.formItem.attribute12,
+        attribute13: self.formItem.attribute13,
+        attribute14: self.formItem.attribute14,
+        attribute15: self.formItem.attribute15,
+        attribute16: self.formItem.attribute16,
+        attribute17: self.formItem.attribute17,
+        attribute18: self.formItem.attribute18,
+        attribute19: self.formItem.attribute19,
+        attribute20: self.formItem.attribute20,
+        desc: self.formItem.desc
+      }).then(function (response) {
+        alert('数据保存成功')
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
+      })
+    },
+    /* 更新并提交表单数据 */
+    updateAndSubmit () {
+      var self = this
+      if (!confirm('确认保存??')) {
+        return
+      }
+      this.$axios.put(`production/semifinishedData/` + self.formItem.id + '/', {
+        type: self.formItem.type,
+        semifinished_id: self.formItem.semifinished,
+        task_id: self.formItem.task,
+        batch: self.formItem.batch,
+        sn: self.formItem.sn,
+        sum: self.formItem.sum,
+        personnel: self.formItem.personnel,
+        equipment: self.formItem.equipment,
+        material: self.formItem.material,
+        station: self.formItem.station,
+        quality: self.formItem.quality,
+        dataTime: self.formItem.dataTime,
+        file: self.formItem.file,
+        image: self.formItem.image,
+        attribute1: self.formItem.attribute1,
+        attribute2: self.formItem.attribute2,
+        attribute3: self.formItem.attribute3,
+        attribute4: self.formItem.attribute4,
+        attribute5: self.formItem.attribute5,
+        attribute6: self.formItem.attribute6,
+        attribute7: self.formItem.attribute7,
+        attribute8: self.formItem.attribute8,
+        attribute9: self.formItem.attribute9,
+        attribute10: self.formItem.attribute10,
+        attribute11: self.formItem.attribute11,
+        attribute12: self.formItem.attribute12,
+        attribute13: self.formItem.attribute13,
+        attribute14: self.formItem.attribute14,
+        attribute15: self.formItem.attribute15,
+        attribute16: self.formItem.attribute16,
+        attribute17: self.formItem.attribute17,
+        attribute18: self.formItem.attribute18,
+        attribute19: self.formItem.attribute19,
+        attribute20: self.formItem.attribute20,
+        desc: self.formItem.desc
+      }).then(function (response) {
+        self.formItem.file = []
+        self.fileData = []
+        self.formItem.image = []
+        self.imageData = []
+        self.$axios.patch(`production/semifinishedData/` + response.data.id + '/', {
+          state: '完成'
+        }).then(function (response
+        ) {
+          alert('数据提交成功')
+          self.showViewid = 'list'
+        }).catch(function (err) {
+          // 错误提示
+          console.log(err)
+        })
       }).catch(function (err) {
         // 错误提示
         console.log(err)
@@ -1062,13 +1466,16 @@ export default {
                 width: 5em;
               }
               &:nth-child(9){
-                width: 8em;
+                width: 3em;
               }
               &:nth-child(10){
-                width: 5em;
+                width: 8em;
               }
               &:nth-child(11){
                 width: 5em;
+              }
+              &:nth-child(12){
+                width: 6em;
               }
             }
             td{

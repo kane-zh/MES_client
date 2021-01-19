@@ -454,6 +454,18 @@ export default new Router({
               component: () => import('@/views/home/content/production/SemifinishedData')
             },
             {
+              // 产品工序报工
+              path: 'productStationReport',
+              name: 'productStationReport',
+              component: () => import('@/views/home/content/production/ProductStationReport')
+            },
+            {
+              // 半成品工序报工
+              path: 'semifinishedStationReport',
+              name: 'semifinishedStationReport',
+              component: () => import('@/views/home/content/production/SemifinishedStationReport')
+            },
+            {
               // 生产看板信息
               path: 'productionBoard',
               name: 'productionBoard',

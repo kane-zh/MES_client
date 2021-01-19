@@ -3,7 +3,7 @@
     <!-- 列表页显示-->
     <div  class="list">
       <div class="heard">
-        <span>工位分类</span>
+        <span>工序分类</span>
       </div>
       <div class="content" >
         <div class="tree">
@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="button">
-        <button type="button" @click="showCreatView"  v-show="canCreate===true">添加工位分类</button>
+        <button type="button" @click="showCreatView"  v-show="canCreate===true">添加工序分类</button>
       </div>
     </div>
     <!-- 详情页显示-->
@@ -636,7 +636,7 @@ export default {
     })
   },
   mounted () {
-    this.attach_attributes = this.$store.getters.getConfig.attach_attribute.工位信息
+    this.attach_attributes = this.$store.getters.getConfig.attach_attribute.工序信息
   },
   computed: {
     username () {

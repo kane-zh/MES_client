@@ -892,7 +892,7 @@ export default {
       })
     },
     showDefectView (id) {
-      this.defectDetail = [] // 清空工位详情数据
+      this.defectDetail = [] // 清空工序详情数据
       var self = this
       this.$axios.get(`quality/defectInfor/` + id).then(function (response) {
         self.defectDetail = response.data

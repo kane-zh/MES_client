@@ -368,7 +368,7 @@
   </div>
 </template>
 <script>
-import {maxLength, minLength, required} from 'vuelidate/lib/validators'
+import {required} from 'vuelidate/lib/validators'
 export default {
   name: 'equipmentManage',
   components: {

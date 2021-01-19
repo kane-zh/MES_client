@@ -363,6 +363,14 @@
                   v-show ="function_select['生产管理'].半成品过程数据===true">
                 <router-link to="/home/production/semifinishedData">半成品过程数据</router-link>
               </li>
+              <li :class="childMenuSelect==='productStationReport'? 'isActive':'isInActive'"  @click="childMenuSelect='productStationReport'"
+                  v-show ="function_select['生产管理'].产品工序报工===true">
+                <router-link to="/home/production/productStationReport">产品工序报工</router-link>
+              </li>
+              <li :class="childMenuSelect==='semifinishedStationReport'? 'isActive':'isInActive'"  @click="childMenuSelect='semifinishedStationReport'"
+                  v-show ="function_select['生产管理'].半成品工序报工===true">
+                <router-link to="/home/production/semifinishedStationReport">半成品工序报工</router-link>
+              </li>
               <li :class="childMenuSelect==='productionBoard'? 'isActive':'isInActive'"  @click="childMenuSelect='productionBoard'"
                   v-show ="function_select['生产管理'].生产看板===true">
                 <router-link to="/home/production/productionBoard">生产看板</router-link>
