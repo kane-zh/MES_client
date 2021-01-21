@@ -11,27 +11,27 @@
           </div>
           <div>任务分类:
             <select v-model="selectItem.taskType" placeholder="请选择任务分类"      >
-              <option v-for="item in taskType" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in taskType" :value="item.code" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>任务:
             <select v-model="selectItem.task" placeholder="请选择任务"      >
-              <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>产品分类:
             <select v-model="selectItem.productType" placeholder="请选择产品分类"      >
-              <option v-for="item in productType" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in productType" :value="item.code" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>产品:
             <select v-model="selectItem.product" placeholder="请选择产品"      >
-              <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>分类:
             <select v-model="selectItem.type" placeholder="请选择分类"      >
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>开始时间:
@@ -73,11 +73,11 @@
             </tr>
             <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
               <td>{{index}}</td>
-              <td>{{item.type.name+"("+item.type.code+")"}}</td>
-              <td>{{item.taskType_name+"("+item.taskType_code+")"}}</td>
-              <td>{{item.task_name+"("+item.task_code+")"}}</td>
-              <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
-              <td>{{item.product_name+"("+item.product_code+")"}}</td>
+              <td>{{item.type.code+"("+item.type.name+")"}}</td>
+              <td>{{item.taskType_code+"("+item.taskType_name+")"}}</td>
+              <td>{{item.task_code+"("+item.task_name+")"}}</td>
+              <td>{{item.productType_code+"("+item.productType_name+")"}}</td>
+              <td>{{item.product_code+"("+item.product_name+")"}}</td>
               <td>{{item.batch}}</td>
               <td>{{item.sn}}</td>
               <td>{{item.sum}}</td>
@@ -111,11 +111,11 @@
         <div class="content">
           <div class="basic">
             <dt>基础信息</dt>
-            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
-            <dd>{{"任务分类:"+"&#12288;"+detail.taskType_name+"("+detail.taskType_code+")"}}</dd>
-            <dd>{{"任务:"+"&#12288;"+detail.task_name+"("+detail.task_code+")"}}</dd>
-            <dd>{{"产品分类:"+"&#12288;"+detail.productType_name+"("+detail.productType_code+")"}}</dd>
-            <dd>{{"产品:"+"&#12288;"+detail.product_name+"("+detail.product_code+")"}}</dd>
+            <dd>{{"分类:"+"&#12288;"+type.code+"("+type.name+")"}}</dd>
+            <dd>{{"任务分类:"+"&#12288;"+detail.taskType_code+"("+detail.taskType_name+")"}}</dd>
+            <dd>{{"任务:"+"&#12288;"+detail.task_code+"("+detail.task_name+")"}}</dd>
+            <dd>{{"产品分类:"+"&#12288;"+detail.productType_code+"("+detail.productType_name+")"}}</dd>
+            <dd>{{"产品:"+"&#12288;"+detail.product_code+"("+detail.product_name+")"}}</dd>
             <dd>{{"批次号:"+"&#12288;"+detail.batch}}</dd>
             <dd>{{"序列号:"+"&#12288;"+detail.sn}}</dd>
             <dd>{{"数量:"+"&#12288;"+detail.sum}}</dd>
@@ -182,7 +182,7 @@
           <form >
             <div>分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -191,22 +191,22 @@
             </div>
             <div>任务分类:
               <select v-model="formItem.taskType" >
-                <option v-for="item in taskType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in taskType" :value="item.id" :key="item.id">{{item.code +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>任务信息:
               <select v-model="formItem.task" >
-                <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.code +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>产品分类:
               <select v-model="formItem.productType" >
-                <option v-for="item in taskItem_productType" :value="item.productType_code" :key="item.productType_code">{{item.productType_name +"("+ item.productType_code+")"}}</option>
+                <option v-for="item in taskItem_productType" :value="item.productType_code" :key="item.productType_code">{{item.productType_name +"("+ item.productType_name+")"}}</option>
               </select>
             </div>
             <div>产品信息:
               <select v-model="formItem.product" >
-                <option v-for="(item,index) in taskItem_product" :value="item.product_id" :key="index">{{item.product_name +"("+ item.product_code+")"}}</option>
+                <option v-for="(item,index) in taskItem_product" :value="item.product_id" :key="index">{{item.product_code +"("+ item.product_name+")"}}</option>
               </select>
             </div>
             <div>批次号:
@@ -339,7 +339,7 @@
           <form >
             <div>分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -348,22 +348,22 @@
             </div>
             <div>任务分类:
               <select v-model="formItem.taskType" >
-                <option v-for="item in taskType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in taskType" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>任务信息:
               <select v-model="formItem.task" >
-                <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>产品分类:
               <select v-model="formItem.productType" >
-                <option v-for="item in taskItem_productType" :value="item.productType_code" :key="item.productType_code">{{item.productType_name +"("+ item.productType_code+")"}}</option>
+                <option v-for="item in taskItem_productType" :value="item.productType_code" :key="item.productType_code">{{item.productType_name +"("+ item.productType_name+")"}}</option>
               </select>
             </div>
             <div>产品信息:
               <select v-model="formItem.product" >
-                <option v-for="(item,index) in taskItem_product" :value="item.product_id" :key="index">{{item.product_name +"("+ item.product_code+")"}}</option>
+                <option v-for="(item,index) in taskItem_product" :value="item.product_id" :key="index">{{item.product_name +"("+ item.product_name+")"}}</option>
               </select>
             </div>
             <div>批次号:

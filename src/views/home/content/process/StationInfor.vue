@@ -16,7 +16,7 @@
           </div>
           <div>分类:
             <select v-model="selectItem.type">
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>排序:
@@ -67,7 +67,7 @@
               <td>{{index}}</td>
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
-              <td>{{item.type.name+"("+item.type.code+")"}}</td>
+              <td>{{item.type.code+"("+item.type.name+")"}}</td>
               <td>{{item.state}}</td>
               <td>{{item.update_time}}</td>
               <td>{{item.create_user}}</td>
@@ -103,7 +103,7 @@
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
-            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
+            <dd>{{"分类:"+"&#12288;"+type.code+"("+type.name+")"}}</dd>
             <dd v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</dd>
             <dd v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</dd>
             <dd v-show ="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</dd>
@@ -145,8 +145,8 @@
               </tr>
               <tr align="center" v-for="(item,index) in list_material" :key="item.id" >
                 <td>{{index}}</td>
-                <td>{{item.materialTypeName+"("+item.materialTypeCode+")"}}</td>
-                <td>{{item.materialName+"("+item.materialCode+")"}}</td>
+                <td>{{item.materialTypeCode+"("+item.materialTypeName+")"}}</td>
+                <td>{{item.materialCode+"("+item.materialName+")"}}</td>
                 <td>{{item.sum}}</td>
                 <td>{{item.desc}}</td>
               </tr>
@@ -167,8 +167,8 @@
               </tr>
               <tr align="center" v-for="(item,index) in list_semifinished" :key="item.id" >
                 <td>{{index}}</td>
-                <td>{{item.semifinishedTypeName+"("+item.semifinishedTypeCode+")"}}</td>
-                <td>{{item.semifinishedName+"("+item.semifinishedCode+")"}}</td>
+                <td>{{item.semifinishedTypeCode+"("+item.semifinishedTypeName+")"}}</td>
+                <td>{{item.semifinishedCode+"("+item.semifinishedName+")"}}</td>
                 <td>{{item.sum}}</td>
                 <td>{{item.desc}}</td>
               </tr>
@@ -207,7 +207,7 @@
             </div>
             <div >分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -274,8 +274,8 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_material" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.materialTypeName+"("+item.materialTypeCode+")"}}</td>
-                    <td>{{item.materialName+"("+item.materialCode+")"}}</td>
+                    <td>{{item.materialTypeCode+"("+item.materialTypeName+")"}}</td>
+                    <td>{{item.materialCode+"("+item.materialName+")"}}</td>
                     <td>{{item.sum}}</td>
                     <td>{{item.desc}}</td>
                     <td>
@@ -304,8 +304,8 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_semifinished" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.semifinishedTypeName+"("+item.semifinishedTypeCode+")"}}</td>
-                    <td>{{item.semifinishedName+"("+item.semifinishedCode+")"}}</td>
+                    <td>{{item.semifinishedTypeCode+"("+item.semifinishedTypeName+")"}}</td>
+                    <td>{{item.semifinishedCode+"("+item.semifinishedName+")"}}</td>
                     <td>{{item.sum}}</td>
                     <td>{{item.desc}}</td>
                     <td>
@@ -346,7 +346,7 @@
             </div>
             <div >分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -413,8 +413,8 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_material" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.materialTypeName+"("+item.materialTypeCode+")"}}</td>
-                    <td>{{item.materialName+"("+item.materialCode+")"}}</td>
+                    <td>{{item.materialTypeCode+"("+item.materialTypeName+")"}}</td>
+                    <td>{{item.materialCode+"("+item.materialName+")"}}</td>
                     <td>{{item.sum}}</td>
                     <td>{{item.desc}}</td>
                     <td>
@@ -443,8 +443,8 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_semifinished" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.semifinishedTypeName+"("+item.semifinishedTypeCode+")"}}</td>
-                    <td>{{item.semifinishedName+"("+item.semifinishedCode+")"}}</td>
+                    <td>{{item.semifinishedTypeCode+"("+item.semifinishedTypeName+")"}}</td>
+                    <td>{{item.semifinishedCode+"("+item.semifinishedName+")"}}</td>
                     <td>{{item.sum}}</td>
                     <td>{{item.desc}}</td>
                     <td>
@@ -476,12 +476,12 @@
           <form>
             <div>物料分类:
               <select v-model="formItem_material.materialType" >
-                <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>物料信息:
               <select v-model="formItem_material.material" >
-                <option v-for="item in materialInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
+                <option v-for="item in materialInfor" :value="item.id" :key="item.id">{{item.name + "("+item.name+")"}}</option>
               </select>
             </div>
             <div>数量:
@@ -507,12 +507,12 @@
           <form>
             <div>半成品分类:
               <select v-model="formItem_semifinished.semifinishedType" >
-                <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>半成品信息:
               <select v-model="formItem_semifinished.semifinished" >
-                <option v-for="item in semifinishedInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
+                <option v-for="item in semifinishedInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>数量:

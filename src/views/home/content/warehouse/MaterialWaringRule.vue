@@ -134,9 +134,9 @@
               </tr>
               <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                 <td>{{index}}</td>
-                <td>{{item.warehouseName+"("+item.warehouseCode+")"}}</td>
-                <td>{{item.materialTypeName+"("+item.materialTypeCode+")"}}</td>
-                <td>{{item.materialName+"("+item.materialCode+")"}}</td>
+                <td>{{item.warehouseCode+"("+item.warehouseName+")"}}</td>
+                <td>{{item.materialTypeCode+"("+item.materialTypeName+")"}}</td>
+                <td>{{item.materialCode+"("+item.materialName+")"}}</td>
                 <td>{{item.batch}}</td>
                 <td>{{item.maximum}}</td>
                 <td>{{item.minimum}}</td>
@@ -231,9 +231,9 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.warehouseName+"("+item.warehouseCode+")"}}</td>
-                    <td>{{item.materialTypeName+"("+item.materialTypeCode+")"}}</td>
-                    <td>{{item.materialName+"("+item.materialCode+")"}}</td>
+                    <td>{{item.warehouseCode+"("+item.warehouseName+")"}}</td>
+                    <td>{{item.materialTypeCode+"("+item.materialTypeName+")"}}</td>
+                    <td>{{item.materialCode+"("+item.materialName+")"}}</td>
                     <td>{{item.batch}}</td>
                     <td>{{item.maximum}}</td>
                     <td>{{item.minimum}}</td>
@@ -330,9 +330,9 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.warehouseName+"("+item.warehouseCode+")"}}</td>
-                    <td>{{item.materialTypeName+"("+item.materialTypeCode+")"}}</td>
-                    <td>{{item.materialName+"("+item.materialCode+")"}}</td>
+                    <td>{{item.warehouseCode+"("+item.warehouseName+")"}}</td>
+                    <td>{{item.materialTypeCode+"("+item.materialTypeName+")"}}</td>
+                    <td>{{item.materialCode+"("+item.materialName+")"}}</td>
                     <td>{{item.batch}}</td>
                     <td>{{item.maximum}}</td>
                     <td>{{item.minimum}}</td>
@@ -368,17 +368,17 @@
           <form>
             <div>仓库:
               <select v-model="formItem_child.warehouse" >
-                <option v-for="item in warehouseInfor" :value="item.code" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in warehouseInfor" :value="item.code" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>物料分类:
               <select v-model="formItem_child.materialType" >
-                <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>物料信息:
               <select v-model="formItem_child.material" >
-                <option v-for="item in materialInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
+                <option v-for="item in materialInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>批次:

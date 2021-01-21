@@ -16,7 +16,7 @@
           </div>
           <div>分类:
             <select v-model="selectItem.type">
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>排序:
@@ -73,7 +73,7 @@
               <td>{{index}}</td>
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
-              <td>{{item.type.name+"("+item.type.code+")"}}</td>
+              <td>{{item.type.code+"("+item.type.name+")"}}</td>
               <td>{{item.personnel.name}}</td>
               <td>{{item.personnel.workshop_name}}</td>
               <td>{{item.personnel.team.name}}</td>
@@ -112,9 +112,9 @@
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
-            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
-            <dd>{{"人员:"+"&#12288;"+personnel.name+"("+personnel.code+")"}}</dd>
-            <dd>{{"等级:"+"&#12288;"+level.name+"("+level.code+")"}}</dd>
+            <dd>{{"分类:"+"&#12288;"+type.code+"("+type.name+")"}}</dd>
+            <dd>{{"人员:"+"&#12288;"+personnel.code+"("+personnel.name+")"}}</dd>
+            <dd>{{"等级:"+"&#12288;"+level.code+"("+level.name+")"}}</dd>
             <dd>{{"考核时间:"+"&#12288;"+detail.dataTime}}</dd>
             <dd v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</dd>
             <dd v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</dd>
@@ -166,18 +166,18 @@
             </div>
             <div>分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
             <div>人员:
               <select v-model="formItem.personnel"   placeholder="请选择人员">
-                <option v-for="item in personnelInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in personnelInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>等级:
               <select v-model="formItem.level"   placeholder="请选择等级">
-                <option v-for="item in levelInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in levelInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>考核时间:
@@ -242,18 +242,18 @@
             </div>
             <div>分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
             <div>人员:
               <select v-model="formItem.personnel"   placeholder="请选择人员">
-                <option v-for="item in personnelInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in personnelInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>等级:
               <select v-model="formItem.level"   placeholder="请选择等级">
-                <option v-for="item in levelInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in levelInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>考核时间:

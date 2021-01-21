@@ -31,7 +31,7 @@
           </div>
           <div>仓库:
             <select v-model="selectItem.warehouse" placeholder="请选择编码" >
-              <option v-for="item in warehouse" :value="item.code" :key="item.code">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in warehouse" :value="item.code" :key="item.code">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>操作分类:
@@ -86,10 +86,10 @@
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
               <td>{{item.state}}</td>
-              <td>{{item.warehouse_name+"("+item.warehouse_code+")"}}</td>
-              <td>{{item.position_name+"("+item.position_code+")"}}</td>
-              <td>{{item.materialType_name+"("+item.materialType_code+")"}}</td>
-              <td>{{item.material_name+"("+item.material_code+")"}}</td>
+              <td>{{item.warehouse_code+"("+item.warehouse_name+")"}}</td>
+              <td>{{item.position_code+"("+item.position_name+")"}}</td>
+              <td>{{item.materialType_code+"("+item.materialType_name+")"}}</td>
+              <td>{{item.material_code+"("+item.material_name+")"}}</td>
               <td>{{item.handler}}</td>
               <td>{{item.sum}}</td>
               <td>{{item.type}}</td>
@@ -129,8 +129,8 @@
             <dd>{{"分类:"+"&#12288;"+detail.type}}</dd>
             <dd>{{"仓库:"+"&#12288;"+detail.warehouse_code+"("+detail.warehouse_name+")"}}</dd>
             <dd>{{"仓位:"+"&#12288;"+detail.position_code+"("+detail.position_name+")"}}</dd>
-            <dd>{{"物料分类:"+"&#12288;"+detail.materialType_name+"("+detail.materialType_code+")"}}</dd>
-            <dd>{{"物料:"+"&#12288;"+detail.material_name+"("+detail.material_code+")"}}</dd>
+            <dd>{{"物料分类:"+"&#12288;"+detail.materialType_code+"("+detail.materialType_name+")"}}</dd>
+            <dd>{{"物料:"+"&#12288;"+detail.material_code+"("+detail.material_name+")"}}</dd>
             <dd>{{"批次:"+"&#12288;"+detail.batch}}</dd>
             <dd>{{"操作者:"+"&#12288;"+detail.handler}}</dd>
             <dd>{{"数量:"+"&#12288;"+detail.sum}}</dd>
@@ -199,23 +199,23 @@
             </div>
             <div>仓库:
               <select v-model="formItem.warehouse"   placeholder="请选择仓库">
-                <option v-for="item in warehouse" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in warehouse" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>仓位:
               <select v-model="formItem.position"   placeholder="请选择仓位">
-                <option v-for="item in positionInfor" :value="item.id" :key="item.id" >{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in positionInfor" :value="item.id" :key="item.id" >{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.position.required">请选择仓位</span>
             </div>
             <div>物料分类:
               <select v-model="formItem.materialType"   placeholder="请选择物料分类"      :disabled="inputDisable">
-                <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>物料:
               <select v-model="formItem.material"   placeholder="请选择物料"     :disabled="inputDisable">
-                <option v-for="item in materialInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in materialInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.material.required">请选择物料</span>
             </div>
@@ -301,23 +301,23 @@
             </div>
             <div>仓库:
               <select v-model="formItem.warehouse"   placeholder="请选择仓库">
-                <option v-for="item in warehouse" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in warehouse" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>仓位:
               <select v-model="formItem.position"   placeholder="请选择仓位">
-                <option v-for="item in positionInfor" :value="item.id" :key="item.id" >{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in positionInfor" :value="item.id" :key="item.id" >{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.position.required">请选择仓位</span>
             </div>
             <div>物料分类:
               <select v-model="formItem.materialType"   placeholder="请选择物料分类"      :disabled="inputDisable">
-                <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in materialType" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>物料:
               <select v-model="formItem.material"   placeholder="请选择物料"     :disabled="inputDisable">
-                <option v-for="item in materialInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in materialInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.material.required">请选择物料</span>
             </div>

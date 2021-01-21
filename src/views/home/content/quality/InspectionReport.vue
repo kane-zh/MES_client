@@ -16,7 +16,7 @@
           </div>
           <div>分类:
             <select v-model="selectItem.type">
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>排序:
@@ -71,7 +71,7 @@
               <td>{{index}}</td>
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
-              <td>{{item.type.name+"("+item.type.code+")"}}</td>
+              <td>{{item.type.code+"("+item.type.name+")"}}</td>
               <td>{{item.state}}</td>
               <td>{{item.handler}}</td>
               <td>{{item.dataTime}}</td>
@@ -108,7 +108,7 @@
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
-            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
+            <dd>{{"分类:"+"&#12288;"+type.code+"("+type.name+")"}}</dd>
             <dd>{{"报检数量:"+"&#12288;"+detail.submit_sum}}</dd>
             <dd>{{"抽检数量:"+"&#12288;"+detail.samples_sum}}</dd>
             <dd>{{"合格数量:"+"&#12288;"+detail.ok_sum}}</dd>
@@ -160,8 +160,8 @@
               </tr>
               <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                 <td>{{index}}</td>
-                <td>{{item.defectName+"("+item.defectCode+")"}}</td>
-                <td>{{item.defectTypeName+"("+item.defectTypeCode+")"}}</td>
+                <td>{{item.defectCode+"("+item.defectName+")"}}</td>
+                <td>{{item.defectTypeCode+"("+item.defectTypeName+")"}}</td>
                 <td>{{item.ok_sum}}</td>
                 <td>{{item.ng_sum}}</td>
                 <td>{{item.concession_sum}}</td>
@@ -202,7 +202,7 @@
             </div>
             <div >分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -300,8 +300,8 @@
                 </tr>
                 <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                   <td>{{index}}</td>
-                  <td>{{item.defectName+"("+item.defectCode+")"}}</td>
-                  <td>{{item.defectTypeName+"("+item.defectTypeCode+")"}}</td>
+                  <td>{{item.defectCode+"("+item.defectName+")"}}</td>
+                  <td>{{item.defectTypeCode+"("+item.defectTypeName+")"}}</td>
                   <td>{{item.ok_sum}}</td>
                   <td>{{item.ng_sum}}</td>
                   <td>{{item.concession_sum}}</td>
@@ -344,7 +344,7 @@
             </div>
             <div >分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -442,8 +442,8 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.defectName+"("+item.defectCode+")"}}</td>
-                    <td>{{item.defectTypeName+"("+item.defectTypeCode+")"}}</td>
+                    <td>{{item.defectCode+"("+item.defectName+")"}}</td>
+                    <td>{{item.defectTypeCode+"("+item.defectTypeName+")"}}</td>
                     <td>{{item.ok_sum}}</td>
                     <td>{{item.ng_sum}}</td>
                     <td>{{item.concession_sum}}</td>
@@ -477,12 +477,12 @@
           <form>
             <div>缺陷分类:
               <select v-model="formItem_child.defectType" >
-                <option v-for="item in defectType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in defectType" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>缺陷信息:
               <select v-model="formItem_child.defect" >
-                <option v-for="item in defectInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in defectInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>合格数量:

@@ -62,8 +62,8 @@
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
               <td>{{item.state}}</td>
-              <td>{{item.workshop_name+"("+item.workshop_code+")"}}</td>
-              <td>{{item.team.name+"("+item.team.code+")"}}</td>
+              <td>{{item.workshop_code+"("+item.workshop_name+")"}}</td>
+              <td>{{item.team.code+"("+item.team.name+")"}}</td>
               <td>{{item.dataTime}}</td>
               <td>{{item.create_user}}</td>
               <td>{{item.auditor}}</td>
@@ -98,8 +98,8 @@
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
-            <dd>{{"车间:"+"&#12288;"+detail.workshop_name+"("+detail.workshop_code+")"}}</dd>
-            <dd>{{"班组:"+"&#12288;"+team.name+"("+team.code+")"}}</dd>
+            <dd>{{"车间:"+"&#12288;"+detail.workshop_code+"("+detail.workshop_name+")"}}</dd>
+            <dd>{{"班组:"+"&#12288;"+team.code+"("+team.name+")"}}</dd>
             <dd>{{"汇报时间:"+"&#12288;"+detail.dataTime}}</dd>
             <dd v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</dd>
             <dd v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</dd>
@@ -140,8 +140,8 @@
               </tr>
               <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                 <td>{{index}}</td>
-                <td>{{item.productTypeName+"("+item.productTypeCode+")"}}</td>
-                <td>{{item.productName+"("+item.productCode+")"}}</td>
+                <td>{{item.productTypeCode+"("+item.productTypeName+")"}}</td>
+                <td>{{item.productCode+"("+item.productName+")"}}</td>
                 <td>{{item.handler}}</td>
                 <td>{{item.all_sum}}</td>
                 <td>{{item.ok_sum}}</td>
@@ -181,12 +181,12 @@
             </div>
             <div>车间:
               <select v-model="formItem.workshop"   placeholder="请选择车间">
-                <option v-for="item in workshopInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in workshopInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>班组:
               <select v-model="formItem.team"   placeholder="请选择班组">
-                <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>汇报时间:
@@ -247,8 +247,8 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
                     <td>{{index}}</td>
-                    <td>{{item.productTypeName+"("+item.productTypeCode+")"}}</td>
-                    <td>{{item.productName+"("+item.productCode+")"}}</td>
+                    <td>{{item.productTypeCode+"("+item.productTypeName+")"}}</td>
+                    <td>{{item.productCode+"("+item.productName+")"}}</td>
                     <td>{{item.handler}}</td>
                     <td>{{item.all_sum}}</td>
                     <td>{{item.ok_sum}}</td>
@@ -290,12 +290,12 @@
             </div>
             <div>车间:
               <select v-model="formItem.workshop"   placeholder="请选择车间">
-                <option v-for="item in workshopInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in workshopInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>班组:
               <select v-model="formItem.team"   placeholder="请选择班组">
-                <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>汇报时间:
@@ -356,8 +356,8 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" type="height:1em" >
                     <td>{{index}}</td>
-                    <td>{{item.productTypeName+"("+item.productTypeCode+")"}}</td>
-                    <td>{{item.productName+"("+item.productCode+")"}}</td>
+                    <td>{{item.productTypeCode+"("+item.productTypeName+")"}}</td>
+                    <td>{{item.productCode+"("+item.productName+")"}}</td>
                     <td>{{item.handler}}</td>
                     <td>{{item.all_sum}}</td>
                     <td>{{item.ok_sum}}</td>
@@ -393,12 +393,12 @@
           <form>
             <div>产品分类:
               <select v-model="formItem_child.productType" >
-                <option v-for="item in productType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in productType" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>产品信息:
               <select v-model="formItem_child.product" >
-                <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
+                <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>总数量:

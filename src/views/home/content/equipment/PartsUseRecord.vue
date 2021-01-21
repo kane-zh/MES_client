@@ -101,7 +101,7 @@
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
-            <dd>{{"备品:"+"&#12288;"+parts.name+"("+parts.code+")"}}</dd>
+            <dd>{{"备品:"+"&#12288;"+parts.code+"("+parts.name+")"}}</dd>
             <dd>{{"数量:"+"&#12288;"+detail.sum}}</dd>
             <dd>{{"执行人员:"+"&#12288;"+detail.handler}}</dd>
             <dd>{{"使用时间:"+"&#12288;"+detail.dataTime}}</dd>
@@ -158,12 +158,12 @@
             </div>
             <div>备品分类:
               <select v-model="formItem.partsType"   placeholder="请选择备品分类">
-                <option v-for="item in partsType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in partsType" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>备品:
               <select v-model="formItem.parts"   placeholder="请选择备品">
-                <option v-for="item in partsInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in partsInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>执行者:
@@ -222,12 +222,12 @@
             </div>
             <div>备品分类:
               <select v-model="formItem.partsType"   placeholder="请选择备品分类">
-                <option v-for="item in partsType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in partsType" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>备品:
               <select v-model="formItem.parts"   placeholder="请选择备品">
-                <option v-for="item in partsInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in partsInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>执行者:

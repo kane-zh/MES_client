@@ -72,7 +72,7 @@
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
               <td>{{item.state}}</td>
-              <td>{{item.client.name+"("+item.client.code+")"}}</td>
+              <td>{{item.client.code+"("+item.client.name+")"}}</td>
               <td>{{item.delivery_time}}</td>
               <td>{{item.update_time}}</td>
               <td>{{item.create_user}}</td>
@@ -108,7 +108,7 @@
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
-            <dd>{{"客户:"+"&#12288;"+client.name+"("+client.code+")"}}</dd>
+            <dd>{{"客户:"+"&#12288;"+client.code+"("+client.name+")"}}</dd>
             <dd>{{"交付日期:"+"&#12288;"+detail.delivery_time}}</dd>
             <dd v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</dd>
             <dd v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</dd>
@@ -150,8 +150,8 @@
               </tr>
               <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                 <td>{{index}}</td>
-                <td>{{item.productTypeName+"("+item.productTypeCode+")"}}</td>
-                <td>{{item.productName+"("+item.productCode+")"}}</td>
+                <td>{{item.productTypeCode+"("+item.productTypeName+")"}}</td>
+                <td>{{item.productCode+"("+item.productName+")"}}</td>
                 <td>{{item.batch}}</td>
                 <td>{{item.sum}}</td>
                 <td>{{item.assigned}}</td>
@@ -198,7 +198,7 @@
             </div>
             <div>客户:
               <select v-model="formItem.client"   placeholder="请选择客户">
-                <option v-for="item in clientInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in clientInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.client.required">请选择客户</span>
             </div>
@@ -256,8 +256,8 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.productTypeName+"("+item.productTypeCode+")"}}</td>
-                    <td>{{item.productName+"("+item.productCode+")"}}</td>
+                    <td>{{item.productTypeCode+"("+item.productTypeName+")"}}</td>
+                    <td>{{item.productCode+"("+item.productName+")"}}</td>
                     <td>{{item.batch}}</td>
                     <td>{{item.sum}}</td>
                     <td>{{item.desc}}</td>
@@ -299,7 +299,7 @@
             </div>
             <div>客户:
               <select v-model="formItem.client"   placeholder="请选择客户">
-                <option v-for="item in clientInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in clientInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.client.required">请选择客户</span>
             </div>
@@ -357,8 +357,8 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.productTypeName+"("+item.productTypeCode+")"}}</td>
-                    <td>{{item.productName+"("+item.productCode+")"}}</td>
+                    <td>{{item.productTypeCode+"("+item.productTypeName+")"}}</td>
+                    <td>{{item.productCode+"("+item.productName+")"}}</td>
                     <td>{{item.batch}}</td>
                     <td>{{item.sum}}</td>
                     <td>{{item.desc}}</td>
@@ -391,12 +391,12 @@
           <form>
             <div>产品分类:
               <select v-model="formItem_child.productType" >
-                <option v-for="item in productType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in productType" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>产品信息:
               <select v-model="formItem_child.product" >
-                <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
+                <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>批次:
@@ -444,7 +444,7 @@ export default {
     return {
       /* 视图显示控制 */
       showViewid: 'list',
-      showChildForm: '',
+      showChildForm: 'false',
       /* 列表页数据 */
       list: [],
       listCount: 0,

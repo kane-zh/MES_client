@@ -50,7 +50,7 @@
               <td>{{index}}</td>
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
-              <td>{{item.equipment.name+"("+item.equipment.code+")"}}</td>
+              <td>{{item.equipment.code+"("+item.equipment.name+")"}}</td>
               <td>{{item.type}}</td>
               <td>{{item.allTime}}</td>
               <td>{{item.runTime}}</td>
@@ -138,12 +138,12 @@
             </div>
             <div>设备分类:
               <select v-model="formItem.equipmentType"   placeholder="请选择设备分类">
-                <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>设备:
               <select v-model="formItem.equipment"   placeholder="请选择设备"     >
-                <option v-for="item in equipmentInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in equipmentInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.equipment.required">请选择设备</span>
             </div>
@@ -177,12 +177,12 @@
             </div>
             <div>设备分类:
               <select v-model="formItem.equipmentType"   placeholder="请选择设备分类">
-                <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>设备:
               <select v-model="formItem.equipment"   placeholder="请选择设备"     >
-                <option v-for="item in equipmentInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in equipmentInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.equipment.required">请选择设备</span>
             </div>

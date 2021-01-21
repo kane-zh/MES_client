@@ -16,7 +16,7 @@
           </div>
           <div>分类:
             <select v-model="selectItem.type">
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>排序:
@@ -67,7 +67,7 @@
               <td>{{index}}</td>
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
-              <td>{{item.type.name+"("+item.type.code+")"}}</td>
+              <td>{{item.type.code+"("+item.type.name+")"}}</td>
               <td>{{item.state}}</td>
               <td>{{item.update_time}}</td>
               <td>{{item.create_user}}</td>
@@ -103,12 +103,12 @@
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
-            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
+            <dd>{{"分类:"+"&#12288;"+type.code+"("+type.name+")"}}</dd>
             <dd>{{"质地:"+"&#12288;"+detail.character}}</dd>
-            <dd>{{"单位:"+"&#12288;"+unit.symbol+"("+unit.name+")"}}</dd>
-            <dd>{{"供应商1:"+"&#12288;"+vendor1.name+"("+vendor1.code+")"}}</dd>
-            <dd>{{"供应商2:"+"&#12288;"+vendor2.name+"("+vendor2.code+")"}}</dd>
-            <dd>{{"供应商3:"+"&#12288;"+vendor3.name+"("+vendor3.code+")"}}</dd>
+            <dd>{{"单位:"+"&#12288;"+unit.symbol+"("+unit.code+")"}}</dd>
+<!--            <dd>{{"供应商1:"+"&#12288;"+vendor1.code+"("+vendor1.name+")"}}</dd>-->
+<!--            <dd>{{"供应商2:"+"&#12288;"+vendor2.code+"("+vendor2.name+")"}}</dd>-->
+<!--            <dd>{{"供应商3:"+"&#12288;"+vendor3.code+"("+vendor3.name+")"}}</dd>-->
             <dd v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</dd>
             <dd v-show ="attribute_title.attribute2!==''">{{attribute_title.attribute2 +":"+"&#12288;"+detail.attribute2}}</dd>
             <dd v-show ="attribute_title.attribute3!==''">{{attribute_title.attribute3 +":"+"&#12288;"+detail.attribute3}}</dd>
@@ -173,7 +173,7 @@
               </div>
               <div >分类:
                 <select v-model="formItem.type"   placeholder="请选择分类">
-                  <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                  <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
                 </select>
                 <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
               </div>
@@ -182,18 +182,18 @@
               </div>
               <div >计量单位分类:
                 <select v-model="formItem.unitType"   placeholder="请选择计量单位分类">
-                  <option v-for="item in unitType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                  <option v-for="item in unitType" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
                 </select>
               </div>
               <div >计量单位:
                 <select v-model="formItem.unit"   placeholder="请选择计量单位">
-                  <option v-for="item in unitInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                  <option v-for="item in unitInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
                 </select>
                 <span class="message" v-show ="!$v.formItem.unit.required">请选择计量单位</span>
               </div>
               <div >首选供应商:
                 <select v-model="formItem.vendor1"   placeholder="请选择首选供应商">
-                  <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                  <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
                 </select>
               </div>
               <div >采购编码1:
@@ -201,7 +201,7 @@
               </div>
               <div >次级供应商:
                 <select v-model="formItem.vendor2"   placeholder="请选择次级供应商">
-                  <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                  <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
                 </select>
               </div>
               <div >采购编码2:
@@ -209,7 +209,7 @@
               </div>
               <div >备选供应商:
                 <select v-model="formItem.vendor3"   placeholder="请选择备选供应商">
-                  <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                  <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
                 </select>
               </div>
               <div >采购编码3:
@@ -302,7 +302,7 @@
             </div>
             <div >分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -311,18 +311,18 @@
             </div>
             <div >计量单位分类:
               <select v-model="formItem.unitType"   placeholder="请选择计量单位分类">
-                <option v-for="item in unitType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in unitType" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div >计量单位:
               <select v-model="formItem.unit"   placeholder="请选择计量单位">
-                <option v-for="item in unitInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in unitInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.unit.required">请选择计量单位</span>
             </div>
             <div >首选供应商:
               <select v-model="formItem.vendor1"   placeholder="请选择首选供应商">
-                <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div >采购编码1:
@@ -330,7 +330,7 @@
             </div>
             <div >次级供应商:
               <select v-model="formItem.vendor2"   placeholder="请选择次级供应商">
-                <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div >采购编码2:
@@ -338,7 +338,7 @@
             </div>
             <div >备选供应商:
               <select v-model="formItem.vendor3"   placeholder="请选择备选供应商">
-                <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in vendorInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div >采购编码3:

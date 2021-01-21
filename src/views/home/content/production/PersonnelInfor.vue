@@ -11,12 +11,12 @@
           </div>
           <div>车间:
             <select v-model="selectItem.workshop" placeholder="请选择车间" >
-              <option v-for="item in workshopInfor" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in workshopInfor" :value="item.code" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>班组:
             <select v-model="selectItem.team" placeholder="请选择班组" >
-              <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>
@@ -91,7 +91,7 @@
             <dt>基础信息</dt>
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
-            <dd>{{"班组:"+"&#12288;"+team.name+"("+team.code+")"}}</dd>
+            <dd>{{"班组:"+"&#12288;"+team.code+"("+team.name+")"}}</dd>
             <dd>{{"人员工号:"+"&#12288;"+detail.job_number}}</dd>
             <dd>{{"人员职位:"+"&#12288;"+detail.post}}</dd>
             <dd>{{"人员微信:"+"&#12288;"+detail.wechat}}</dd>
@@ -139,7 +139,7 @@
                 <td>{{index}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>
-                <td>{{item.type.name+"("+item.type.code+")"}}</td>
+                <td>{{item.type.code+"("+item.type.name+")"}}</td>
                 <td>{{item.state}}</td>
                 <td>{{item.rule}}</td>
               </tr>
@@ -186,17 +186,17 @@
             </div>
             <div>车间:
               <select v-model="formItem.workshop" placeholder="请选择车间" >
-                <option v-for="item in workshopInfor" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in workshopInfor" :value="item.code" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>班组:
               <select v-model="formItem.team" placeholder="请选择班组" >
-                <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>技能:
               <select v-model="formItem.skill"  placeholder="请选择技能"  style="height: 90%"  multiple="true">
-                <option v-for="item in skillInfor" :value="item.id" :key="item.id">{{"("+item.type.name+item.type.code+")"+item.name+"("+item.code+")"}}</option>
+                <option v-for="item in skillInfor" :value="item.id" :key="item.id">{{"("+item.type.name+item.type.name+")"+item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div v-show="attribute_title.attribute1!==''" >{{attribute_title.attribute1}}
@@ -276,17 +276,17 @@
             </div>
             <div>车间:
               <select v-model="formItem.workshop" placeholder="请选择车间" >
-                <option v-for="item in workshopInfor" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in workshopInfor" :value="item.code" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>班组:
               <select v-model="formItem.team" placeholder="请选择班组" >
-                <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in teamInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>技能:
               <select v-model="formItem.skill"  placeholder="请选择技能"  style="height: 90%"  multiple="true">
-                <option v-for="item in skillInfor" :value="item.id" :key="item.id">{{"("+item.type.name+item.type.code+")"+item.name+"("+item.code+")"}}</option>
+                <option v-for="item in skillInfor" :value="item.id" :key="item.id">{{"("+item.type.name+item.type.name+")"+item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div v-show="attribute_title.attribute1!==''" >{{attribute_title.attribute1}}

@@ -16,7 +16,7 @@
           </div>
           <div>分类:
             <select v-model="selectItem.type">
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>排序:
@@ -67,7 +67,7 @@
               <td>{{index}}</td>
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
-              <td>{{item.type.name+"("+item.type.code+")"}}</td>
+              <td>{{item.type.code+"("+item.type.name+")"}}</td>
               <td>{{item.state}}</td>
               <td>{{item.update_time}}</td>
               <td>{{item.create_user}}</td>
@@ -103,7 +103,7 @@
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
-            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
+            <dd>{{"分类:"+"&#12288;"+type.code+"("+type.name+")"}}</dd>
             <dd>{{"抽检比例:"+"&#12288;"+detail.samples_ration}}</dd>
             <dd>{{"合格比例:"+"&#12288;"+detail.ok_ration}}</dd>
             <dd>{{"不合格比例:"+"&#12288;"+detail.ng_ration}}</dd>
@@ -146,7 +146,7 @@
                 <td>{{index}}</td>
                 <td>{{item.name}}</td>
                 <td>{{item.code}}</td>
-                <td>{{item.type.name+"("+item.type.code+")"}}</td>
+                <td>{{item.type.code+"("+item.type.name+")"}}</td>
                 <td>{{item.state}}</td>
                 <td><span @click="showDefectView(item.id)">点击</span></td>
               </tr>
@@ -185,7 +185,7 @@
             </div>
             <div>分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -203,7 +203,7 @@
             </div>
             <div>缺陷项:
               <select v-model="formItem.defect"  placeholder="请选择缺陷项"  style="height: 90%"  multiple="true">
-                <option v-for="item in defectInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"+"("+item.type.name+item.type.code+")"}}</option>
+                <option v-for="item in defectInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"+"("+item.type.name+item.type.name+")"}}</option>
               </select>
             </div>
             <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
@@ -267,7 +267,7 @@
             </div>
             <div>分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -285,7 +285,7 @@
             </div>
             <div>缺陷项:
               <select v-model="formItem.defect"  placeholder="请选择缺陷项"  style="height: 90%"  multiple="true">
-                <option v-for="item in defectInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"+"("+item.type.name+item.type.code+")"}}</option>
+                <option v-for="item in defectInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"+"("+item.type.name+item.type.name+")"}}</option>
               </select>
             </div>
             <div v-show="attribute_title.attribute1!==''">{{attribute_title.attribute1}}
@@ -342,8 +342,8 @@
             <dd>{{"名称:"+"&#12288;"+defectDetail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+defectDetail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+defectDetail.state}}</dd>
-            <dd>{{"分类:"+"&#12288;"+defectType.name+"("+defectType.code+")"}}</dd>
-            <dd>{{"等级:"+"&#12288;"+defectGrade.name+"("+defectGrade.code+")"}}</dd>
+            <dd>{{"分类:"+"&#12288;"+defectType.code+"("+defectType.name+")"}}</dd>
+            <dd>{{"等级:"+"&#12288;"+defectGrade.code+"("+defectGrade.name+")"}}</dd>
             <dd>{{"认证规则:"+"&#12288;"+defectDetail.rule}}</dd>
           </div>
           <div class="file">

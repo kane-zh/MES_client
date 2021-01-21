@@ -16,7 +16,7 @@
           </div>
           <div>车间:
             <select v-model="selectItem.type" placeholder="请选择车间"      >
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>排序:
@@ -66,7 +66,7 @@
               <td>{{index}}</td>
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
-              <td>{{item.type.name+"("+item.type.code+")"}}</td>
+              <td>{{item.type.code+"("+item.type.name+")"}}</td>
               <td>{{item.state}}</td>
               <td>{{item.update_time}}</td>
               <td>{{item.create_user}}</td>
@@ -102,7 +102,7 @@
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
-            <dd>{{"车间:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
+            <dd>{{"车间:"+"&#12288;"+type.code+"("+type.name+")"}}</dd>
             <dd>{{"负责人:"+"&#12288;"+detail.principal}}</dd>
             <dd>{{"职责:"+"&#12288;"+detail.duties}}</dd>
             <dd v-show ="attribute_title.attribute1!==''">{{attribute_title.attribute1 +":"+"&#12288;"+detail.attribute1}}</dd>
@@ -164,7 +164,7 @@
             </div>
             <div>车间:
               <select v-model="formItem.type"   placeholder="请选择车间">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择车间</span>
             </div>
@@ -249,7 +249,7 @@
             </div>
             <div>车间:
               <select v-model="formItem.type"   placeholder="请选择车间">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择车间</span>
             </div>

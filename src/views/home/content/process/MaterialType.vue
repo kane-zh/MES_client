@@ -86,7 +86,7 @@
             </div>
             <div v-show="formItem.classes==='二级类别'||formItem.classes==='三级类别'||formItem.classes==='四级类别'">上级类别:
               <select v-model="formItem.parent"   placeholder="请选择上级类别" >
-                <option v-for="item in list" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in list" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.parent.required">请选择父类别</span>
             </div>
@@ -152,7 +152,7 @@
             </div>
             <div v-show="formItem.classes==='二级类别'||formItem.classes==='三级类别'||formItem.classes==='四级类别'">上级类别:
               <select v-model="formItem.parent"   placeholder="请选择上级类别" >
-                <option v-for="item in list" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in list" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.parent.required">请选择父类别</span>
             </div>
@@ -294,7 +294,7 @@ export default {
                 'state': data4[l4].state,
                 'auditor': data4[l4].auditor,
                 'create_user': data4[l4].create_user,
-                'title': data4[l4].name + '(' + data4[l4].code + ')',
+                'title': data4[l4].code + '(' + data4[l4].name + ')',
                 'disableCheckbox': true
               })
             }
@@ -304,7 +304,7 @@ export default {
               'state': data3[l3].state,
               'auditor': data3[l3].auditor,
               'create_user': data3[l3].create_user,
-              'title': data3[l3].name + '(' + data3[l3].code + ')',
+              'title': data3[l3].code + '(' + data3[l3].name + ')',
               'children': children3,
               'disableCheckbox': true
             })
@@ -315,7 +315,7 @@ export default {
             'state': data2[l2].state,
             'auditor': data2[l2].auditor,
             'create_user': data2[l2].create_user,
-            'title': data2[l2].name + '(' + data2[l2].code + ')',
+            'title': data2[l2].code + '(' + data2[l2].name + ')',
             'children': children2,
             'disableCheckbox': true
           })
@@ -326,7 +326,7 @@ export default {
           'state': data[l1].state,
           'auditor': data[l1].auditor,
           'create_user': data[l1].create_user,
-          'title': data[l1].name + '(' + data[l1].code + ')',
+          'title': data[l1].code + '(' + data[l1].name + ')',
           'children': children1,
           'disableCheckbox': true
         })

@@ -16,7 +16,7 @@
           </div>
           <div>分类:
             <select v-model="selectItem.type" placeholder="请选择分类"      >
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>排序:
@@ -82,7 +82,7 @@
               <td>{{index}}</td>
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
-              <td>{{item.type.name+"("+item.type.code+")"}}</td>
+              <td>{{item.type.code+"("+item.type.name+")"}}</td>
               <td>{{item.state}}</td>
               <td>{{item.priority}}</td>
               <td>{{item.delivery_time}}</td>
@@ -119,7 +119,7 @@
             <dt>基础信息</dt>
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
-            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
+            <dd>{{"分类:"+"&#12288;"+type.code+"("+type.name+")"}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
             <dd>{{"优先级:"+"&#12288;"+detail.priority}}</dd>
             <dd>{{"交付日期:"+"&#12288;"+detail.delivery_time}}</dd>
@@ -164,12 +164,12 @@
               </tr>
               <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                 <td>{{index}}</td>
-                <td>{{item.salesOrder_name+"("+item.salesOrder_code+")"}}</td>
-                <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
-                <td>{{item.product_name+"("+item.product_code+")"}}</td>
+                <td>{{item.salesOrder_code+"("+item.salesOrder_name+")"}}</td>
+                <td>{{item.productType_code+"("+item.productType_name+")"}}</td>
+                <td>{{item.product_code+"("+item.product_name+")"}}</td>
                 <td>{{item.batch}}</td>
-                <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
-                <td>{{item.route_name+"("+item.route_code+")"}}</td>
+                <td>{{item.routeType_code+"("+item.routeType_name+")"}}</td>
+                <td>{{item.route_code+"("+item.route_name+")"}}</td>
                 <td>{{item.state}}</td>
                 <td>{{item.sum}}</td>
                 <td>{{item.desc}}</td>
@@ -177,6 +177,7 @@
                   <span  @click="endChild(item.id)" v-show="item.state!=='完成'">终止</span>
                   <span  @click="pendingChild(item.id)" v-show="item.state==='等待'">挂起</span>
                   <span  @click="pendingFreedChild(item.id)" v-show="item.state==='挂起'">解挂</span>
+                  <span  @click="showDetailView_child(item.id)" >查看</span>
                 </td>
               </tr>
               <tr>
@@ -216,7 +217,7 @@
             </div>
             <div>分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -266,7 +267,7 @@
               </ul>
             </div>
             <div class="child">子项:
-              <span @click="showChildForm='true'">
+              <span @click="showChildForm='create'">
                   添加
               </span>
               <div>
@@ -285,12 +286,12 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.salesOrder_name+"("+item.salesOrder_code+")"}}</td>
-                    <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
-                    <td>{{item.product_name+"("+item.product_code+")"}}</td>
+                    <td>{{item.salesOrder_code+"("+item.salesOrder_name+")"}}</td>
+                    <td>{{item.productType_code+"("+item.productType_name+")"}}</td>
+                    <td>{{item.product_code+"("+item.product_name+")"}}</td>
                     <td>{{item.batch}}</td>
-                    <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
-                    <td>{{item.route_name+"("+item.route_code+")"}}</td>
+                    <td>{{item.routeType_code+"("+item.routeType_name+")"}}</td>
+                    <td>{{item.route_code+"("+item.route_name+")"}}</td>
                     <td>{{item.sum}}</td>
                     <td>{{item.desc}}</td>
                     <td>
@@ -331,7 +332,7 @@
             </div>
             <div>分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -381,7 +382,7 @@
               </ul>
             </div>
             <div class="child">子项:
-              <span @click="showChildForm='true'">
+              <span @click="showChildForm='create'">
                   添加
               </span>
               <div>
@@ -400,16 +401,17 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.salesOrder_name+"("+item.salesOrder_code+")"}}</td>
-                    <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
-                    <td>{{item.product_name+"("+item.product_code+")"}}</td>
+                    <td>{{item.salesOrder_code+"("+item.salesOrder_name+")"}}</td>
+                    <td>{{item.productType_code+"("+item.productType_name+")"}}</td>
+                    <td>{{item.product_code+"("+item.product_name+")"}}</td>
                     <td>{{item.batch}}</td>
-                    <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
-                    <td>{{item.route_name+"("+item.route_code+")"}}</td>
+                    <td>{{item.routeType_code+"("+item.routeType_name+")"}}</td>
+                    <td>{{item.route_code+"("+item.route_name+")"}}</td>
                     <td>{{item.sum}}</td>
                     <td>{{item.desc}}</td>
                     <td>
                       <button type="button" @click="removeChild(item.id)">移除</button>
+                      <button type="button" @click="showDetailView_child(item.id)" >查看</button>
                     </td>
                   </tr>
                   <tr>
@@ -427,32 +429,32 @@
       </div>
     </div>
     <!--    /*子项添加对话框*/-->
-    <div class="dialog" v-show ="showChildForm==='true'">
+    <div class="dialog" v-show ="showChildForm==='create'">
       <div class="center">
         <div class="heard">
           <span>子项添加</span>
-          <button type="button" @click="showChildForm='false'"></button>
+          <button type="button" @click="showChildForm=''"></button>
         </div>
         <div class="content">
           <form>
             <div>生产订单:
               <select v-model="formItem_child.salesOrder" >
-                <option v-for="item in salesOrder" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in salesOrder" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>生产订单子项:
               <select v-model="formItem_child.salesOrderItem" >
-                <option v-for="item in salesOrderItem" :value="item.id" :key="item.id">{{item.product_name +"("+ item.product_code+")"+"["+ item.batch+"]"}}</option>
+                <option v-for="item in salesOrderItem" :value="item.id" :key="item.id">{{item.product_name +"("+ item.product_name+")"+"["+ item.batch+"]"}}</option>
               </select>
             </div>
             <div>生产线路分类:
               <select v-model="formItem_child.productRouteType" >
-                <option v-for="item in productRouteType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in productRouteType" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>生产线路:
               <select v-model="formItem_child.productRoute" >
-                <option v-for="item in productRoute" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
+                <option v-for="item in productRoute" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>总数量:
@@ -476,10 +478,48 @@
             <div>备注信息:
               <textarea v-model="formItem_child.desc" placeholder="请输入当前产品说明信息..."></textarea>
             </div>
+            <div class="file">文件:
+              <span>
+                选择文件
+                <input type="file"  @change="fileBeforeUpload_child"/>
+              </span>
+              <ul>
+                <li v-for="value in fileData_child" v-bind:key="value.id"  @click="removeFile_child(value.id)">{{value.fileName}}</li>
+              </ul>
+            </div>
             <div>
               <button type="button" @click="uploadChild">添加</button>
             </div>
           </form>
+        </div>
+      </div>
+    </div>
+    <!--    /*子项详情对话框*/-->
+    <div class="dialog_detail" v-show ="showChildForm==='detail'">
+      <div class="center">
+        <div class="heard">
+          <span>子项信息</span>
+          <button type="button" @click="showChildForm=''"></button>
+        </div>
+        <div class="content">
+          <div class="basic">
+            <dt>基础信息</dt>
+            <dd v-show ="attribute_title_child.attribute1!==''">{{attribute_title_child.attribute1 +":"+"&#12288;"+detail_child.attribute1}}</dd>
+            <dd v-show ="attribute_title_child.attribute2!==''">{{attribute_title_child.attribute2 +":"+"&#12288;"+detail_child.attribute2}}</dd>
+            <dd v-show ="attribute_title_child.attribute3!==''">{{attribute_title_child.attribute3 +":"+"&#12288;"+detail_child.attribute3}}</dd>
+            <dd v-show ="attribute_title_child.attribute4!==''">{{attribute_title_child.attribute4 +":"+"&#12288;"+detail_child.attribute4}}</dd>
+            <dd v-show ="attribute_title_child.attribute5!==''">{{attribute_title_child.attribute5 +":"+"&#12288;"+detail_child.attribute5}}</dd>
+          </div>
+          <div class="desc" v-show="detail_child.desc!=''">
+            <dt>备注信息</dt>
+            <dd>{{detail_child.desc}}</dd>
+          </div>
+          <div class="file">
+            <dt>文件附件</dt>
+            <dd v-for="(value,id) in detail_child.file" :key="id">
+              <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
+            </dd>
+          </div>
         </div>
       </div>
     </div>
@@ -518,6 +558,7 @@ export default {
 
       /* 详情页数据 */
       detail: [],
+      detail_child: [],
       type: {},
       /* 详情页审核记录项表单 */
       alterItem: {
@@ -561,6 +602,7 @@ export default {
         productRouteType: '',
         productRoute: '',
         sum: 0,
+        file: [],
         attribute1: '',
         attribute2: '',
         attribute3: '',
@@ -575,7 +617,14 @@ export default {
         desc: '',
         uri: 'productTaskcreate'
       },
+      fileItem_child: {
+        file: '',
+        fileName: '',
+        desc: '',
+        uri: 'productTaskcreate'
+      },
       fileData: [],
+      fileData_child: [],
       typeInfor: [],
       /* 具有审核权限的账号信息 */
       userinfor: [],
@@ -889,7 +938,7 @@ export default {
       /* 清空子项表单数据 */
       for (let key in this.formItem_child) {
         if (Object.prototype.toString.call(this.formItem_child[key]) === '[object Array]') {
-          this.formItem_pchild[key] = []
+          this.formItem_child[key] = []
         } else if (Object.prototype.toString.call(this.formItem_child[key]) === '[object Object]') {
           var obj1 = this.formItem_child[key]
           for (let key1 in obj1) {
@@ -1035,6 +1084,70 @@ export default {
         console.log(err)
       })
     },
+    /* 提交文件项 */
+    uploadFile_child () {
+      if (!confirm('确认提交??')) {
+        return
+      }
+      let formData = new FormData()
+      // 下面是表单绑定的data 数据
+      formData.append('uri', this.fileItem_child.uri)
+      formData.append('desc', this.fileItem_child.desc)
+      formData.append('file', this.fileItem_child.file)
+      var self = this
+      this.$axios.post(`plan/file/`, formData,
+        {headers: {'Content-Type': 'multipart/form-data'}}
+      ).then(function (response) {
+        var obj = {'id': response.data.id,
+          'fileName': self.fileItem_child.fileName,
+          'fileUrl': response.data.file,
+          'desc': response.data.desc,
+          'uri': response.data.uri}
+        self.fileItem_child.file = ''
+        self.fileItem_child.desc = ''
+        self.formItem_child.file.push(response.data.id)
+        self.fileData_child.push(obj)
+        alert(self.fileItem_child.fileName + '文件提交成功')
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
+      })
+    },
+    fileBeforeUpload_child (event) {
+      this.fileItem_child.file = event.target.files[0]
+      this.fileItem_child.fileName = event.target.files[0].name
+      this.uploadFile_child()
+    },
+    removeFile_child: function (id) {
+      var self = this
+      if (!confirm('是否要删除当前数据')) {
+        // 当用户点击的取消按钮的时候，应该阻断这个方法中的后面代码的继续执行
+        return
+      }
+      for (var i = 0; i < self.fileItem_child.file.length; i++) {
+        if (self.fileItem_child.file[i] === id) {
+          self.fileItem_child.file.splice(i, 1)
+        }
+      }
+      for (var j = 0; j < self.fileData_child.length; j++) {
+        if (self.fileData_child[j].id === id) {
+          self.fileData_child.splice(j, 1)
+        }
+      }
+    },
+    /* 改变数据项状态 */
+    showDetailView_child (id) {
+      var self = this
+      this.$axios.get(`plan/productTaskItemCreate/` + id).then(function (response) {
+        self.detail_child = response.data
+      }).then(function (response
+      ) {
+        self.showChildForm = 'detail'
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
+      })
+    },
     /* 提交子项产品项 */
     uploadChild () {
       var self = this
@@ -1042,6 +1155,7 @@ export default {
         salesOrderItem: self.formItem_child.salesOrderItem,
         route_id: self.formItem_child.productRoute,
         sum: self.formItem_child.sum,
+        file: self.formItem_child.file,
         attribute1: self.formItem_child.attribute1,
         attribute2: self.formItem_child.attribute2,
         attribute3: self.formItem_child.attribute3,
@@ -1093,6 +1207,7 @@ export default {
           // 'routeType_code': self.productRouteType[index3].code,
           // 'routeType_name': self.productRouteType[index3].name,
           'sum': response.data.sum,
+          'file': response.data.file,
           'attribute1': response.data.attribute1,
           'attribute2': response.data.attribute2,
           'attribute3': response.data.attribute3,
@@ -1107,12 +1222,14 @@ export default {
         self.formItem_child.salesOrder = ''
         self.formItem_child.salesOrderItem = ''
         self.formItem_child.sum = ''
+        self.formItem_child.file = ''
         self.formItem_child.attribute1 = ''
         self.formItem_child.attribute2 = ''
         self.formItem_child.attribute3 = ''
         self.formItem_child.attribute4 = ''
         self.formItem_child.attribute5 = ''
         self.formItem_child.desc = ''
+        self.fileData_child = []
         alert('记录提交成功')
       }).catch(function (err) {
         // 错误提示
@@ -1538,25 +1655,25 @@ export default {
                 width: 3em;
               }
               &:nth-child(2){
-                width: 10em;
+                width: 8em;
               }
               &:nth-child(3){
-                width: 10em;
+                width: 8em;
               }
               &:nth-child(4){
                 width: 10em;
               }
               &:nth-child(5){
-                width: 5em;
+                width: 4em;
               }
               &:nth-child(6){
-                width: 5em;
+                width: 4em;
               }
               &:nth-child(7){
-                width: 10em;
+                width: 12em;
               }
               &:nth-child(8){
-                width: 10em;
+                width: 14em;
               }
               &:nth-child(9){
                 width: 5em;
@@ -1565,7 +1682,7 @@ export default {
                 width: 5em;
               }
               &:nth-child(11){
-                width: 5em;
+                width: 6em;
               }
             }
             td{
@@ -1786,31 +1903,34 @@ export default {
                   width: 3em;
                 }
                 &:nth-child(2){
-                  width: 10em;
+                  width: 8em;
                 }
                 &:nth-child(3){
                   width: 10em;
                 }
                 &:nth-child(4){
-                  width: 5em;
-                }
-                &:nth-child(5){
-                  width: 5em;
-                }
-                &:nth-child(6){
-                  width: 5em;
-                }
-                &:nth-child(7){
-                  width: 5em;
-                }
-                &:nth-child(8){
                   width: 10em;
                 }
+                &:nth-child(5){
+                  width: 4em;
+                }
+                &:nth-child(6){
+                  width: 10em;
+                }
+                &:nth-child(7){
+                  width: 10em;
+                }
+                &:nth-child(8){
+                  width: 4em;
+                }
                 &:nth-child(9){
-                  width: 5em;
+                  width: 4em;
                 }
                 &:nth-child(10){
-                  width: 5em;
+                  width: 10em;
+                }
+                &:nth-child(11){
+                  width: 6em;
                 }
               }
               td{
@@ -2255,22 +2375,31 @@ export default {
                       width: 3em;
                     }
                     &:nth-child(2){
-                      width: 10em;
+                      width: 8em;
                     }
                     &:nth-child(3){
-                      width: 10em;
+                      width: 8em;
                     }
                     &:nth-child(4){
-                      width: 5em;
+                      width: 10em;
                     }
                     &:nth-child(5){
-                      width: 5em;
+                      width: 4em;
                     }
                     &:nth-child(6){
                       width: 10em;
                     }
                     &:nth-child(7){
-                      width: 5em;
+                      width: 10em;
+                    }
+                    &:nth-child(8){
+                      width: 3em;
+                    }
+                    &:nth-child(9){
+                      width: 10em;
+                    }
+                    &:nth-child(10){
+                      width: 6em;
                     }
                   }
                   td{
@@ -2496,6 +2625,131 @@ export default {
             background: #ffffff;
             border: 1px solid #363E42;
             border-radius: 13px;
+          }
+        }
+      }
+    }
+    .dialog_detail {
+      position: absolute;
+      top:0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(200, 200, 200,0.8);
+      .center {
+        position: absolute;
+        top:20%;
+        left: 20%;
+        width: 60%;
+        height: 50%;
+        background: #ffffff;
+        border-radius:0.5em;
+        .heard {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 100%;
+          height: 12%;
+          background: #123658;
+          border-top-right-radius: 0.5em;
+          border-top-left-radius: 0.5em;
+          span {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            font-family: PingFangSC-Regular;
+            font-size: 0.6em;
+            line-height: 1.5em;
+            text-align: center;
+            color: #ffffff;
+            display: inline-block;
+          }
+          button {
+            position: absolute;
+            right: 0.25em;
+            top: 0.25em;
+            height: 0.5em;
+            width: 0.5em;
+            border: none;
+            background-image: url("../../../../../static/icons/close.png");
+            background-size: cover;
+          }
+        }
+        .content {
+          position: absolute;
+          top: 15%;
+          left: 5%;
+          width: 90%;
+          height: 80%;
+          overflow: auto;
+          .basic{
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            dd{
+              width: 50%;
+              display: block;
+              float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #0c0c0c;
+            }
+          }
+          .desc{
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            dd{
+              width: 100%;
+              display: block;
+              float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #0c0c0c;
+            }
+          }
+          .file{
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            dd{
+              width: 100%;
+              display: block;
+              float: left;
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #0c0c0c;
+              a{
+                color: #0c0c0c;
+              }
+            }
           }
         }
       }

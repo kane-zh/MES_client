@@ -16,7 +16,7 @@
           </div>
           <div>分类:
             <select v-model="selectItem.type" placeholder="请选择分类"      >
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>排序:
@@ -82,7 +82,7 @@
               <td>{{index}}</td>
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
-              <td>{{item.type.name+"("+item.type.code+")"}}</td>
+              <td>{{item.type.code+"("+item.type.name+")"}}</td>
               <td>{{item.state}}</td>
               <td>{{item.priority}}</td>
               <td>{{item.delivery_time}}</td>
@@ -119,7 +119,7 @@
             <dt>基础信息</dt>
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
-            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
+            <dd>{{"分类:"+"&#12288;"+type.code+"("+type.name+")"}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
             <dd>{{"优先级:"+"&#12288;"+detail.priority}}</dd>
             <dd>{{"交付日期:"+"&#12288;"+detail.delivery_time}}</dd>
@@ -163,10 +163,10 @@
               </tr>
               <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                 <td>{{index}}</td>
-                <td>{{item.semifinishedType_name+"("+item.semifinishedType_code+")"}}</td>
-                <td>{{item.semifinished_name+"("+item.semifinished_code+")"}}</td>
-                <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
-                <td>{{item.route_name+"("+item.route_code+")"}}</td>
+                <td>{{item.semifinishedType_code+"("+item.semifinishedType_name+")"}}</td>
+                <td>{{item.semifinished_code+"("+item.semifinished_name+")"}}</td>
+                <td>{{item.routeType_code+"("+item.routeType_name+")"}}</td>
+                <td>{{item.route_code+"("+item.route_name+")"}}</td>
                 <td>{{item.state}}</td>
                 <td>{{item.sum}}</td>
                 <td>{{item.batch}}</td>
@@ -214,7 +214,7 @@
             </div>
             <div>分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -282,10 +282,10 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.semifinishedType_name+"("+item.semifinishedType_code+")"}}</td>
-                    <td>{{item.semifinished_name+"("+item.semifinished_code+")"}}</td>
-                    <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
-                    <td>{{item.route_name+"("+item.route_code+")"}}</td>
+                    <td>{{item.semifinishedType_code+"("+item.semifinishedType_name+")"}}</td>
+                    <td>{{item.semifinished_code+"("+item.semifinished_name+")"}}</td>
+                    <td>{{item.routeType_code+"("+item.routeType_name+")"}}</td>
+                    <td>{{item.route_code+"("+item.route_name+")"}}</td>
                     <td>{{item.batch}}</td>
                     <td>{{item.sum}}</td>
                     <td>{{item.desc}}</td>
@@ -327,7 +327,7 @@
             </div>
             <div>分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -395,10 +395,10 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.semifinishedType_name+"("+item.semifinishedType_code+")"}}</td>
-                    <td>{{item.semifinished_name+"("+item.semifinished_code+")"}}</td>
-                    <td>{{item.routeType_name+"("+item.routeType_code+")"}}</td>
-                    <td>{{item.route_name+"("+item.route_code+")"}}</td>
+                    <td>{{item.semifinishedType_code+"("+item.semifinishedType_name+")"}}</td>
+                    <td>{{item.semifinished_code+"("+item.semifinished_name+")"}}</td>
+                    <td>{{item.routeType_code+"("+item.routeType_name+")"}}</td>
+                    <td>{{item.route_code+"("+item.route_name+")"}}</td>
                     <td>{{item.batch}}</td>
                     <td>{{item.sum}}</td>
                     <td>{{item.desc}}</td>
@@ -431,22 +431,22 @@
           <form>
             <div>半成品分类:
               <select v-model="formItem_child.semifinishedType" >
-                <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>半成品信息:
               <select v-model="formItem_child.semifinished" >
-                <option v-for="item in semifinishedInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
+                <option v-for="item in semifinishedInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>生产线路分类:
               <select v-model="formItem_child.productRouteType" >
-                <option v-for="item in productRouteType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in productRouteType" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>生产线路:
               <select v-model="formItem_child.productRoute" >
-                <option v-for="item in productRoute" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
+                <option v-for="item in productRoute" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>批次:

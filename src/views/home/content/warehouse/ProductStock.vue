@@ -53,9 +53,9 @@
               </tr>
               <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
                 <td>{{index}}</td>
-                <td>{{item.warehouse_name+"("+item.warehouse_code+")"}}</td>
-                <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
-                <td>{{item.product_name+"("+item.product_code+")"}}</td>
+                <td>{{item.warehouse_code+"("+item.warehouse_name+")"}}</td>
+                <td>{{item.productType_code+"("+item.productType_name+")"}}</td>
+                <td>{{item.product_code+"("+item.product_name+")"}}</td>
                 <td>{{item.batch}}</td>
                 <td>{{item.sum}}</td>
               </tr>
@@ -127,10 +127,10 @@
               </tr>
               <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
                 <td>{{index}}</td>
-                <td>{{item.warehouse_name+"("+item.warehouse_code+")"}}</td>
-                <td>{{item.position_name+"("+item.position_code+")"}}</td>
-                <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
-                <td>{{item.product_name+"("+item.product_code+")"}}</td>
+                <td>{{item.warehouse_code+"("+item.warehouse_name+")"}}</td>
+                <td>{{item.position_code+"("+item.position_name+")"}}</td>
+                <td>{{item.productType_code+"("+item.productType_name+")"}}</td>
+                <td>{{item.product_code+"("+item.product_name+")"}}</td>
                 <td>{{item.batch}}</td>
                 <td>{{item.sum}}</td>
                 <td>{{item.state}}</td>

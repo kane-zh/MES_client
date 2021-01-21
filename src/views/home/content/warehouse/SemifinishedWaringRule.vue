@@ -134,9 +134,9 @@
               </tr>
               <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                 <td>{{index}}</td>
-                <td>{{item.warehouseName+"("+item.warehouseCode+")"}}</td>
-                <td>{{item.semifinishedTypeName+"("+item.semifinishedTypeCode+")"}}</td>
-                <td>{{item.semifinishedName+"("+item.semifinishedCode+")"}}</td>
+                <td>{{item.warehouseCode+"("+item.warehouseName+")"}}</td>
+                <td>{{item.semifinishedTypeCode+"("+item.semifinishedTypeName+")"}}</td>
+                <td>{{item.semifinishedCode+"("+item.semifinishedName+")"}}</td>
                 <td>{{item.batch}}</td>
                 <td>{{item.maximum}}</td>
                 <td>{{item.minimum}}</td>
@@ -231,9 +231,9 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.warehouseName+"("+item.warehouseCode+")"}}</td>
-                    <td>{{item.semifinishedTypeName+"("+item.semifinishedTypeCode+")"}}</td>
-                    <td>{{item.semifinishedName+"("+item.semifinishedCode+")"}}</td>
+                    <td>{{item.warehouseCode+"("+item.warehouseName+")"}}</td>
+                    <td>{{item.semifinishedTypeCode+"("+item.semifinishedTypeName+")"}}</td>
+                    <td>{{item.semifinishedCode+"("+item.semifinishedName+")"}}</td>
                     <td>{{item.batch}}</td>
                     <td>{{item.maximum}}</td>
                     <td>{{item.minimum}}</td>
@@ -330,9 +330,9 @@
                   </tr>
                   <tr align="center" v-for="(item,index) in list_child" :key="item.id" >
                     <td>{{index}}</td>
-                    <td>{{item.warehouseName+"("+item.warehouseCode+")"}}</td>
-                    <td>{{item.semifinishedTypeName+"("+item.semifinishedTypeCode+")"}}</td>
-                    <td>{{item.semifinishedName+"("+item.semifinishedCode+")"}}</td>
+                    <td>{{item.warehouseCode+"("+item.warehouseName+")"}}</td>
+                    <td>{{item.semifinishedTypeCode+"("+item.semifinishedTypeName+")"}}</td>
+                    <td>{{item.semifinishedCode+"("+item.semifinishedName+")"}}</td>
                     <td>{{item.batch}}</td>
                     <td>{{item.maximum}}</td>
                     <td>{{item.minimum}}</td>
@@ -368,17 +368,17 @@
           <form>
             <div>仓库:
               <select v-model="formItem_child.warehouse" >
-                <option v-for="item in warehouseInfor" :value="item.code" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in warehouseInfor" :value="item.code" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>半成品分类:
               <select v-model="formItem_child.semifinishedType" >
-                <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.code+")"}}</option>
+                <option v-for="item in semifinishedType" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>半成品信息:
               <select v-model="formItem_child.semifinished" >
-                <option v-for="item in semifinishedInfor" :value="item.id" :key="item.id">{{item.name + item.code}}</option>
+                <option v-for="item in semifinishedInfor" :value="item.id" :key="item.id">{{item.name +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>批次:

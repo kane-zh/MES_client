@@ -16,7 +16,7 @@
           </div>
           <div>分类:
             <select v-model="selectItem.type">
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>排序:
@@ -71,7 +71,7 @@
               <td>{{index}}</td>
               <td>{{item.name}}</td>
               <td>{{item.code}}</td>
-              <td>{{item.type.name+"("+item.type.code+")"}}</td>
+              <td>{{item.type.code+"("+item.type.name+")"}}</td>
               <td>{{item.state}}</td>
               <td>{{item.handler}}</td>
               <td>{{item.dataTime}}</td>
@@ -108,8 +108,8 @@
             <dd>{{"名称:"+"&#12288;"+detail.name}}</dd>
             <dd>{{"编码:"+"&#12288;"+detail.code}}</dd>
             <dd>{{"状态:"+"&#12288;"+detail.state}}</dd>
-            <dd>{{"分类:"+"&#12288;"+type.name+"("+type.code+")"}}</dd>
-            <dd>{{"设备:"+"&#12288;"+equipment.name+"("+equipment.code+")"}}</dd>
+            <dd>{{"分类:"+"&#12288;"+type.code+"("+type.name+")"}}</dd>
+            <dd>{{"设备:"+"&#12288;"+equipment.code+"("+equipment.name+")"}}</dd>
             <dd>{{"维护结果:"+"&#12288;"+detail.result}}</dd>
             <dd>{{"维护人员:"+"&#12288;"+detail.handler}}</dd>
             <dd>{{"维护耗时:"+"&#12288;"+detail.time_consuming}}</dd>
@@ -218,7 +218,7 @@
             </div>
             <div>分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -227,18 +227,18 @@
             </div>
             <div>设备分类:
               <select v-model="formItem.equipmentType"   placeholder="请选择设备分类">
-                <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>设备:
               <select v-model="formItem.equipment"   placeholder="请选择设备">
-                <option v-for="item in equipmentInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in equipmentInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.equipment.required">请选择设备</span>
             </div>
             <div>备品消耗:
               <select v-model="formItem.parts_use"   placeholder="请选择备品消耗"  style="height: 90%"  multiple="true">
-                <option v-for="item in partsUse" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in partsUse" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>维护结果:
@@ -348,7 +348,7 @@
             </div>
             <div>分类:
               <select v-model="formItem.type"   placeholder="请选择分类">
-                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.type.required">请选择分类</span>
             </div>
@@ -357,18 +357,18 @@
             </div>
             <div>设备分类:
               <select v-model="formItem.equipmentType"   placeholder="请选择设备分类">
-                <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in equipmentType" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>设备:
               <select v-model="formItem.equipment"   placeholder="请选择设备">
-                <option v-for="item in equipmentInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in equipmentInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
               <span class="message" v-show ="!$v.formItem.equipment.required">请选择设备</span>
             </div>
             <div>备品消耗:
               <select v-model="formItem.parts_use"   placeholder="请选择备品消耗"  style="height: 90%"  multiple="true">
-                <option v-for="item in partsUse" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in partsUse" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>维护结果:

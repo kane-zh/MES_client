@@ -6,22 +6,22 @@
           <form class="select">
             <div>任务分类:
               <select v-model="selectItem.taskType" placeholder="请选择任务分类"      >
-                <option v-for="item in taskType" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in taskType" :value="item.code" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>任务:
               <select v-model="selectItem.task" placeholder="请选择任务"      >
-                <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in taskInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>产品分类:
               <select v-model="selectItem.productType" placeholder="请选择产品分类"      >
-                <option v-for="item in productType" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in productType" :value="item.code" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>产品:
               <select v-model="selectItem.product" placeholder="请选择产品"      >
-                <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>排序:
@@ -34,12 +34,12 @@
             </div>
             <div>工序分类:
               <select v-model="selectItem.stationType" placeholder="请选择工序分类"      >
-                <option v-for="item in stationType" :value="item.code" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in stationType" :value="item.code" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>工序:
               <select v-model="selectItem.station" placeholder="请选择工序"      >
-                <option v-for="item in stationInfor" :value="item.id" :key="item.id">{{item.name+"("+item.code+")"}}</option>
+                <option v-for="item in stationInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
               </select>
             </div>
             <div>开始时间:
@@ -76,12 +76,12 @@
               </tr>
               <tr align="center" v-for="(item,index) in list" :key="item.id" type="height:1em" >
                 <td>{{index}}</td>
-                <td>{{item.taskType_name+"("+item.taskType_code+")"}}</td>
-                <td>{{item.task_name+"("+item.task_code+")"}}</td>
-                <td>{{item.productType_name+"("+item.productType_code+")"}}</td>
-                <td>{{item.product_name+"("+item.product_code+")"}}</td>
-                <td>{{item.stationType_name+"("+item.stationType_code+")"}}</td>
-                <td>{{item.station_name+"("+item.station_code+")"}}</td>
+                <td>{{item.taskType_code+"("+item.taskType_name+")"}}</td>
+                <td>{{item.task_code+"("+item.task_name+")"}}</td>
+                <td>{{item.productType_code+"("+item.productType_name+")"}}</td>
+                <td>{{item.product_code+"("+item.product_name+")"}}</td>
+                <td>{{item.stationType_code+"("+item.stationType_name+")"}}</td>
+                <td>{{item.station_code+"("+item.station_name+")"}}</td>
                 <td>{{item.add_time}}</td>
                 <td>{{item.batch}}</td>
                 <td>{{item.sum}}</td>
