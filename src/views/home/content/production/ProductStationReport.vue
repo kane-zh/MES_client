@@ -82,7 +82,7 @@
                 <td>{{item.product_code+"("+item.product_name+")"}}</td>
                 <td>{{item.stationType_code+"("+item.stationType_name+")"}}</td>
                 <td>{{item.station_code+"("+item.station_name+")"}}</td>
-                <td>{{item.add_time}}</td>
+                <td>{{item.update_time}}</td>
                 <td>{{item.batch}}</td>
                 <td>{{item.sum}}</td>
               </tr>

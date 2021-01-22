@@ -520,6 +520,28 @@
               <a target='_black' v-bind:key="id" :href="value.file">{{value.file_name}}</a>
             </dd>
           </div>
+          <div class="table">
+            <dt>工序报工</dt>
+            <table >
+              <tr align="center"  type="height:2em">
+                <th>序号</th>
+                <th>工序类型</th>
+                <th>工序</th>
+                <th>最新时间</th>
+                <th>数量</th>
+              </tr>
+              <tr align="center" v-for="(item,index) in list_stationReport" :key="item.id" type="height:1em" >
+                <td>{{index}}</td>
+                <td>{{item.stationType_code+"("+item.stationType_name+")"}}</td>
+                <td>{{item.station_code+"("+item.station_name+")"}}</td>
+                <td>{{item.update_time}}</td>
+                <td>{{item.sum}}</td>
+              </tr>
+              <tr>
+
+              </tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -559,6 +581,7 @@ export default {
       /* 详情页数据 */
       detail: [],
       detail_child: [],
+      list_stationReport: '',
       type: {},
       /* 详情页审核记录项表单 */
       alterItem: {
@@ -1140,9 +1163,17 @@ export default {
       var self = this
       this.$axios.get(`plan/productTaskItemCreate/` + id).then(function (response) {
         self.detail_child = response.data
-      }).then(function (response
-      ) {
-        self.showChildForm = 'detail'
+        self.$axios.get('production/productStationReport/?task_id=' + self.detail_child.id +
+            '&product_id=' + self.detail_child.salesOrderItem.product_id +
+            '&search=' + self.detail_child.salesOrderItem.batch
+        ).then(function (response) {
+          console.log(response.data.results)
+          self.list_stationReport = response.data.results
+          self.showChildForm = 'detail'
+        }).catch(function (err) {
+          // 错误提示
+          console.log(err)
+        })
       }).catch(function (err) {
         // 错误提示
         console.log(err)
@@ -2748,6 +2779,65 @@ export default {
               color: #0c0c0c;
               a{
                 color: #0c0c0c;
+              }
+            }
+          }
+          .table {
+            position: relative;
+            top: 0;
+            overflow:hidden;
+            width: 100%;
+            overflow: auto;
+            dt{
+              font-family: PingFangSC-Regular;
+              font-size: 0.5em;
+              line-height: 2em;
+              color: #9ca022;
+              text-align: center;
+            }
+            table{
+              height: 100%;
+              width: 100%;
+              table-layout: auto;
+              empty-cells:hide;
+              word-break : normal;
+              font-size: 0.5em;
+              th{
+                position: sticky;
+                top:0;
+                height: 1em;
+                font-family: PingFangSC-Regular;
+                font-size: 0.6em;
+                line-height: 1.6em;
+                color: #000000;
+                text-align: center;
+                background: #999494;
+                border:1px solid rgba(177, 176, 171, 0.89);
+                &:nth-child(1){
+                  width: 3em;
+                }
+                &:nth-child(2){
+                  width: 10em;
+                }
+                &:nth-child(3){
+                  width: 10em;
+                }
+                &:nth-child(4){
+                  width: 15em;
+                }
+                &:nth-child(5){
+                  width: 5em;
+                }
+              }
+              td{
+                height: 1em;
+                font-family: PingFangSC-Regular;
+                font-size: 0.5em;
+                line-height: 2em;
+                color: #191A1E;
+                text-align: center;
+                background: #eeeaea;
+                border:1px solid rgba(177, 176, 171, 0.61);
               }
             }
           }

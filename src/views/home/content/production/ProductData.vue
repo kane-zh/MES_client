@@ -29,9 +29,14 @@
               <option v-for="item in productInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
-          <div>分类:
-            <select v-model="selectItem.type" placeholder="请选择分类"      >
-              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
+          <div>工序分类:
+            <select v-model="selectItem.stationType" placeholder="请选择工序分类"      >
+              <option v-for="item in stationType" :value="item.code" :key="item.id">{{item.code+"("+item.name+")"}}</option>
+            </select>
+          </div>
+          <div>工序:
+            <select v-model="selectItem.station" placeholder="请选择工序"      >
+              <option v-for="item in stationInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
             </select>
           </div>
           <div>开始时间:
@@ -39,6 +44,11 @@
           </div>
           <div>结束时间:
             <input v-model="selectItem.stop_time"  type="datetime-local" placeholder="选择日期和时间">
+          </div>
+          <div>分类:
+            <select v-model="selectItem.type" placeholder="请选择分类"      >
+              <option v-for="item in typeInfor" :value="item.id" :key="item.id">{{item.code+"("+item.name+")"}}</option>
+            </select>
           </div>
           <div>关键字:
             <input v-model="selectItem.searchValue" type="text" placeholder="  请输入要搜索的信息...">
@@ -64,6 +74,8 @@
               <th>任务</th>
               <th>产品分类</th>
               <th>产品</th>
+              <th>工序分类</th>
+              <th>工序</th>
               <th>批次号</th>
               <th>序列号</th>
               <th>数量</th>
@@ -78,6 +90,8 @@
               <td>{{item.task_code+"("+item.task_name+")"}}</td>
               <td>{{item.productType_code+"("+item.productType_name+")"}}</td>
               <td>{{item.product_code+"("+item.product_name+")"}}</td>
+              <td>{{item.stationType_code+"("+item.stationType_name+")"}}</td>
+              <td>{{item.station_code+"("+item.station_name+")"}}</td>
               <td>{{item.batch}}</td>
               <td>{{item.sn}}</td>
               <td>{{item.sum}}</td>
@@ -116,6 +130,8 @@
             <dd>{{"任务:"+"&#12288;"+detail.task_code+"("+detail.task_name+")"}}</dd>
             <dd>{{"产品分类:"+"&#12288;"+detail.productType_code+"("+detail.productType_name+")"}}</dd>
             <dd>{{"产品:"+"&#12288;"+detail.product_code+"("+detail.product_name+")"}}</dd>
+            <dd>{{"工序分类:"+"&#12288;"+detail.stationType_code+"("+detail.stationType_name+")"}}</dd>
+            <dd>{{"工序:"+"&#12288;"+detail.station_code+"("+detail.station_name+")"}}</dd>
             <dd>{{"批次号:"+"&#12288;"+detail.batch}}</dd>
             <dd>{{"序列号:"+"&#12288;"+detail.sn}}</dd>
             <dd>{{"数量:"+"&#12288;"+detail.sum}}</dd>
@@ -168,6 +184,7 @@
           </div>
         </div>
         <div class="button">
+          <button type="button" @click="changeState('完成')" v-show="detail.state==='新建'">提交</button>
         </div>
       </div>
     </div>
@@ -207,6 +224,16 @@
             <div>产品信息:
               <select v-model="formItem.product" >
                 <option v-for="(item,index) in taskItem_product" :value="item.product_id" :key="index">{{item.product_code +"("+ item.product_name+")"}}</option>
+              </select>
+            </div>
+            <div>工序分类:
+              <select v-model="formItem.stationType" >
+                <option v-for="item in stationType" :value="item.id" :key="item.id">{{item.code +"("+ item.name+")"}}</option>
+              </select>
+            </div>
+            <div>工序信息:
+              <select v-model="formItem.station_id" >
+                <option v-for="(item,index) in stationInfor" :value="item.id" :key="index">{{item.code +"("+ item.name+")"}}</option>
               </select>
             </div>
             <div>批次号:
@@ -366,6 +393,16 @@
                 <option v-for="(item,index) in taskItem_product" :value="item.product_id" :key="index">{{item.product_name +"("+ item.product_name+")"}}</option>
               </select>
             </div>
+            <div>工序分类:
+              <select v-model="formItem.stationType" >
+                <option v-for="item in stationType" :value="item.id" :key="item.id">{{item.code +"("+ item.name+")"}}</option>
+              </select>
+            </div>
+            <div>工序信息:
+              <select v-model="formItem.station_id" >
+                <option v-for="(item,index) in stationInfor" :value="item.id" :key="index">{{item.code +"("+ item.name+")"}}</option>
+              </select>
+            </div>
             <div>批次号:
               <input v-model="formItem.batch"  placeholder="请输入批次号...">
             </div>
@@ -508,8 +545,10 @@ export default {
         ordering: '',
         productType: '',
         taskType: '',
+        stationType: '',
         product: '',
         task: '',
+        station:'',
         create_user: '',
         type: '',
         searchValue: '',
@@ -527,6 +566,8 @@ export default {
         product: '',
         taskType: '',
         task: '',
+        stationType: '',
+        station_id: '',
         batch: '',
         sn: '',
         sum: '',
@@ -582,11 +623,13 @@ export default {
       productInfor: [],
       /* 任务分类信息 */
       taskType: [],
-      /* 任务信息 */
       taskInfor: [],
       taskItem: [],
       taskItem_productType: [],
       taskItem_product: [],
+      /* 工序分类信息 */
+      stationType: [],
+      stationInfor: [],
       /* 过程数据分类信息 */
       typeInfor: [],
       /* 具有审核权限的账号信息 */
@@ -663,8 +706,10 @@ export default {
       this.$axios.get('production/productData/?create_user=' + self.selectItem.create_user +
               '&productType_code=' + self.selectItem.productType +
               '&taskType_code=' + self.selectItem.taskType +
+              '&stationType_code=' + self.selectItem.stationType +
               '&product_id=' + self.selectItem.product +
               '&task_id=' + self.selectItem.task +
+              '&station_id=' + self.selectItem.station +
               '&type=' + self.selectItem.type +
               '&search=' + self.selectItem.searchValue +
               '&start_time=' + self.selectItem.start_time +
@@ -847,9 +892,6 @@ export default {
       ) {
         self.detail.state = self.formItem.state
         self.formItem.state = ''
-        if (self.detail.state === '作废') {
-          self.showListView()
-        }
         alert('数据提交成功')
       }).catch(function (err) {
         // 错误提示
@@ -968,6 +1010,7 @@ export default {
         type: self.formItem.type,
         product_id: self.formItem.product,
         task_id: self.formItem.task,
+        station_id: self.formItem.station_id,
         batch: self.formItem.batch,
         sn: self.formItem.sn,
         sum: self.formItem.sum,
@@ -1023,6 +1066,7 @@ export default {
         type: self.formItem.type,
         product_id: self.formItem.product,
         task_id: self.formItem.task,
+        station_id: self.formItem.station_id,
         batch: self.formItem.batch,
         sn: self.formItem.sn,
         sum: self.formItem.sum,
@@ -1084,6 +1128,7 @@ export default {
         type: self.formItem.type,
         product_id: self.formItem.product,
         task_id: self.formItem.task,
+        station_id: self.formItem.station_id,
         batch: self.formItem.batch,
         sn: self.formItem.sn,
         sum: self.formItem.sum,
@@ -1133,6 +1178,7 @@ export default {
         type: self.formItem.type,
         product_id: self.formItem.product,
         task_id: self.formItem.task,
+        station_id: self.formItem.station_id,
         batch: self.formItem.batch,
         sn: self.formItem.sn,
         sum: self.formItem.sum,
@@ -1198,7 +1244,13 @@ export default {
           self.taskType = response.data.results
           self.$axios.get('process/productType/?page_size=99999&ordering=-id').then(function (response) {
             self.productType = response.data.results
-            self.showListView()
+            self.$axios.get('process/stationType/?page_size=99999&ordering=-id').then(function (response) {
+              self.stationType = response.data.results
+              self.showListView()
+            }).catch(function (err) {
+              // 错误提示
+              console.log(err)
+            })
           }).catch(function (err) {
             // 错误提示
             console.log(err)
@@ -1340,6 +1392,20 @@ export default {
         return item
       }, [])
     },
+    'formItem.stationType': function (newval, oldval) {
+      var self = this
+      this.stationInfor = []
+      if (newval === undefined || newval === '') {
+        return
+      }
+      this.$axios.get('process/stationInfor/?page_size=99999&ordering=-id&state=使用中' +
+        '&type=' + newval).then(function (response) {
+        self.stationInfor = response.data.results
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
+      })
+    },
     'selectItem.taskType': function (newval, oldval) {
       var self = this
       this.taskInfor = []
@@ -1385,7 +1451,29 @@ export default {
         // 错误提示
         console.log(err)
       })
-    }
+    },
+    'selectItem.stationType': function (newval, oldval) {
+      var self = this
+      this.stationInfor = []
+      if (newval === undefined || newval === '') {
+        return
+      }
+      // eslint-disable-next-line camelcase
+      var stationType_id = ''
+      this.stationType.forEach(function (value, i) {
+        if (newval === value.code) {
+          // eslint-disable-next-line camelcase
+          stationType_id = value.id
+        }
+      })
+      this.$axios.get('process/stationInfor/?page_size=99999&ordering=-id&state=使用中' +
+        '&type=' + stationType_id).then(function (response) {
+        self.stationInfor = response.data.results
+      }).catch(function (err) {
+        // 错误提示
+        console.log(err)
+      })
+    },
   }
 }
 </script>
